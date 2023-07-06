@@ -132,7 +132,7 @@ class XMPNode(
         children?.size ?: 0
 
     fun findChildByName(expr: String?): XMPNode? =
-        getOrCreateChildren()?.find { it.name == expr }
+        getOrCreateChildren().find { it.name == expr }
 
     /**
      * Returns the qualifier or empty list, if there are none.

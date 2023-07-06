@@ -338,7 +338,6 @@ object XMPNodeUtils {
     ): XMPNode? {
 
         var nextNode: XMPNode? = null
-        var index = 0
         val stepKind = nextStep.kind
 
         if (stepKind == XMPPath.STRUCT_FIELD_STEP) {
@@ -351,7 +350,7 @@ object XMPNodeUtils {
             if (!parentNode.options.isArray())
                 throw XMPException("Indexing applied to non-array", XMPError.BADXPATH)
 
-            index = when (stepKind) {
+            val index = when (stepKind) {
 
                 XMPPath.ARRAY_INDEX_STEP ->
                     findIndexedItem(parentNode, nextStep.name, createNodes)

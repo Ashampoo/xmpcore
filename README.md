@@ -5,6 +5,7 @@
 ![Android](https://img.shields.io/badge/-Android-gray.svg?style=flat)
 ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=flat)
 ![iOS](https://img.shields.io/badge/-iOS-gray.svg?style=flat)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xmpcore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=xmpcore)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore)
 
 This library is a port of Adobe's XMP SDK to Kotlin Multiplatform by Ashampoo.

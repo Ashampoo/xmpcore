@@ -164,8 +164,6 @@ object Utils {
         if (uuid == null)
             return false
 
-        delimPos = 0
-
         while (delimPos < uuid.length) {
 
             if (uuid[delimPos] == '-') {
