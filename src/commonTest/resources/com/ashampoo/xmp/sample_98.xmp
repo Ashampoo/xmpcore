@@ -1,0 +1,70 @@
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 6.0.0">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about=""
+    xmlns:exif="http://ns.adobe.com/exif/1.0/"
+    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+    xmlns:MY="http://ns.mylollc.com/MyloEdit/"
+    xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
+    xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#"
+    xmlns:stArea="http://ns.adobe.com/xmp/sType/Area#"
+    xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
+   exif:DateTimeOriginal="2023-07-03T10:24:15.000"
+   exif:SubSecTime="0"
+   exif:SubSecTimeOriginal="0"
+   exif:SubSecTimeDigitized="0"
+   exif:GPSVersionID="2.2.0.0"
+   exif:GPSLatitude="53,13.1662N"
+   exif:GPSLongitude="8,14.3757E"
+   xmp:CreateDate="2023-07-03T10:24:15.000"
+   xmp:ModifyDate="2023-07-03T10:24:15.000"
+   xmp:MetadataDate="2023-07-03T08:38:51.678Z"
+   xmp:Rating="1"
+   xmp:Label="Green"
+   MY:DateRangeStart="2023-07-03T10:24:15.000"
+   MY:DateRangeEnd="2023-07-03T10:24:15.000"
+   MY:DateRangeScope=""
+   MY:Undated="false"
+   MY:flag="false"
+   MY:processVersion="1"
+   MY:MetadataDate="2023-07-03T08:38:51.678Z"
+   xmpMM:DocumentID="8464164F-5DC3-45BD-B6B7-64AD12447273"
+   xmpMM:OriginalDocumentID="8464164F-5DC3-45BD-B6B7-64AD12447273"
+   xmpMM:InstanceID="xmp.iid:9EC3DA31-39F9-4138-AD0C-04ABB0F284DB">
+   <dc:subject>
+    <rdf:Bag>
+     <rdf:li>test</rdf:li>
+    </rdf:Bag>
+   </dc:subject>
+   <mwg-rs:Regions rdf:parseType="Resource">
+    <mwg-rs:AppliedToDimensions
+     stDim:w="5120"
+     stDim:h="6400"
+     stDim:unit="pixel"/>
+    <mwg-rs:RegionList>
+     <rdf:Seq>
+      <rdf:li>
+       <rdf:Description
+        mwg-rs:Type="Face"
+        mwg-rs:Name="Cool Guy"
+        mwg-rs:Description="mylio_face">
+       <mwg-rs:Area
+        stArea:x="0.478764"
+        stArea:y="0.472614"
+        stArea:w="0.742454"
+        stArea:h="0.788569"
+        stArea:unit="normalized"/>
+       </rdf:Description>
+      </rdf:li>
+     </rdf:Seq>
+    </mwg-rs:RegionList>
+   </mwg-rs:Regions>
+   <Iptc4xmpExt:PersonInImage>
+    <rdf:Seq>
+     <rdf:li>Cool Guy</rdf:li>
+    </rdf:Seq>
+   </Iptc4xmpExt:PersonInImage>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>

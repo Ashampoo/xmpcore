@@ -1,0 +1,80 @@
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.1.3">
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <rdf:Description rdf:about=""
+        xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
+        xmlns:MY="http://ns.mylollc.com/MyloEdit/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:exif="http://ns.adobe.com/exif/1.0/"
+        xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
+        xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#"
+        xmlns:stArea="http://ns.adobe.com/xmp/sType/Area#"
+        xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+        xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/">
+      <Iptc4xmpExt:PersonInImage>
+        <rdf:Seq>
+          <rdf:li>Cool Guy</rdf:li>
+        </rdf:Seq>
+      </Iptc4xmpExt:PersonInImage>
+      <MY:DateRangeEnd>2023-07-03T10:24:15.000</MY:DateRangeEnd>
+      <MY:DateRangeScope/>
+      <MY:DateRangeStart>2023-07-03T10:24:15.000</MY:DateRangeStart>
+      <MY:MetadataDate>2023-07-03T08:38:51.678Z</MY:MetadataDate>
+      <MY:Undated>false</MY:Undated>
+      <MY:flag>false</MY:flag>
+      <MY:processVersion>1</MY:processVersion>
+      <dc:subject>
+        <rdf:Bag>
+          <rdf:li>test</rdf:li>
+        </rdf:Bag>
+      </dc:subject>
+      <exif:DateTimeOriginal>2023-07-03T10:24:15.000</exif:DateTimeOriginal>
+      <exif:GPSLatitude>53,13.1662N</exif:GPSLatitude>
+      <exif:GPSLongitude>8,14.3757E</exif:GPSLongitude>
+      <exif:GPSVersionID>2.2.0.0</exif:GPSVersionID>
+      <exif:SubSecTime>0</exif:SubSecTime>
+      <exif:SubSecTimeDigitized>0</exif:SubSecTimeDigitized>
+      <exif:SubSecTimeOriginal>0</exif:SubSecTimeOriginal>
+      <mwg-rs:Regions>
+        <rdf:Description>
+          <mwg-rs:AppliedToDimensions>
+            <rdf:Description>
+              <stDim:h>6400</stDim:h>
+              <stDim:unit>pixel</stDim:unit>
+              <stDim:w>5120</stDim:w>
+            </rdf:Description>
+          </mwg-rs:AppliedToDimensions>
+          <mwg-rs:RegionList>
+            <rdf:Seq>
+              <rdf:li>
+                <rdf:Description>
+                  <mwg-rs:Area>
+                    <rdf:Description>
+                      <stArea:h>0.788569</stArea:h>
+                      <stArea:unit>normalized</stArea:unit>
+                      <stArea:w>0.742454</stArea:w>
+                      <stArea:x>0.478764</stArea:x>
+                      <stArea:y>0.472614</stArea:y>
+                    </rdf:Description>
+                  </mwg-rs:Area>
+                  <mwg-rs:Description>mylio_face</mwg-rs:Description>
+                  <mwg-rs:Name>Cool Guy</mwg-rs:Name>
+                  <mwg-rs:Type>Face</mwg-rs:Type>
+                </rdf:Description>
+              </rdf:li>
+            </rdf:Seq>
+          </mwg-rs:RegionList>
+        </rdf:Description>
+      </mwg-rs:Regions>
+      <xmp:CreateDate>2023-07-03T10:24:15.000</xmp:CreateDate>
+      <xmp:Label>Green</xmp:Label>
+      <xmp:MetadataDate>2023-07-03T08:38:51.678Z</xmp:MetadataDate>
+      <xmp:ModifyDate>2023-07-03T10:24:15.000</xmp:ModifyDate>
+      <xmp:Rating>1</xmp:Rating>
+      <xmpMM:DocumentID>8464164F-5DC3-45BD-B6B7-64AD12447273</xmpMM:DocumentID>
+      <xmpMM:InstanceID>xmp.iid:9EC3DA31-39F9-4138-AD0C-04ABB0F284DB</xmpMM:InstanceID>
+      <xmpMM:OriginalDocumentID>8464164F-5DC3-45BD-B6B7-64AD12447273</xmpMM:OriginalDocumentID>
+    </rdf:Description>
+  </rdf:RDF>
+</x:xmpmeta>
+<?xpacket end="w"?>
