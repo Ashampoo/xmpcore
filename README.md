@@ -5,10 +5,9 @@
 ![Android](https://img.shields.io/badge/-Android-gray.svg?style=flat)
 ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=flat)
 ![iOS](https://img.shields.io/badge/-iOS-gray.svg?style=flat)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xmpcore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=xmpcore)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore)
 
-This library is a port of Adobe's XMP SDK to Kotlin Multiplatform.
+This library is a port of Adobe's XMP SDK to Kotlin Multiplatform by Ashampoo.
 
 It's part of [Ashampoo Photos](https://ashampoo.com/photos).
 
@@ -50,6 +49,12 @@ You find more samples in the unit tests.
 If you have previously utilized the official XMP Core Java library available on
 Maven Central, please make sure to update your imports from `com.adobe.internal.xmp`
 to `com.ashampoo.xmp`.
+
+## Contributions
+
+Contributions to this project are welcome! If you encounter any issues,
+have suggestions for improvements, or would like to contribute new features,
+please feel free to submit a pull request.
 
 ## Acknowledgements
 
