@@ -51,7 +51,7 @@ object XMPPathParser {
         pos.path = path
 
         // Pull out the first component and do some special processing on it: add the schema
-        // namespace prefix and and see if it is an alias. The start must be a "qualName".
+        // namespace prefix and see if it is an alias. The start must be a "qualName".
         parseRootNode(schemaNS, pos, expandedXPath)
 
         // Now continue to process the rest of the XMPPath string.
@@ -166,7 +166,7 @@ object XMPPathParser {
 
         pos.stepEnd++ // Look at the character after the leading '['.
 
-        if ('0' <= pos.path!![pos.stepEnd] && pos.path!![pos.stepEnd] <= '9') {
+        if (pos.path!![pos.stepEnd] in '0'..'9') {
 
             // A numeric (decimal integer) array index.
             while (
@@ -349,8 +349,8 @@ object XMPPathParser {
      */
     private fun verifyXPathRoot(schemaNS: String?, rootProp: String): String {
 
-        // Do some basic checks on the URI and name. Try to lookup the URI. See if the name is qualified.
-        if (schemaNS == null || schemaNS.length == 0)
+        // Do some basic checks on the URI and name. Try to look up the URI. See if the name is qualified.
+        if (schemaNS.isNullOrEmpty())
             throw XMPException("Schema namespace URI is required", XMPError.BADSCHEMA)
 
         if (rootProp[0] == '?' || rootProp[0] == '@')

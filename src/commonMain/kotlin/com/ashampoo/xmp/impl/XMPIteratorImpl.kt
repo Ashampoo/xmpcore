@@ -73,8 +73,8 @@ class XMPIteratorImpl(
         // the start node of the iteration depending on the schema and property filter
         var startNode: XMPNode? = null
         var initialPath: String? = null
-        val baseSchema = schemaNS != null && schemaNS.length > 0
-        val baseProperty = propPath != null && propPath.length > 0
+        val baseSchema = !schemaNS.isNullOrEmpty()
+        val baseProperty = !propPath.isNullOrEmpty()
 
         when {
 
@@ -344,7 +344,7 @@ class XMPIteratorImpl(
                 segmentName = currNode.name
             }
 
-            return if (parentPath == null || parentPath.length == 0) {
+            return if (parentPath.isNullOrEmpty()) {
 
                 segmentName
 
@@ -440,41 +440,34 @@ class XMPIteratorImpl(
          */
         override fun hasNext(): Boolean {
 
-            return if (returnProperty != null) {
+            // hasNext has been called before
+            if (returnProperty != null)
+                return true
 
-                // hasNext has been called before
-                true
+            if (skipSiblings)
+                return false
 
-            } else if (skipSiblings) {
+            if (!nodeChildrenIterator.hasNext())
+                return false
 
-                false
+            val child = nodeChildrenIterator.next()
 
-            } else if (nodeChildrenIterator.hasNext()) {
+            index++
 
-                val child = nodeChildrenIterator.next()
+            var path: String? = null
 
-                index++
+            if (child.options.isSchemaNode())
+                baseNS = child.name
+            else if (child.parent != null)
+                path = accumulatePath(child, parentPath, index)
 
-                var path: String? = null
-
-                if (child.options.isSchemaNode()) {
-                    baseNS = child.name
-                } else if (child.parent != null) {
-                    // for all but the root node and schema nodes
-                    path = accumulatePath(child, parentPath, index)
-                }
-
-                // report next property, skip not-leaf nodes in case options is set
-                if (!options.isJustLeafnodes() || !child.hasChildren()) {
-                    returnProperty = createPropertyInfo(child, baseNS!!, path!!)
-                    true
-                } else {
-                    hasNext()
-                }
-
-            } else {
-                false
+            // report next property, skip not-leaf nodes in case options is set
+            if (!options.isJustLeafnodes() || !child.hasChildren()) {
+                returnProperty = createPropertyInfo(child, baseNS!!, path!!)
+                return true
             }
+
+            return hasNext()
         }
     }
 

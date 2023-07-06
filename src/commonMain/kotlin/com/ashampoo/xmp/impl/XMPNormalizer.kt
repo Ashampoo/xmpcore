@@ -204,14 +204,14 @@ internal object XMPNormalizer {
 
                 val childValue = currChild.value
 
-                if (childValue == null || childValue.length == 0) {
+                if (childValue.isNullOrEmpty()) {
 
                     // Delete empty valued children that have no xml:lang.
                     it.remove()
 
                 } else {
 
-                    // Add an xml:lang qualifier with the value "x-repair".
+                    // Add a xml:lang qualifier with the value "x-repair".
                     val repairLang = XMPNode(XMPConst.XML_LANG, "x-repair")
                     currChild.addQualifier(repairLang)
                 }
@@ -220,7 +220,7 @@ internal object XMPNormalizer {
     }
 
     /**
-     * Visit all of the top level nodes looking for aliases. If there is
+     * Visit all the top level nodes looking for aliases. If there is
      * no base, transplant the alias subtree. If there is a base and strict
      * aliasing is on, make sure the alias and base subtrees match.
      *
@@ -427,7 +427,7 @@ internal object XMPNormalizer {
         if (!outerCall &&
             (
                 aliasNode.name != baseNode.name ||
-                    !aliasNode.options.equals(baseNode.options) ||
+                    aliasNode.options != baseNode.options ||
                     aliasNode.getQualifierLength() != baseNode.getQualifierLength()
                 )
         )

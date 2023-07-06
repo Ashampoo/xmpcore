@@ -79,7 +79,7 @@ object XMPNodeUtils {
 
             if (prefix == null) {
 
-                prefix = if (suggestedPrefix != null && suggestedPrefix.length != 0)
+                prefix = if (!suggestedPrefix.isNullOrEmpty())
                     schemaRegistry.registerNamespace(namespaceURI, suggestedPrefix)
                 else
                     throw XMPException("Unregistered schema namespace URI", XMPError.BADSCHEMA)
@@ -287,7 +287,7 @@ object XMPNodeUtils {
         if (options.isArrayOrdered())
             options.setArray(true)
 
-        if (options.isCompositeProperty() && itemValue != null && itemValue.toString().length > 0)
+        if (options.isCompositeProperty() && itemValue != null && itemValue.toString().isNotEmpty())
             throw XMPException("Structs and arrays can't have values", XMPError.BADOPTIONS)
 
         options.assertConsistency(options.getOptions())
@@ -417,16 +417,15 @@ object XMPNodeUtils {
      * @param segment     the segment containing the array index
      * @param createNodes flag if new nodes are allowed to be created.
      * @return Returns the index or index = -1 if not found
-     *
      */
     private fun findIndexedItem(arrayNode: XMPNode?, segment: String?, createNodes: Boolean): Int {
 
-        var segment = segment
         var index: Int
 
         try {
 
-            segment = segment!!.substring(1, segment.length - 1)
+            var segment = segment!!.substring(1, segment.length - 1)
+
             index = segment.toInt()
 
             if (index < 1)
@@ -471,6 +470,7 @@ object XMPNodeUtils {
             if (!currItem.options.isStruct())
                 throw XMPException("Field selector must be used on array of struct", XMPError.BADXPATH)
 
+            @Suppress("LoopWithTooManyJumpStatements")
             for (childIndex in 1..currItem.getChildrenLength()) {
 
                 val currField = currItem.getChild(childIndex)

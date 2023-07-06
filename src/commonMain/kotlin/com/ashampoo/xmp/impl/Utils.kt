@@ -188,7 +188,7 @@ object Utils {
      */
     fun isXMLName(name: String): Boolean {
 
-        if (name.length > 0 && !isNameStartChar(name[0]))
+        if (name.isNotEmpty() && !isNameStartChar(name[0]))
             return false
 
         for (i in 1 until name.length)
@@ -209,7 +209,7 @@ object Utils {
     @kotlin.jvm.JvmStatic
     fun isXMLNameNS(name: String): Boolean {
 
-        if (name.length > 0 && (!isNameStartChar(name[0]) || name[0] == ':'))
+        if (name.isNotEmpty() && (!isNameStartChar(name[0]) || name[0] == ':'))
             return false
 
         for (index in 1 until name.length)
@@ -257,9 +257,8 @@ object Utils {
         // slow path with escaping
         val buffer = StringBuilder(value.length * 4 / 3)
 
-        for (index in 0 until value.length) {
-
-            val char = value[index]
+        @Suppress("LoopWithTooManyJumpStatements")
+        for (char in value) {
 
             if (!(escapeWhitespaces && (char == '\t' || char == '\n' || char == '\r'))) {
 

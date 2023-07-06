@@ -22,14 +22,6 @@ abstract class Options {
      */
     private var valueBits = 0
 
-    /**
-     * a map containing the bit names
-     */
-    private val optionNames = mutableMapOf<Int, String>()
-
-    /**
-     * The default constructor.
-     */
     protected constructor()
 
     /**
@@ -44,34 +36,6 @@ abstract class Options {
     }
 
     protected abstract fun getValidOptions(): Int
-
-    /**
-     * Resets the options.
-     */
-    fun clear() {
-        valueBits = 0
-    }
-
-    /**
-     * @param optionBits an option bitmask
-     * @return Returns true, if this object is equal to the given options.
-     */
-    fun isExactly(optionBits: Int): Boolean =
-        getOptions() == optionBits
-
-    /**
-     * @param optionBits an option bitmask
-     * @return Returns true, if this object contains all given options.
-     */
-    fun containsAllOptions(optionBits: Int): Boolean =
-        getOptions() and optionBits == optionBits
-
-    /**
-     * @param optionBits an option bitmask
-     * @return Returns true, if this object contain at least one of the given options.
-     */
-    fun containsOneOf(optionBits: Int): Boolean =
-        getOptions() and optionBits != 0
 
     /**
      * @param optionBit the binary bit or bits that are requested
@@ -98,10 +62,6 @@ abstract class Options {
      */
     fun getOptions(): Int = valueBits
 
-    /**
-     * @param options The options to set.
-     *
-     */
     fun setOptions(options: Int) {
 
         assertOptionsValid(options)
@@ -109,51 +69,10 @@ abstract class Options {
         this.valueBits = options
     }
 
-    /**
-     * @see Object.equals
-     */
     override fun equals(other: Any?): Boolean =
         getOptions() == (other as? Options)?.getOptions()
 
-    /**
-     * @see Object.hashCode
-     */
     override fun hashCode(): Int = getOptions()
-
-    /**
-     * Creates a human readable string from the set options. *Note:* This method is quite
-     * expensive and should only be used within tests or as
-     *
-     * @return Returns a String listing all options that are set to `true` by their name,
-     * like &quot;option1 | option4&quot;.
-     */
-    fun getOptionsString(): String {
-
-        if (valueBits != 0) {
-
-            val sb = StringBuilder()
-
-            var theBits = valueBits
-
-            while (theBits != 0) {
-
-                val oneLessBit = theBits and theBits - 1 // clear rightmost one bit
-                val singleBit = theBits xor oneLessBit
-                val bitName = getOptionName(singleBit)
-                sb.append(bitName)
-
-                if (oneLessBit != 0)
-                    sb.append(" | ")
-
-                theBits = oneLessBit
-            }
-
-            return sb.toString()
-
-        } else {
-            return "<none>"
-        }
-    }
 
     /**
      * @return Returns the options as hex bitmask.
@@ -165,7 +84,7 @@ abstract class Options {
      * To be implemeted by inheritants.
      *
      * @param option a single, valid option bit.
-     * @return Returns a human readable name for an option bit.
+     * @return Returns a human-readable name for an option bit.
      */
     protected abstract fun defineOptionName(option: Int): String?
 
@@ -186,44 +105,17 @@ abstract class Options {
      * Checks options before they are set.
      * First it is checked if only defined options are used,
      * second the additional [Options.assertConsistency]-method is called.
-     *
-     * @param options the options to check
-     *
      */
     private fun assertOptionsValid(options: Int) {
 
         val invalidOptions = options and getValidOptions().inv()
 
-        if (invalidOptions == 0)
-            assertConsistency(options)
-        else
+        if (invalidOptions != 0)
             throw XMPException(
                 "The option bit(s) 0x" + invalidOptions.toString(16) + " + are invalid!",
                 XMPError.BADOPTIONS
             )
-    }
 
-    /**
-     * Looks up or asks the inherited class for the name of an option bit.
-     * Its save that there is only one valid option handed into the method.
-     *
-     * @param option a single option bit
-     * @return Returns the option name or undefined.
-     */
-    private fun getOptionName(option: Int): String {
-
-        var result = optionNames[option]
-
-        if (result == null) {
-
-            result = defineOptionName(option)
-
-            if (result != null)
-                optionNames[option] = result
-            else
-                result = "<option name not defined>"
-        }
-
-        return result
+        assertConsistency(options)
     }
 }

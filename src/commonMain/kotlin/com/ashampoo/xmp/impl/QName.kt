@@ -46,6 +46,6 @@ class QName {
     }
 
     fun hasPrefix(): Boolean =
-        prefix != null && prefix!!.length > 0
+        prefix != null && prefix!!.isNotEmpty()
 
 }

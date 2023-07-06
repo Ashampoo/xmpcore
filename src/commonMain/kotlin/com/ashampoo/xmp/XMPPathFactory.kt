@@ -73,10 +73,10 @@ object XMPPathFactory {
     @kotlin.jvm.JvmStatic
     fun composeStructFieldPath(fieldNS: String, fieldName: String): String {
 
-        if (fieldNS.length == 0)
+        if (fieldNS.isEmpty())
             throw XMPException("Empty field namespace URI", XMPError.BADSCHEMA)
 
-        if (fieldName.length == 0)
+        if (fieldName.isEmpty())
             throw XMPException("Empty field name", XMPError.BADXPATH)
 
         val fieldPath = XMPPathParser.expandXPath(fieldNS, fieldName)
@@ -101,10 +101,10 @@ object XMPPathFactory {
     @kotlin.jvm.JvmStatic
     fun composeQualifierPath(qualNS: String, qualName: String): String {
 
-        if (qualNS.length == 0)
+        if (qualNS.isEmpty())
             throw XMPException("Empty qualifier namespace URI", XMPError.BADSCHEMA)
 
-        if (qualName.length == 0)
+        if (qualName.isEmpty())
             throw XMPException("Empty qualifier name", XMPError.BADXPATH)
 
         val qualPath = XMPPathParser.expandXPath(qualNS, qualName)

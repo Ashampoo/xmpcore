@@ -32,7 +32,7 @@ object XMPUtils {
     @kotlin.jvm.JvmStatic
     fun convertToBoolean(value: String?): Boolean {
 
-        if (value == null || value.length == 0)
+        if (value.isNullOrEmpty())
             throw XMPException("Empty convert-string", XMPError.BADVALUE)
 
         val valueLowercase = value.lowercase()
@@ -54,7 +54,7 @@ object XMPUtils {
     fun convertToInteger(rawValue: String?): Int {
         try {
 
-            if (rawValue == null || rawValue.length == 0)
+            if (rawValue.isNullOrEmpty())
                 throw XMPException("Empty convert-string", XMPError.BADVALUE)
 
             return if (rawValue.startsWith("0x"))
@@ -72,7 +72,7 @@ object XMPUtils {
 
         try {
 
-            if (rawValue == null || rawValue.length == 0)
+            if (rawValue.isNullOrEmpty())
                 throw XMPException("Empty convert-string", XMPError.BADVALUE)
 
             return if (rawValue.startsWith("0x"))
@@ -90,7 +90,7 @@ object XMPUtils {
 
         try {
 
-            if (rawValue == null || rawValue.length == 0)
+            if (rawValue.isNullOrEmpty())
                 throw XMPException("Empty convert-string", XMPError.BADVALUE)
 
             return rawValue.toDouble()

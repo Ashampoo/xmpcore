@@ -226,7 +226,7 @@ internal object XMPRDFParser : XMPError {
                         // the XMP tree name if
                         // it doesn't have a name yet. Make sure this name matches
                         // the XMP tree name.
-                        if (xmpParent.name != null && xmpParent.name!!.length > 0) {
+                        if (xmpParent.name != null && xmpParent.name!!.isNotEmpty()) {
 
                             if (xmpParent.name != attribute.value)
                                 throw XMPException("Mismatched top level rdf:about values", XMPError.BADXMP)
@@ -1108,8 +1108,6 @@ internal object XMPRDFParser : XMPError {
      */
     private fun getRDFTermKind(node: Node): Int {
 
-        val nodeName = node.nodeName
-
         var namespace = when (node) {
             is Element -> node.namespaceURI
             is Attr -> node.namespaceURI
@@ -1117,7 +1115,7 @@ internal object XMPRDFParser : XMPError {
         }
 
         if (namespace == null &&
-            ("about" == nodeName || "ID" == nodeName) &&
+            ("about" == node.nodeName || "ID" == node.nodeName) &&
             node is Attr && XMPConst.NS_RDF == node.ownerElement?.namespaceURI
         ) {
             namespace = XMPConst.NS_RDF
@@ -1125,7 +1123,7 @@ internal object XMPRDFParser : XMPError {
 
         if (namespace == XMPConst.NS_RDF) {
 
-            when (nodeName) {
+            when (node.nodeName) {
 
                 "rdf:li" ->
                     return RDFTERM_LI

@@ -892,13 +892,14 @@ class XMPMetaImpl : XMPMeta {
 
         } else {
 
-            if (value != null && value.toString().length > 0)
+            if (value != null && value.toString().isNotEmpty())
                 throw XMPException("Composite nodes can't have values", XMPError.BADXPATH)
 
             // Can't change an array to a struct, or vice versa.
-            if (node.options.getOptions() and compositeMask != 0)
-                if (newOptions.getOptions() and compositeMask != node.options.getOptions() and compositeMask)
-                    throw XMPException("Requested and existing composite form mismatch", XMPError.BADXPATH)
+            if (node.options.getOptions() and compositeMask != 0 &&
+                newOptions.getOptions() and compositeMask != node.options.getOptions() and compositeMask
+            )
+                throw XMPException("Requested and existing composite form mismatch", XMPError.BADXPATH)
 
             node.removeChildren()
         }
