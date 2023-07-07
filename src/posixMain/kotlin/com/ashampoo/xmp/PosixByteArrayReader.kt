@@ -1,3 +1,5 @@
+package com.ashampoo.xmp
+
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.UnsafeNumber
 import kotlinx.cinterop.memScoped

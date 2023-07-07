@@ -71,7 +71,7 @@ class XMPIteratorImpl(
         this.options = options ?: IteratorOptions()
 
         // the start node of the iteration depending on the schema and property filter
-        var startNode: XMPNode? = null
+        var startNode: XMPNode?
         var initialPath: String? = null
         val baseSchema = !schemaNS.isNullOrEmpty()
         val baseProperty = !propPath.isNullOrEmpty()
