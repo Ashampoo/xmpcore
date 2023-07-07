@@ -156,7 +156,7 @@ class RewriteXmpTest {
     }
 
     /**
-     * Conversion from compact to canonical should be lossless.
+     * Conversion from canonical to compact should be lossless.
      */
     @OptIn(ExperimentalStdlibApi::class)
     @Test
