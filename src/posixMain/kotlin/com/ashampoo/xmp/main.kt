@@ -1,4 +1,5 @@
-import com.ashampoo.xmp.XMPMetaFactory
+package com.ashampoo.xmp
+
 import com.ashampoo.xmp.options.SerializeOptions
 import platform.posix.perror
 

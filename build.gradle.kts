@@ -128,9 +128,9 @@ kotlin {
 
     mingwX64("win") {
         binaries {
-            executable(
-                buildTypes = setOf(NativeBuildType.RELEASE)
-            )
+            executable(setOf(NativeBuildType.RELEASE)) {
+                entryPoint = "com.ashampoo.xmp.main"
+            }
         }
     }
 
@@ -191,15 +191,12 @@ kotlin {
         macosArm64()
     ).forEach {
 
-        it.binaries.executable(
-            buildTypes = setOf(NativeBuildType.RELEASE)
-        ) {
+        it.binaries.executable(setOf(NativeBuildType.RELEASE)) {
             baseName = "xmpcore"
+            entryPoint = "com.ashampoo.xmp.main"
         }
 
-        it.binaries.framework(
-            buildTypes = setOf(NativeBuildType.RELEASE)
-        ) {
+        it.binaries.framework(setOf(NativeBuildType.RELEASE)) {
             baseName = "xmpcore"
             /* Part of the XCFramework */
             xcf.add(this)
