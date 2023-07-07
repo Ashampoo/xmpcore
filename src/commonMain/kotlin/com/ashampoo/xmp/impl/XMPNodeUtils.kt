@@ -308,7 +308,7 @@ object XMPNodeUtils {
             return null
 
         val strValue: String = when (value) {
-            is Boolean -> if (value) XMPConst.TRUESTR else XMPConst.FALSESTR
+            is Boolean -> if (value) XMPConst.TRUE_STRING else XMPConst.FALSE_STRING
             is Int -> value.toString()
             is Long -> value.toString()
             is Double -> value.toString()

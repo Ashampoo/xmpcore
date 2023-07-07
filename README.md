@@ -43,7 +43,7 @@ val xmpSerializeOptions =
 val newXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptions)
 ```
 
-You find more samples in the unit tests.
+See the unit tests `ReadXmpTest` and `WriteXmpTest` how to read and manipulate data.
 
 ### Migration hint
 

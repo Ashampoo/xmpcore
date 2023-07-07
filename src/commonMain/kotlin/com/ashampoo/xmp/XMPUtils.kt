@@ -23,7 +23,7 @@ object XMPUtils {
      * @param value The string representation of the Boolean.
      * @return The appropriate boolean value for the string.
      *         The checked values for `true` and `false` are:
-     *  * [XMPConst.TRUESTR] and [XMPConst.FALSESTR]
+     *  * [XMPConst.TRUE_STRING] and [XMPConst.FALSE_STRING]
      *  * &quot;t&quot; and &quot;f&quot;
      *  * &quot;on&quot; and &quot;off&quot;
      *  * &quot;yes&quot; and &quot;no&quot;

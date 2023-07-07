@@ -31,12 +31,12 @@ object XMPConst {
     /**
      * The XML namespace for the IPTC Core schema.
      */
-    const val NS_IPTCCORE: String = "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
+    const val NS_IPTC_CORE: String = "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
 
     /**
      * The XML namespace for the IPTC Extension schema.
      */
-    const val NS_IPTCEXT: String = "http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
+    const val NS_IPTC_EXT: String = "http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
 
     /**
      * The XML namespace for the DICOM medical schema.
@@ -118,7 +118,7 @@ object XMPConst {
     /**
      * The XML namespace for the Photoshop Album schema.
      */
-    const val NS_PSALBUM: String = "http://ns.adobe.com/album/1.0/"
+    const val NS_PS_ALBUM: String = "http://ns.adobe.com/album/1.0/"
 
     /**
      * The XML namespace for Adobe's EXIF schema.
@@ -128,7 +128,7 @@ object XMPConst {
     /**
      * NS for the CIPA XMP for Exif document v1.1
      */
-    const val NS_EXIFX: String = "http://cipa.jp/exif/1.0/"
+    const val NS_EXIF_CIPA: String = "http://cipa.jp/exif/1.0/"
 
     const val NS_EXIF_AUX: String = "http://ns.adobe.com/exif/1.0/aux/"
 
@@ -140,9 +140,9 @@ object XMPConst {
 
     const val NS_JP2K: String = "http://ns.adobe.com/jp2k/1.0/"
 
-    const val NS_CAMERARAW: String = "http://ns.adobe.com/camera-raw-settings/1.0/"
+    const val NS_CAMERA_RAW: String = "http://ns.adobe.com/camera-raw-settings/1.0/"
 
-    const val NS_ADOBESTOCKPHOTO: String = "http://ns.adobe.com/StockPhoto/1.0/"
+    const val NS_ADOBE_STOCK_PHOTO: String = "http://ns.adobe.com/StockPhoto/1.0/"
 
     const val NS_CREATOR_ATOM: String = "http://ns.adobe.com/creatorAtom/1.0/"
 
@@ -158,14 +158,14 @@ object XMPConst {
     /**
      * RIFF Info Schema
      */
-    const val NS_RIFFINFO: String = "http://ns.adobe.com/riff/info/"
+    const val NS_RIFF_INFO: String = "http://ns.adobe.com/riff/info/"
 
     const val NS_SCRIPT: String = "http://ns.adobe.com/xmp/1.0/Script/"
 
     /**
      * Transform XMP
      */
-    const val NS_TXMP: String = "http://ns.adobe.com/TransformXMP/"
+    const val NS_TRANSFORM_XMP: String = "http://ns.adobe.com/TransformXMP/"
 
     /**
      * Adobe Flash SWF
@@ -197,7 +197,7 @@ object XMPConst {
 
     const val TYPE_TEXT: String = "http://ns.adobe.com/xap/1.0/t/"
 
-    const val TYPE_PAGEDFILE: String = "http://ns.adobe.com/xap/1.0/t/pg/"
+    const val TYPE_PAGED_FILE: String = "http://ns.adobe.com/xap/1.0/t/pg/"
 
     const val TYPE_GRAPHICS: String = "http://ns.adobe.com/xap/1.0/g/"
 
@@ -211,12 +211,12 @@ object XMPConst {
     /**
      * The XML namespace for fields of the ResourceEvent type.
      */
-    const val TYPE_RESOURCEEVENT: String = "http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
+    const val TYPE_RESOURCE_EVENT: String = "http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
 
     /**
      * The XML namespace for fields of the ResourceRef type.
      */
-    const val TYPE_RESOURCEREF: String = "http://ns.adobe.com/xap/1.0/sType/ResourceRef#"
+    const val TYPE_RESOURCE_REF: String = "http://ns.adobe.com/xap/1.0/sType/ResourceRef#"
 
     /**
      * The XML namespace for fields of the Version type.
@@ -228,22 +228,22 @@ object XMPConst {
      */
     const val TYPE_ST_JOB: String = "http://ns.adobe.com/xap/1.0/sType/Job#"
 
-    const val TYPE_MANIFESTITEM: String = "http://ns.adobe.com/xap/1.0/sType/ManifestItem#"
+    const val TYPE_MANIFEST_ITEM: String = "http://ns.adobe.com/xap/1.0/sType/ManifestItem#"
 
     // ---------------------------------------------------------------------------------------------
     // Basic types and constants
 
     /**
      * The canonical true string value for Booleans in serialized XMP. Code that converts from the
-     * string to a bool should be case insensitive, and even allow "1".
+     * string to a bool should be case-insensitive, and even allow "1".
      */
-    const val TRUESTR: String = "True"
+    const val TRUE_STRING: String = "True"
 
     /**
      * The canonical false string value for Booleans in serialized XMP. Code that converts from the
-     * string to a bool should be case insensitive, and even allow "0".
+     * string to a bool should be case-insensitive, and even allow "0".
      */
-    const val FALSESTR: String = "False"
+    const val FALSE_STRING: String = "False"
 
     /**
      * Index that has the meaning to be always the last item in an array.
@@ -284,4 +284,12 @@ object XMPConst {
      * XMP meta tag version old
      */
     const val TAG_XAPMETA: String = "xapmeta"
+
+    /** GPSVersionID as written by default by ExifTool. */
+    const val DEFAULT_GPS_VERSION_ID = "2.3.0.0"
+
+    const val XMP_DC_SUBJECT: String = "subject"
+
+    const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
+
 }

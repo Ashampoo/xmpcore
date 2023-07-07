@@ -34,6 +34,7 @@ import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.properties.XMPProperty
+import com.ashampoo.xmp.properties.XMPPropertyInfo
 
 /**
  * Implementation for [XMPMeta].
@@ -575,7 +576,7 @@ class XMPMetaImpl : XMPMeta {
         setProperty(
             schemaNS,
             propName,
-            if (propValue) XMPConst.TRUESTR else XMPConst.FALSESTR,
+            if (propValue) XMPConst.TRUE_STRING else XMPConst.FALSE_STRING,
             options
         )
     }
@@ -824,6 +825,18 @@ class XMPMetaImpl : XMPMeta {
         normalize(this, options)
     }
 
+    override fun printAllToConsole() {
+
+        val iterator: XMPIterator = iterator()
+
+        while (iterator.hasNext()) {
+
+            val propertyInfo = iterator.next() as? XMPPropertyInfo ?: continue
+
+            println("${propertyInfo.getPath()} = ${propertyInfo.getValue()}")
+        }
+    }
+
     // -------------------------------------------------------------------------------------
     // private
 
@@ -874,7 +887,7 @@ class XMPMetaImpl : XMPMeta {
     /**
      * The internals for setProperty() and related calls, used after the node is found or created.
      */
-    fun setNode(node: XMPNode, value: Any?, newOptions: PropertyOptions, deleteExisting: Boolean) {
+    private fun setNode(node: XMPNode, value: Any?, newOptions: PropertyOptions, deleteExisting: Boolean) {
 
         val compositeMask = PropertyOptions.ARRAY or PropertyOptions.ARRAY_ALT_TEXT or
             PropertyOptions.ARRAY_ALTERNATE or PropertyOptions.ARRAY_ORDERED or PropertyOptions.STRUCT

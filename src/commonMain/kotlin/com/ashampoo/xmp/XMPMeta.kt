@@ -763,4 +763,6 @@ interface XMPMeta {
      */
     fun normalize(options: ParseOptions = ParseOptions())
 
+    fun printAllToConsole()
+
 }
