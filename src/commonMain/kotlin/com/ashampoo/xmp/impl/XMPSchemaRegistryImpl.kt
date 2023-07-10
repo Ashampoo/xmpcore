@@ -20,6 +20,7 @@ import com.ashampoo.xmp.properties.XMPAliasInfo
  * The schema registry handles the namespaces, aliases and global options for the XMP Toolkit.
  * There is only one single instance used by the toolkit.
  */
+@Suppress("TooManyFunctions")
 object XMPSchemaRegistryImpl : XMPSchemaRegistry {
 
     /**
@@ -66,7 +67,7 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
         var suggestedPrefix = suggestedPrefix
 
         if (namespaceURI.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (suggestedPrefix.isEmpty())
             throw XMPException("Empty prefix", XMPError.BADPARAM)
@@ -274,6 +275,7 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
      * direct aliases regardless of whether the actual data type is
      * an array or not (see [AliasOptions]).
      */
+    @Suppress("ThrowsCount")
     fun registerAlias(
         aliasNS: String,
         aliasProp: String,
@@ -283,13 +285,13 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
     ) {
 
         if (aliasNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (aliasProp.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
 
         if (actualNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (actualProp.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -350,6 +352,7 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
      * Register the standard aliases.
      * Note: This method is not lock because only called by the constructor.
      */
+    @Suppress("StringLiteralDuplication", "LongMethod")
     private fun registerStandardAliases() {
 
         val aliasToArrayOrdered = AliasOptions().setArrayOrdered(true)

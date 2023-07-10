@@ -73,7 +73,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -120,7 +120,7 @@ class XMPMetaImpl : XMPMeta {
     override fun countArrayItems(schemaNS: String, arrayName: String): Int {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -137,7 +137,7 @@ class XMPMetaImpl : XMPMeta {
     override fun deleteArrayItem(schemaNS: String, arrayName: String, itemIndex: Int) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -150,7 +150,7 @@ class XMPMetaImpl : XMPMeta {
     override fun deleteProperty(schemaNS: String, propName: String) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -169,7 +169,7 @@ class XMPMetaImpl : XMPMeta {
 
         // Note: qualNS and qualName are checked inside composeQualfierPath
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -189,7 +189,7 @@ class XMPMetaImpl : XMPMeta {
         // fieldNS and fieldName are checked inside composeStructFieldPath
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -202,7 +202,7 @@ class XMPMetaImpl : XMPMeta {
     override fun doesPropertyExist(schemaNS: String, propName: String): Boolean {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -220,7 +220,7 @@ class XMPMetaImpl : XMPMeta {
     override fun doesArrayItemExist(schemaNS: String, arrayName: String, itemIndex: Int): Boolean {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -240,7 +240,7 @@ class XMPMetaImpl : XMPMeta {
         // fieldNS and fieldName are checked inside composeStructFieldPath()
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -260,7 +260,7 @@ class XMPMetaImpl : XMPMeta {
         // qualNS and qualName are checked inside composeQualifierPath()
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -273,7 +273,7 @@ class XMPMetaImpl : XMPMeta {
     override fun getArrayItem(schemaNS: String, arrayName: String, itemIndex: Int): XMPProperty? {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -291,7 +291,7 @@ class XMPMetaImpl : XMPMeta {
     ): XMPProperty? {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (altTextName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -345,7 +345,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (altTextName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -503,7 +503,7 @@ class XMPMetaImpl : XMPMeta {
     private fun getProperty(schemaNS: String, propName: String, valueType: Int): XMPProperty? {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -546,7 +546,7 @@ class XMPMetaImpl : XMPMeta {
     private fun getPropertyObject(schemaNS: String, propName: String, valueType: Int): Any? {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -641,7 +641,7 @@ class XMPMetaImpl : XMPMeta {
 
         // qualNS and qualName are checked inside composeQualfierPath
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -661,7 +661,7 @@ class XMPMetaImpl : XMPMeta {
         // fieldNS and fieldName are checked inside composeStructFieldPath
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -693,7 +693,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -717,7 +717,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)
@@ -740,7 +740,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -767,7 +767,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
@@ -790,7 +790,7 @@ class XMPMetaImpl : XMPMeta {
     ) {
 
         if (schemaNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
             throw XMPException("Empty array name", XMPError.BADPARAM)

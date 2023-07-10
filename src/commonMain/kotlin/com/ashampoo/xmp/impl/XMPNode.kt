@@ -164,7 +164,7 @@ class XMPNode(
 
             getOrCreateQualifier().add(0, qualNode)
 
-        } else if ("rdf:type" == qualNode.name) {
+        } else if (XMPConst.RDF_TYPE == qualNode.name) {
 
             // "rdf:type" must be first or second after "xml:lang" and the option "hasType" is set
             options.setHasType(true)
@@ -189,7 +189,7 @@ class XMPNode(
         if (XMPConst.XML_LANG == qualNode.name) {
             // if "xml:lang" is removed, remove hasLanguage-flag too
             options.setHasLanguage(false)
-        } else if ("rdf:type" == qualNode.name) {
+        } else if (XMPConst.RDF_TYPE == qualNode.name) {
             // if "rdf:type" is removed, remove hasType-flag too
             options.setHasType(false)
         }
@@ -235,10 +235,10 @@ class XMPNode(
 
     override fun compareTo(other: XMPNode): Int {
 
-        return if (options.isSchemaNode())
-            value!!.compareTo(other.value!!)
-        else
-            name!!.compareTo(other.name!!)
+        if (options.isSchemaNode())
+            return value!!.compareTo(other.value!!)
+
+        return name!!.compareTo(other.name!!)
     }
 
     /**
@@ -260,7 +260,7 @@ class XMPNode(
             var sortFrom = 0
 
             while (quals.size > sortFrom &&
-                (XMPConst.XML_LANG == quals[sortFrom].name || "rdf:type" == quals[sortFrom].name)
+                (XMPConst.XML_LANG == quals[sortFrom].name || XMPConst.RDF_TYPE == quals[sortFrom].name)
             ) {
                 quals[sortFrom].sort()
                 sortFrom++

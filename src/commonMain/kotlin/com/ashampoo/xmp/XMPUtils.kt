@@ -33,7 +33,7 @@ object XMPUtils {
     fun convertToBoolean(value: String?): Boolean {
 
         if (value.isNullOrEmpty())
-            throw XMPException("Empty convert-string", XMPError.BADVALUE)
+            throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
 
         val valueLowercase = value.lowercase()
 
@@ -55,7 +55,7 @@ object XMPUtils {
         try {
 
             if (rawValue.isNullOrEmpty())
-                throw XMPException("Empty convert-string", XMPError.BADVALUE)
+                throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
 
             return if (rawValue.startsWith("0x"))
                 rawValue.substring(2).toInt(16)
@@ -73,7 +73,7 @@ object XMPUtils {
         try {
 
             if (rawValue.isNullOrEmpty())
-                throw XMPException("Empty convert-string", XMPError.BADVALUE)
+                throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
 
             return if (rawValue.startsWith("0x"))
                 rawValue.substring(2).toLong(16)
@@ -91,7 +91,7 @@ object XMPUtils {
         try {
 
             if (rawValue.isNullOrEmpty())
-                throw XMPException("Empty convert-string", XMPError.BADVALUE)
+                throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
 
             return rawValue.toDouble()
 

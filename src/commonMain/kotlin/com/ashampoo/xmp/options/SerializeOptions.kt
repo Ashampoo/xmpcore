@@ -100,9 +100,8 @@ class SerializeOptions : Options {
 
     /**
      * @return Returns clone of this SerializeOptions-object with the same options set.
-     *
      */
-    public fun clone(): SerializeOptions =
+    fun clone(): SerializeOptions =
         SerializeOptions(getOptions())
 
     /**

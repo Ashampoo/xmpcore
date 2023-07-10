@@ -28,7 +28,7 @@ import nl.adaptivity.xmlutil.dom.namespaceURI
  * XML-parsing and fixes the prefix. After the parsing several normalisations
  * are applied to the XMPTree.
  */
-object XMPMetaParser {
+internal object XMPMetaParser {
 
     private val XMP_RDF = Any() // "new Object()" in Java
 
@@ -42,12 +42,14 @@ object XMPMetaParser {
      */
     fun parse(
         input: String,
-        options: ParseOptions = ParseOptions()
+        options: ParseOptions?
     ): XMPMeta {
 
-        val document = XmlUtilDomParser.parseDocumentFromString(input)
+        val actualOptions = options ?: ParseOptions()
 
-        val xmpmetaRequired = options.getRequireXMPMeta()
+        val document = DomParser.parseDocumentFromString(input)
+
+        val xmpmetaRequired = actualOptions.getRequireXMPMeta()
 
         var result: Array<Any?>? = arrayOfNulls(3)
 
@@ -55,13 +57,13 @@ object XMPMetaParser {
 
         return if (result != null && result[1] === XMP_RDF) {
 
-            val xmp = XMPRDFParser.parse(result[0] as Node, options)
+            val xmp = XMPRDFParser.parse(result[0] as Node, actualOptions)
 
             xmp.setPacketHeader(result[2] as? String)
 
             // Check if the XMP object shall be normalized
-            if (!options.getOmitNormalization())
-                normalize(xmp, options)
+            if (!actualOptions.getOmitNormalization())
+                normalize(xmp, actualOptions)
             else
                 xmp
 

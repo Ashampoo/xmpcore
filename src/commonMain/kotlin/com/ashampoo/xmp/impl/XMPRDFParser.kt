@@ -33,7 +33,8 @@ import nl.adaptivity.xmlutil.dom.value
 /**
  * Parser for "normal" XML serialisation of RDF.
  */
-internal object XMPRDFParser : XMPError {
+@Suppress("TooManyFunctions")
+internal object XMPRDFParser {
 
     const val RDFTERM_OTHER = 0
 
@@ -188,8 +189,8 @@ internal object XMPRDFParser : XMPError {
      * Process the attribute list for an RDF node element. A property attribute URI is
      * anything other than an RDF term. The rdf:ID and rdf:nodeID attributes are simply ignored,
      * as are rdf:about attributes on inner nodes.
-     *
      */
+    @Suppress("ThrowsCount")
     private fun parseRdfNodeElementAttrs(
         xmp: XMPMetaImpl,
         xmpParent: XMPNode,
@@ -520,7 +521,7 @@ internal object XMPRDFParser : XMPError {
 
                                 typeName += ":$localName"
 
-                                addQualifierNode(newCompound, "rdf:type", typeName)
+                                addQualifierNode(newCompound, XMPConst.RDF_TYPE, typeName)
                             }
                         }
                     }
@@ -850,10 +851,6 @@ internal object XMPRDFParser : XMPError {
         isTopLevel: Boolean
     ): XMPNode {
 
-        var actualXmpParent = xmpParent
-
-        val registry = schemaRegistry
-
         var namespace = when (xmlNode) {
             is Element -> xmlNode.namespaceURI
             is Attr -> xmlNode.namespaceURI
@@ -870,7 +867,7 @@ internal object XMPRDFParser : XMPError {
         if (XMPConst.NS_DC_DEPRECATED == namespace)
             namespace = XMPConst.NS_DC
 
-        var prefix = registry.getNamespacePrefix(namespace)
+        var prefix = schemaRegistry.getNamespacePrefix(namespace)
 
         if (prefix == null) {
 
@@ -885,7 +882,7 @@ internal object XMPRDFParser : XMPError {
             else
                 DEFAULT_PREFIX
 
-            prefix = registry.registerNamespace(namespace, prefix)
+            prefix = schemaRegistry.registerNamespace(namespace, prefix)
         }
 
         val xmlNodeLocalName = when (xmlNode) {
@@ -900,6 +897,8 @@ internal object XMPRDFParser : XMPError {
         val childOptions = PropertyOptions()
 
         var isAlias = false
+
+        var actualXmpParent = xmpParent
 
         if (isTopLevel) {
 
@@ -920,7 +919,7 @@ internal object XMPRDFParser : XMPError {
 
             // If this is an alias set the alias flag in the node
             // and the hasAliases flag in the tree.
-            if (registry.findAlias(childName) != null) {
+            if (schemaRegistry.findAlias(childName) != null) {
                 isAlias = true
                 xmp.root.hasAliases = true
                 schemaNode.hasAliases = true
