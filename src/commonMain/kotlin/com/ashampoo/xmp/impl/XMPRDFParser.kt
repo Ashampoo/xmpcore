@@ -33,7 +33,7 @@ import nl.adaptivity.xmlutil.dom.value
 /**
  * Parser for "normal" XML serialisation of RDF.
  */
-internal object XMPRDFParser : XMPError {
+internal object XMPRDFParser {
 
     const val RDFTERM_OTHER = 0
 

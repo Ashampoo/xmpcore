@@ -66,7 +66,7 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
         var suggestedPrefix = suggestedPrefix
 
         if (namespaceURI.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (suggestedPrefix.isEmpty())
             throw XMPException("Empty prefix", XMPError.BADPARAM)
@@ -283,13 +283,13 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
     ) {
 
         if (aliasNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (aliasProp.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
 
         if (actualNS.isEmpty())
-            throw XMPException("Empty schema namespace URI", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (actualProp.isEmpty())
             throw XMPException("Empty property name", XMPError.BADPARAM)
