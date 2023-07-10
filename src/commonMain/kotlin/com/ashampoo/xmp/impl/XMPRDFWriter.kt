@@ -20,6 +20,7 @@ import com.ashampoo.xmp.options.SerializeOptions
  * Serializes the `XMPMeta`-object using the standard RDF serialization format.
  * The output is a XMP String according to the `SerializeOptions`.
  */
+@Suppress("TooManyFunctions")
 internal class XMPRDFWriter(
     val xmp: XMPMetaImpl,
     val options: SerializeOptions
