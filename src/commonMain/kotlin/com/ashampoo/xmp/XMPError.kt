@@ -11,6 +11,7 @@ package com.ashampoo.xmp
 object XMPError {
 
     const val EMPTY_SCHEMA_TEXT: String = "Empty schema namespace URI"
+    const val EMPTY_CONVERT_STRING_TEXT: String = "Empty convert-string"
 
     const val UNKNOWN: Int = 0
     const val BADPARAM: Int = 4
