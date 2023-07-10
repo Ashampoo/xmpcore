@@ -28,12 +28,14 @@ object XMPMetaFactory {
 
     fun create(): XMPMeta = XMPMetaImpl()
 
+    @Throws(XMPException::class)
     fun parseFromString(
         packet: String,
         options: ParseOptions = ParseOptions()
     ): XMPMeta =
         XMPMetaParser.parse(packet, options)
 
+    @Throws(XMPException::class)
     fun serializeToString(
         xmp: XMPMeta,
         options: SerializeOptions = SerializeOptions()
