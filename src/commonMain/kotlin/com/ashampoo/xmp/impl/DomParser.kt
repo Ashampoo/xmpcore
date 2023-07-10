@@ -12,11 +12,23 @@ object DomParser {
 
     fun parseDocumentFromString(input: String): Document {
 
+        /*
+         * We encountered a situation where the XMP had NUL characters at the end
+         * for unknown reasons. This  caused an exception in the parser.
+         * The test images IMG_0001.jpg and IMG_0002.jpg on the iOS simulator
+         * exhibited this issue, indicating that it could occur in real-world
+         * scenarios as well. To address this, we now trim all whitespaces and
+         * ISO control characters from the XMP to ensure its proper parsing.
+         */
+        val trimmedInput = input.trim {
+            it.isWhitespace() || it.isISOControl()
+        }
+
         try {
 
             val writer = DomWriter()
 
-            val reader = XmlStreaming.newReader(input)
+            val reader = XmlStreaming.newReader(trimmedInput)
 
             do {
                 val event = reader.next()
