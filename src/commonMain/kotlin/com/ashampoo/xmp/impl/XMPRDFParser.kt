@@ -520,7 +520,7 @@ internal object XMPRDFParser : XMPError {
 
                                 typeName += ":$localName"
 
-                                addQualifierNode(newCompound, "rdf:type", typeName)
+                                addQualifierNode(newCompound, XMPConst.RDF_TYPE, typeName)
                             }
                         }
                     }
