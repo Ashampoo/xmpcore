@@ -31,22 +31,24 @@ object XMPMetaFactory {
     @Throws(XMPException::class)
     fun parseFromString(
         packet: String,
-        options: ParseOptions = ParseOptions()
+        options: ParseOptions? = null
     ): XMPMeta =
         XMPMetaParser.parse(packet, options)
 
     @Throws(XMPException::class)
     fun serializeToString(
         xmp: XMPMeta,
-        options: SerializeOptions = SerializeOptions()
+        options: SerializeOptions? = null
     ): String {
 
         require(xmp is XMPMetaImpl) { "Serialization only works with XMPMetaImpl" }
 
+        val actualOptions = options ?: SerializeOptions()
+
         /* sort the internal data model on demand */
-        if (options.getSort())
+        if (actualOptions.getSort())
             xmp.sort()
 
-        return XMPRDFWriter(xmp, options).serialize()
+        return XMPRDFWriter(xmp, actualOptions).serialize()
     }
 }

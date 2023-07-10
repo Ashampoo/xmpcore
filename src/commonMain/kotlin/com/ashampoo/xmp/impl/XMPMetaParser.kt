@@ -42,12 +42,14 @@ internal object XMPMetaParser {
      */
     fun parse(
         input: String,
-        options: ParseOptions = ParseOptions()
+        options: ParseOptions?
     ): XMPMeta {
+
+        val actualOptions = options ?: ParseOptions()
 
         val document = XmlUtilDomParser.parseDocumentFromString(input)
 
-        val xmpmetaRequired = options.getRequireXMPMeta()
+        val xmpmetaRequired = actualOptions.getRequireXMPMeta()
 
         var result: Array<Any?>? = arrayOfNulls(3)
 
@@ -55,13 +57,13 @@ internal object XMPMetaParser {
 
         return if (result != null && result[1] === XMP_RDF) {
 
-            val xmp = XMPRDFParser.parse(result[0] as Node, options)
+            val xmp = XMPRDFParser.parse(result[0] as Node, actualOptions)
 
             xmp.setPacketHeader(result[2] as? String)
 
             // Check if the XMP object shall be normalized
-            if (!options.getOmitNormalization())
-                normalize(xmp, options)
+            if (!actualOptions.getOmitNormalization())
+                normalize(xmp, actualOptions)
             else
                 xmp
 
