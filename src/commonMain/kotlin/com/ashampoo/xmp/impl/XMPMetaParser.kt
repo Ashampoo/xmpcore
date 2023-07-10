@@ -47,7 +47,7 @@ internal object XMPMetaParser {
 
         val actualOptions = options ?: ParseOptions()
 
-        val document = XmlUtilDomParser.parseDocumentFromString(input)
+        val document = DomParser.parseDocumentFromString(input)
 
         val xmpmetaRequired = actualOptions.getRequireXMPMeta()
 
