@@ -189,8 +189,8 @@ internal object XMPRDFParser {
      * Process the attribute list for an RDF node element. A property attribute URI is
      * anything other than an RDF term. The rdf:ID and rdf:nodeID attributes are simply ignored,
      * as are rdf:about attributes on inner nodes.
-     *
      */
+    @Suppress("ThrowsCount")
     private fun parseRdfNodeElementAttrs(
         xmp: XMPMetaImpl,
         xmpParent: XMPNode,

@@ -20,6 +20,7 @@ import com.ashampoo.xmp.properties.XMPAliasInfo
  * The schema registry handles the namespaces, aliases and global options for the XMP Toolkit.
  * There is only one single instance used by the toolkit.
  */
+@Suppress("TooManyFunctions")
 object XMPSchemaRegistryImpl : XMPSchemaRegistry {
 
     /**
@@ -274,6 +275,7 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
      * direct aliases regardless of whether the actual data type is
      * an array or not (see [AliasOptions]).
      */
+    @Suppress("ThrowsCount")
     fun registerAlias(
         aliasNS: String,
         aliasProp: String,
@@ -350,6 +352,7 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
      * Register the standard aliases.
      * Note: This method is not lock because only called by the constructor.
      */
+    @Suppress("StringLiteralDuplication", "LongMethod")
     private fun registerStandardAliases() {
 
         val aliasToArrayOrdered = AliasOptions().setArrayOrdered(true)
