@@ -28,7 +28,7 @@ import nl.adaptivity.xmlutil.dom.namespaceURI
  * XML-parsing and fixes the prefix. After the parsing several normalisations
  * are applied to the XMPTree.
  */
-object XMPMetaParser {
+internal object XMPMetaParser {
 
     private val XMP_RDF = Any() // "new Object()" in Java
 
