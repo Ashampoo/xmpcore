@@ -850,8 +850,6 @@ internal object XMPRDFParser : XMPError {
         isTopLevel: Boolean
     ): XMPNode {
 
-        var actualXmpParent = xmpParent
-
         var namespace = when (xmlNode) {
             is Element -> xmlNode.namespaceURI
             is Attr -> xmlNode.namespaceURI
@@ -898,6 +896,8 @@ internal object XMPRDFParser : XMPError {
         val childOptions = PropertyOptions()
 
         var isAlias = false
+
+        var actualXmpParent = xmpParent
 
         if (isTopLevel) {
 
