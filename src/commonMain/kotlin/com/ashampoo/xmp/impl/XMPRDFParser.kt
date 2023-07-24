@@ -863,7 +863,7 @@ internal object XMPRDFParser {
                 XMPError.BADRDF
             )
 
-        // Fix a legacy DC namespace
+        /* Fix a legacy DC namespace */
         if (XMPConst.NS_DC_DEPRECATED == namespace)
             namespace = XMPConst.NS_DC
 
@@ -1134,6 +1134,10 @@ internal object XMPRDFParser {
                     return RDFTERM_DESCRIPTION
 
                 "rdf:about" ->
+                    return RDFTERM_ABOUT
+
+                /* Some invalid files in the real world lack the "rdf" prefix. */
+                "about" ->
                     return RDFTERM_ABOUT
 
                 "resource" ->
