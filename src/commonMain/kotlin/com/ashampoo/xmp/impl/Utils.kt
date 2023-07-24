@@ -25,15 +25,19 @@ object Utils {
      */
     const val UUID_LENGTH = 32 + UUID_SEGMENT_COUNT
 
+    const val HEX_RADIX = 16
+
+    private const val XML_NAME_LENGTH = 0x0100
+
     /**
      * table of XML name start chars (<= 0xFF)
      */
-    private val xmlNameStartChars = BooleanArray(0x0100)
+    private val xmlNameStartChars = BooleanArray(XML_NAME_LENGTH)
 
     /**
      * table of XML name chars (<= 0xFF)
      */
-    private val xmlNameChars = BooleanArray(0x0100)
+    private val xmlNameChars = BooleanArray(XML_NAME_LENGTH)
 
     private val controlCharRegex = Regex("[\\p{Cntrl}]")
 
@@ -48,10 +52,8 @@ object Utils {
      * normalization rules:
      *
      *  *  The primary subtag is lower case, the suggested practice of ISO 639.
-     *  *  All 2 letter secondary subtags are upper case, the suggested
-     * practice of ISO 3166.
+     *  *  All 2 letter secondary subtags are upper case, the suggested practice of ISO 3166.
      *  *  All other subtags are lower case.
-     *
      *
      * @param value raw value
      * @return Returns the normalized value.
@@ -59,7 +61,7 @@ object Utils {
     @kotlin.jvm.JvmStatic
     fun normalizeLangValue(value: String): String {
 
-        // don't normalize x-default
+        /* Don't normalize x-default */
         if (XMPConst.X_DEFAULT == value)
             return value
 
@@ -80,12 +82,14 @@ object Utils {
                     /* Leave as is. */
                 }
 
-                else ->
+                else -> {
+
                     /* Convert second subtag to uppercase, all other to lowercase */
                     if (subTag != 2)
                         buffer.append(value[i].lowercaseChar())
                     else
                         buffer.append(value[i].uppercaseChar())
+                }
             }
         }
 
@@ -98,10 +102,11 @@ object Utils {
      *  * [qualName="value"] - An element in an array of structs, chosen by a field value.
      *  * [?qualName="value"] - An element in an array, chosen by a qualifier value.
      *
-     * The value portion is a string quoted by ''' or '"'. The value may contain
-     * any character including a doubled quoting character. The value may be
-     * empty. *Note:* It is assumed that the expression is formal
-     * correct
+     * The value portion is a string quoted by ''' or '"'.
+     * The value may contain any character including a doubled quoting character.
+     * The value may be empty.
+     *
+     * *Note:* It is assumed that the expression is formal correct
      *
      * @param selector the selector
      * @return Returns an array where the first entry contains the name and the second the value.
@@ -149,12 +154,13 @@ object Utils {
      * Check some requirements for an UUID:
      *
      *  * Length of the UUID is 32
-     *  * The Delimiter count is 4 and all the 4 delimiter are on their right position (8,13,18,23)
+     *  * The Delimiter count is 4 and all the 4 delimiter are on their right position (8, 13, 18, 23)
      *
      * @param uuid uuid to test
      * @return true - this is a well formed UUID, false - UUID has not the expected format
      */
     @kotlin.jvm.JvmStatic
+    @Suppress("MagicNumber")
     fun checkUUIDFormat(uuid: String?): Boolean {
 
         var result = true
@@ -167,7 +173,9 @@ object Utils {
         while (delimPos < uuid.length) {
 
             if (uuid[delimPos] == '-') {
+
                 delimCnt++
+
                 result = result && (delimPos == 8 || delimPos == 13 || delimPos == 18 || delimPos == 23)
             }
 
@@ -178,10 +186,10 @@ object Utils {
     }
 
     /**
-     * Simple check for valid XMLNames. Within ASCII range<br></br>
-     * ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6]<br></br>
-     * are accepted, above all characters (which is not entirely
-     * correct according to the XML Spec.
+     * Simple check for valid XMLNames. Within ASCII range
+     * ":" | [A-Z] | "_" | [a-z] | [#xC0-#xD6] | [#xD8-#xF6]
+     * are accepted, above all characters
+     * (which is not entirely correct according to the XML Spec).
      *
      * @param name an XML Name
      * @return Return `true` if the name is correct.
@@ -233,6 +241,7 @@ object Utils {
      * @return Returns the value ready for XML output.
      */
     @kotlin.jvm.JvmStatic
+    @Suppress("ComplexCondition", "kotlin:S3776")
     fun escapeXML(value: String, forAttribute: Boolean, escapeWhitespaces: Boolean): String {
 
         // quick check if character are contained that need special treatment
@@ -240,11 +249,13 @@ object Utils {
 
         for (index in 0 until value.length) {
 
-            val c = value[index]
+            val char = value[index]
+
+            val isControlChar = char == '\t' || char == '\n' || char == '\r'
 
             if (
-                c == '<' || c == '>' || c == '&' || escapeWhitespaces &&
-                (c == '\t' || c == '\n' || c == '\r') || forAttribute && c == '"'
+                char == '<' || char == '>' || char == '&' ||
+                escapeWhitespaces && isControlChar || forAttribute && char == '"'
             ) {
                 needsEscaping = true
                 break
@@ -260,7 +271,9 @@ object Utils {
         @Suppress("LoopWithTooManyJumpStatements")
         for (char in value) {
 
-            if (!(escapeWhitespaces && (char == '\t' || char == '\n' || char == '\r'))) {
+            val isControlChar = char == '\t' || char == '\n' || char == '\r'
+
+            if (!(escapeWhitespaces && isControlChar)) {
 
                 when (char) {
 
@@ -295,7 +308,7 @@ object Utils {
                 // write control chars escaped,
                 // if there are others than tab, LF and CR the xml will become invalid.
                 buffer.append("&#x")
-                buffer.append(char.code.toString(16).uppercase())
+                buffer.append(char.code.toString(HEX_RADIX).uppercase())
                 buffer.append(';')
             }
         }
@@ -318,47 +331,64 @@ object Utils {
      * All characters according to the XML Spec 1.1 are accepted:
      * http://www.w3.org/TR/xml11/#NT-NameStartChar
      *
-     * @param ch a character
+     * @param char a character
      * @return Returns true if the character is a valid first char of an XML name.
      */
-    private fun isNameStartChar(ch: Char): Boolean =
-        ch.code <= 0xFF && xmlNameStartChars[ch.code] || ch.code >= 0x100 && ch.code <= 0x2FF ||
-            ch.code >= 0x370 && ch.code <= 0x37D || ch.code >= 0x37F && ch.code <= 0x1FFF ||
-            ch.code >= 0x200C && ch.code <= 0x200D || ch.code >= 0x2070 && ch.code <= 0x218F ||
-            ch.code >= 0x2C00 && ch.code <= 0x2FEF || ch.code >= 0x3001 && ch.code <= 0xD7FF ||
-            ch.code >= 0xF900 && ch.code <= 0xFDCF || ch.code >= 0xFDF0 && ch.code <= 0xFFFD ||
-            ch.code >= 0x10000 && ch.code <= 0xEFFFF
+    @Suppress("MagicNumber", "kotlin:S3776")
+    private fun isNameStartChar(char: Char): Boolean =
+        char.code <= 0xFF && xmlNameStartChars[char.code] ||
+            char.code >= 0x100 && char.code <= 0x2FF ||
+            char.code >= 0x370 && char.code <= 0x37D ||
+            char.code >= 0x37F && char.code <= 0x1FFF ||
+            char.code >= 0x200C && char.code <= 0x200D ||
+            char.code >= 0x2070 && char.code <= 0x218F ||
+            char.code >= 0x2C00 && char.code <= 0x2FEF ||
+            char.code >= 0x3001 && char.code <= 0xD7FF ||
+            char.code >= 0xF900 && char.code <= 0xFDCF ||
+            char.code >= 0xFDF0 && char.code <= 0xFFFD ||
+            char.code >= 0x10000 && char.code <= 0xEFFFF
 
     /**
      * Simple check if a character is a valid XML name char
      * (every char except the first one), according to the XML Spec 1.1:
      * http://www.w3.org/TR/xml11/#NT-NameChar
      *
-     * @param ch a character
+     * @param char a character
      * @return Returns true if the character is a valid char of an XML name.
      */
-    private fun isNameChar(ch: Char): Boolean =
-        ch.code <= 0xFF && xmlNameChars[ch.code] || isNameStartChar(ch) ||
-            ch.code >= 0x300 && ch.code <= 0x36F || ch.code >= 0x203F && ch.code <= 0x2040
+    @Suppress("MagicNumber")
+    private fun isNameChar(char: Char): Boolean =
+        char.code <= 0xFF && xmlNameChars[char.code] ||
+            isNameStartChar(char) ||
+            char.code >= 0x300 && char.code <= 0x36F ||
+            char.code >= 0x203F && char.code <= 0x2040
 
     /**
      * Initializes the char tables for the chars 0x00-0xFF for later use,
      * according to the XML 1.1 specification at http://www.w3.org/TR/xml11
      */
+    @Suppress("MagicNumber")
     private fun initCharTables() {
 
-        var ch = 0.toChar()
+        var char = 0.toChar()
 
-        while (ch < xmlNameChars.size.toChar()) {
+        while (char < xmlNameChars.size.toChar()) {
 
-            xmlNameStartChars[ch.code] = ch == ':' || 'A' <= ch && ch <= 'Z' || ch == '_' ||
-                'a' <= ch && ch <= 'z' || 0xC0 <= ch.code && ch.code <= 0xD6 ||
-                0xD8 <= ch.code && ch.code <= 0xF6 || 0xF8 <= ch.code && ch.code <= 0xFF
+            xmlNameStartChars[char.code] = char == ':' ||
+                'A' <= char && char <= 'Z' ||
+                char == '_' ||
+                'a' <= char && char <= 'z' ||
+                0xC0 <= char.code && char.code <= 0xD6 ||
+                0xD8 <= char.code && char.code <= 0xF6 ||
+                0xF8 <= char.code && char.code <= 0xFF
 
-            xmlNameChars[ch.code] = xmlNameStartChars[ch.code] || ch == '-' || ch == '.' ||
-                '0' <= ch && ch <= '9' || ch.code == 0xB7
+            xmlNameChars[char.code] = xmlNameStartChars[char.code] ||
+                char == '-' ||
+                char == '.' ||
+                '0' <= char && char <= '9' ||
+                char.code == 0xB7
 
-            ch++
+            char++
         }
     }
 }
