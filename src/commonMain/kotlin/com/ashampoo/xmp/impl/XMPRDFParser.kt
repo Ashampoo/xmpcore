@@ -1107,20 +1107,26 @@ internal object XMPRDFParser {
      */
     private fun getRDFTermKind(node: Node): Int {
 
-        var namespace = when (node) {
+        val namespace = when (node) {
             is Element -> node.namespaceURI
             is Attr -> node.namespaceURI
             else -> throw XMPException("Unknown Node ${node.nodeType}", XMPError.BADXMP)
         }
 
-        if (namespace == null &&
+        /*
+         * This code handles the fact that sometimes "rdf:about" and "rdf:ID"
+         * come without the prefix.
+         *
+         * Note that the check for the namespace must be for NULL or EMPTY, because depending
+         * on the used XML parser implementation the resulting namespace may be an empty string.
+         */
+        @Suppress("ComplexCondition")
+        val mustBeRdfNamespace = namespace.isNullOrEmpty() &&
             ("about" == node.nodeName || "ID" == node.nodeName) &&
-            node is Attr && XMPConst.NS_RDF == node.ownerElement?.namespaceURI
-        ) {
-            namespace = XMPConst.NS_RDF
-        }
+            node is Attr &&
+            XMPConst.NS_RDF == node.ownerElement?.namespaceURI
 
-        if (namespace == XMPConst.NS_RDF) {
+        if (mustBeRdfNamespace || namespace == XMPConst.NS_RDF) {
 
             when (node.nodeName) {
 
@@ -1133,11 +1139,7 @@ internal object XMPRDFParser {
                 "rdf:Description" ->
                     return RDFTERM_DESCRIPTION
 
-                "rdf:about" ->
-                    return RDFTERM_ABOUT
-
-                /* Some invalid files in the real world lack the "rdf" prefix. */
-                "about" ->
+                "rdf:about", "about" ->
                     return RDFTERM_ABOUT
 
                 "resource" ->
@@ -1146,7 +1148,7 @@ internal object XMPRDFParser {
                 "rdf:RDF" ->
                     return RDFTERM_RDF
 
-                "ID" ->
+                "rdf:ID", "ID" ->
                     return RDFTERM_ID
 
                 "nodeID" ->
