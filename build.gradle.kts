@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    kotlin("multiplatform") version "1.8.20"
+    kotlin("multiplatform") version "1.9.0"
     id("com.android.library") version "7.4.2"
     id("maven-publish")
     id("signing")
@@ -200,25 +200,6 @@ kotlin {
             baseName = "xmpcore"
             /* Part of the XCFramework */
             xcf.add(this)
-        }
-    }
-
-    // See https://youtrack.jetbrains.com/issue/KT-55751
-    val myAttribute = Attribute.of("KT-55751", String::class.java)
-
-    // replace releaseFrameworkIosFat by the name of the first configuration that conflicts
-    configurations.named("releaseFrameworkIosFat").configure {
-        attributes {
-            // put a unique attribute
-            attribute(myAttribute, "release-all")
-        }
-    }
-
-    // replace releaseFrameworkOsxFat by the name of the first configuration that conflicts
-    configurations.named("releaseFrameworkOsxFat").configure {
-        attributes {
-            // put a unique attribute
-            attribute(myAttribute, "release-all")
         }
     }
 
