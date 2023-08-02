@@ -116,7 +116,7 @@ dependencies {
 
 kotlin {
 
-    android {
+    androidTarget {
 
         compilations.all {
             kotlinOptions {
