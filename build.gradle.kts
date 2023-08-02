@@ -7,11 +7,12 @@ plugins {
     id("maven-publish")
     id("signing")
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
-    id("org.sonarqube") version "4.0.0.2929"
+    id("org.sonarqube") version "4.3.0.3225"
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
     id("com.asarkar.gradle.build-time-tracker") version "4.3.0"
     id("me.qoomon.git-versioning") version "6.4.1"
     id("com.goncalossilva.resources") version "0.3.2"
+    id("com.github.ben-manes.versions") version "0.47.0"
 }
 
 repositories {
@@ -21,7 +22,7 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val ktorVersion: String = "2.3.2"
+val ktorVersion: String = "2.3.3"
 val xmlUtilVersion: String = "0.86.1"
 
 description = productName
@@ -165,10 +166,10 @@ kotlin {
             implementation(kotlin("test"))
 
             /* Multiplatform test resources */
-            implementation("com.goncalossilva:resources:0.3.2")
+            implementation("com.goncalossilva:resources:0.4.0")
 
             /* Multiplatform file access */
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.2.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.2.1")
         }
     }
 
