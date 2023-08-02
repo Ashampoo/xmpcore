@@ -1,6 +1,7 @@
 package com.ashampoo.xmp
 
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.UnsafeNumber
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.refTo
@@ -14,7 +15,7 @@ import platform.posix.ftell
 import platform.posix.perror
 import platform.posix.rewind
 
-@OptIn(UnsafeNumber::class)
+@OptIn(UnsafeNumber::class, ExperimentalForeignApi::class)
 internal fun readFileAsByteArray(filePath: String): ByteArray? = memScoped {
 
     /* Note: Mode "rb" is for reading binary files. */
