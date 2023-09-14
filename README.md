@@ -1,6 +1,6 @@
 # XMP Core for Kotlin Multiplatform
 
-[![Kotlin](https://img.shields.io/badge/kotlin-1.9.0-blue.svg?logo=kotlin)](httpw://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.9.10-blue.svg?logo=kotlin)](httpw://kotlinlang.org)
 ![JVM](https://img.shields.io/badge/-JVM-gray.svg?style=flat)
 ![Android](https://img.shields.io/badge/-Android-gray.svg?style=flat)
 ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=flat)
@@ -15,7 +15,7 @@ It's part of [Ashampoo Photos](https://ashampoo.com/photos).
 ## Installation
 
 ```
-implementation("com.ashampoo:xmpcore:0.1.5")
+implementation("com.ashampoo:xmpcore:0.1.6")
 ```
 
 ## How to use
