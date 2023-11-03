@@ -2,17 +2,17 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    kotlin("multiplatform") version "1.9.10"
+    kotlin("multiplatform") version "1.9.20"
     id("com.android.library") version "7.4.2"
     id("maven-publish")
     id("signing")
-    id("io.gitlab.arturbosch.detekt") version "1.23.1"
+    id("io.gitlab.arturbosch.detekt") version "1.23.3"
     id("org.sonarqube") version "4.3.1.3277"
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
     id("com.asarkar.gradle.build-time-tracker") version "4.3.0"
     id("me.qoomon.git-versioning") version "6.4.2"
     id("com.goncalossilva.resources") version "0.4.0"
-    id("com.github.ben-manes.versions") version "0.48.0"
+    id("com.github.ben-manes.versions") version "0.49.0"
 }
 
 repositories {
@@ -22,7 +22,7 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val ktorVersion: String = "2.3.4"
+val ktorVersion: String = "2.3.5"
 val xmlUtilVersion: String = "0.86.2"
 
 description = productName
@@ -111,7 +111,7 @@ koverMerged {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
 }
 
 kotlin {
@@ -169,7 +169,7 @@ kotlin {
             implementation("com.goncalossilva:resources:0.4.0")
 
             /* Multiplatform file access */
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.2.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
         }
     }
 

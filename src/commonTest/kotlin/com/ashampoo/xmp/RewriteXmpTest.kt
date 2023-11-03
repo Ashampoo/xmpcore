@@ -2,7 +2,9 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.options.SerializeOptions
 import com.goncalossilva.resources.Resource
+import kotlinx.io.buffered
 import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.files.sink
 import kotlin.test.Test
 import kotlin.test.fail
@@ -55,13 +57,18 @@ class RewriteXmpTest {
 
             if (!equals) {
 
-                Path("build/sample_${index}_formatted_compact.xmp").sink().use {
-                    it.write(actualCompactXmp.encodeToByteArray())
-                }
+                SystemFileSystem
+                    .sink(Path("build/sample_${index}_formatted_compact.xmp"))
+                    .buffered()
+                    .use {
+                        it.write(actualCompactXmp.encodeToByteArray())
+                    }
 
-                Path("build/sample_${index}_formatted_canonical.xmp").sink().use {
-                    it.write(actualCanonicalXmp.encodeToByteArray())
-                }
+                SystemFileSystem.sink(Path("build/sample_${index}_formatted_canonical.xmp"))
+                    .buffered()
+                    .use {
+                        it.write(actualCanonicalXmp.encodeToByteArray())
+                    }
 
                 fail("XMP for sample $index looks different after rewrite.")
             }
@@ -88,9 +95,12 @@ class RewriteXmpTest {
 
             if (!equals) {
 
-                Path("build/sample_${index}_roundtrip_compact.xmp").sink().use {
-                    it.write(newXmp.encodeToByteArray())
-                }
+                SystemFileSystem
+                    .sink(Path("build/sample_${index}_roundtrip_compact.xmp"))
+                    .buffered()
+                    .use {
+                        it.write(newXmp.encodeToByteArray())
+                    }
 
                 fail("XMP for sample $index looks different after compact roundtrip.")
             }
@@ -117,9 +127,12 @@ class RewriteXmpTest {
 
             if (!equals) {
 
-                Path("build/sample_${index}_roundtrip_canonical.xmp").sink().use {
-                    it.write(newXmp.encodeToByteArray())
-                }
+                SystemFileSystem
+                    .sink(Path("build/sample_${index}_roundtrip_canonical.xmp"))
+                    .buffered()
+                    .use {
+                        it.write(newXmp.encodeToByteArray())
+                    }
 
                 fail("XMP for sample $index looks different after canonical roundtrip.")
             }
@@ -146,9 +159,12 @@ class RewriteXmpTest {
 
             if (!equals) {
 
-                Path("build/sample_${index}_compact_to_canonical.xmp").sink().use {
-                    it.write(newXmp.encodeToByteArray())
-                }
+                SystemFileSystem
+                    .sink(Path("build/sample_${index}_compact_to_canonical.xmp"))
+                    .buffered()
+                    .use {
+                        it.write(newXmp.encodeToByteArray())
+                    }
 
                 fail("XMP for sample $index looks different after compact to canonical conversion.")
             }
@@ -175,9 +191,12 @@ class RewriteXmpTest {
 
             if (!equals) {
 
-                Path("build/sample_${index}_canonical_to_compact.xmp").sink().use {
-                    it.write(newXmp.encodeToByteArray())
-                }
+                SystemFileSystem
+                    .sink(Path("build/sample_${index}_canonical_to_compact.xmp"))
+                    .buffered()
+                    .use {
+                        it.write(newXmp.encodeToByteArray())
+                    }
 
                 fail("XMP for sample $index looks different after canonical to compact conversion.")
             }

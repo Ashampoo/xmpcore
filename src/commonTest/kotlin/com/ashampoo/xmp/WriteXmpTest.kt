@@ -5,7 +5,9 @@ import com.ashampoo.xmp.XMPConst.XMP_DC_SUBJECT
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.options.SerializeOptions
 import com.goncalossilva.resources.Resource
+import kotlinx.io.buffered
 import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.files.sink
 import kotlin.test.Test
 import kotlin.test.fail
@@ -43,9 +45,12 @@ class WriteXmpTest {
 
         if (!equals) {
 
-            Path("build/empty.xmp").sink().use {
-                it.write(actualXmp.encodeToByteArray())
-            }
+            SystemFileSystem
+                .sink(Path("build/empty.xmp"))
+                .buffered()
+                .use {
+                    it.write(actualXmp.encodeToByteArray())
+                }
 
             fail("XMP empty.xmp looks different.")
         }
@@ -70,9 +75,12 @@ class WriteXmpTest {
 
         if (!equals) {
 
-            Path("build/rating.xmp").sink().use {
-                it.write(actualXmp.encodeToByteArray())
-            }
+            SystemFileSystem
+                .sink(Path("build/rating.xmp"))
+                .buffered()
+                .use {
+                    it.write(actualXmp.encodeToByteArray())
+                }
 
             fail("XMP rating.xmp looks different.")
         }
@@ -97,9 +105,12 @@ class WriteXmpTest {
 
         if (!equals) {
 
-            Path("build/new.xmp").sink().use {
-                it.write(actualXmp.encodeToByteArray())
-            }
+            SystemFileSystem
+                .sink(Path("build/new.xmp"))
+                .buffered()
+                .use {
+                    it.write(actualXmp.encodeToByteArray())
+                }
 
             fail("XMP new.xmp looks different.")
         }
@@ -146,9 +157,12 @@ class WriteXmpTest {
 
         if (!equals) {
 
-            Path("build/updated.xmp").sink().use {
-                it.write(actualXmp.encodeToByteArray())
-            }
+            SystemFileSystem
+                .sink(Path("build/updated.xmp"))
+                .buffered()
+                .use {
+                    it.write(actualXmp.encodeToByteArray())
+                }
 
             fail("XMP updated.xmp looks different.")
         }
