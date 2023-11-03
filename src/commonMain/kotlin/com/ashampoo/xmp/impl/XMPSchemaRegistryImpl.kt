@@ -64,22 +64,22 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
 
     override fun registerNamespace(namespaceURI: String, suggestedPrefix: String): String {
 
-        var suggestedPrefix = suggestedPrefix
+        var actualSuggestedPrefix = suggestedPrefix
 
         if (namespaceURI.isEmpty())
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
-        if (suggestedPrefix.isEmpty())
+        if (actualSuggestedPrefix.isEmpty())
             throw XMPException("Empty prefix", XMPError.BADPARAM)
 
-        if (suggestedPrefix[suggestedPrefix.length - 1] != ':')
-            suggestedPrefix += ':'
+        if (actualSuggestedPrefix[actualSuggestedPrefix.length - 1] != ':')
+            actualSuggestedPrefix += ':'
 
-        if (!isXMLNameNS(suggestedPrefix.substring(0, suggestedPrefix.length - 1)))
+        if (!isXMLNameNS(actualSuggestedPrefix.substring(0, actualSuggestedPrefix.length - 1)))
             throw XMPException("The prefix is a bad XML name", XMPError.BADXML)
 
         val registeredPrefix = namespaceToPrefixMap[namespaceURI]
-        val registeredNS = prefixToNamespaceMap[suggestedPrefix]
+        val registeredNS = prefixToNamespaceMap[actualSuggestedPrefix]
 
         // Return the actual prefix
         if (registeredPrefix != null)
@@ -89,24 +89,24 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
 
             // the namespace is new, but the prefix is already engaged,
             // we generate a new prefix out of the suggested
-            var generatedPrefix = suggestedPrefix
+            var generatedPrefix = actualSuggestedPrefix
 
             var i = 1
 
             while (prefixToNamespaceMap.containsKey(generatedPrefix)) {
                 generatedPrefix =
-                    suggestedPrefix.substring(0, suggestedPrefix.length - 1) + "_" + i + "_:"
+                    actualSuggestedPrefix.substring(0, actualSuggestedPrefix.length - 1) + "_" + i + "_:"
                 i++
             }
 
-            suggestedPrefix = generatedPrefix
+            actualSuggestedPrefix = generatedPrefix
         }
 
-        prefixToNamespaceMap[suggestedPrefix] = namespaceURI
-        namespaceToPrefixMap[namespaceURI] = suggestedPrefix
+        prefixToNamespaceMap[actualSuggestedPrefix] = namespaceURI
+        namespaceToPrefixMap[namespaceURI] = actualSuggestedPrefix
 
         // Return the suggested prefix
-        return suggestedPrefix
+        return actualSuggestedPrefix
     }
 
     override fun deleteNamespace(namespaceURI: String) {
@@ -122,12 +122,12 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
 
     override fun getNamespaceURI(namespacePrefix: String): String? {
 
-        var namespacePrefix = namespacePrefix
+        var actualNamespacePrefix = namespacePrefix
 
-        if (!namespacePrefix.endsWith(":"))
-            namespacePrefix += ":"
+        if (!actualNamespacePrefix.endsWith(":"))
+            actualNamespacePrefix += ":"
 
-        return prefixToNamespaceMap[namespacePrefix]
+        return prefixToNamespaceMap[actualNamespacePrefix]
     }
 
     override fun getNamespaces(): Map<String, String> =

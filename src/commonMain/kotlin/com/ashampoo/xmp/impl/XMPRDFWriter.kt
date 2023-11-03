@@ -555,37 +555,37 @@ internal class XMPRDFWriter(
         indent: Int
     ) {
 
-        var prefix = prefix
-        var namespace = namespace
+        var actualPrefix = prefix
+        var actualNamespace = namespace
 
-        if (namespace == null) {
+        if (actualNamespace == null) {
 
             // prefix contains qname, extract prefix and lookup namespace with prefix
-            val qname = QName(prefix)
+            val qname = QName(actualPrefix)
 
             if (!qname.hasPrefix())
                 return
 
-            prefix = qname.prefix!!
+            actualPrefix = qname.prefix!!
 
             // add colon for lookup
-            namespace = schemaRegistry.getNamespaceURI("$prefix:")
+            actualNamespace = schemaRegistry.getNamespaceURI("$actualPrefix:")
 
             // prefix w/o colon
-            declareNamespace(prefix, namespace, usedPrefixes, indent)
+            declareNamespace(actualPrefix, actualNamespace, usedPrefixes, indent)
         }
 
-        if (!usedPrefixes.contains(prefix)) {
+        if (!usedPrefixes.contains(actualPrefix)) {
 
             writeNewline()
             writeIndent(indent)
             write("xmlns:")
-            write(prefix)
+            write(actualPrefix)
             write("=\"")
-            write(namespace!!)
+            write(actualNamespace!!)
             write('"')
 
-            usedPrefixes.add(prefix)
+            usedPrefixes.add(actualPrefix)
         }
     }
 
@@ -641,7 +641,7 @@ internal class XMPRDFWriter(
         indent: Int
     ) {
 
-        var indent = indent
+        var actualIndent = indent
         var emitEndTag = true
         var indentEndTag = true
 
@@ -654,7 +654,7 @@ internal class XMPRDFWriter(
         else if (XMPConst.ARRAY_ITEM_NAME == elemName)
             elemName = "rdf:li"
 
-        writeIndent(indent)
+        writeIndent(actualIndent)
         write('<')
         write(elemName!!)
 
@@ -702,8 +702,8 @@ internal class XMPRDFWriter(
 
                 write(">")
                 writeNewline()
-                indent++
-                writeIndent(indent)
+                actualIndent++
+                writeIndent(actualIndent)
                 write(RDF_STRUCT_START)
                 write(">")
 
@@ -713,18 +713,18 @@ internal class XMPRDFWriter(
 
             writeNewline()
 
-            serializeCanonicalRDFProperty(node, useCanonicalRDF, true, indent + 1)
+            serializeCanonicalRDFProperty(node, useCanonicalRDF, true, actualIndent + 1)
 
             for (qualifier in node.getQualifier())
                 if (!RDF_ATTR_QUALIFIER.contains(qualifier.name))
-                    serializeCanonicalRDFProperty(qualifier, useCanonicalRDF, false, indent + 1)
+                    serializeCanonicalRDFProperty(qualifier, useCanonicalRDF, false, actualIndent + 1)
 
             if (useCanonicalRDF) {
 
-                writeIndent(indent)
+                writeIndent(actualIndent)
                 write(RDF_STRUCT_END)
                 writeNewline()
-                indent--
+                actualIndent--
             }
 
         } else {
@@ -766,15 +766,15 @@ internal class XMPRDFWriter(
                     // This is an array.
                     write('>')
                     writeNewline()
-                    emitRDFArrayTag(node, true, indent + 1)
+                    emitRDFArrayTag(node, true, actualIndent + 1)
 
                     if (node.options.isArrayAltText())
                         XMPNodeUtils.normalizeLangArray(node)
 
                     for (child in node.getChildren())
-                        serializeCanonicalRDFProperty(child, useCanonicalRDF, false, indent + 2)
+                        serializeCanonicalRDFProperty(child, useCanonicalRDF, false, actualIndent + 2)
 
-                    emitRDFArrayTag(node, false, indent + 1)
+                    emitRDFArrayTag(node, false, actualIndent + 1)
                 }
 
                 !hasRDFResourceQual -> {
@@ -788,7 +788,7 @@ internal class XMPRDFWriter(
 
                             write(">")
                             writeNewline()
-                            writeIndent(indent + 1)
+                            writeIndent(actualIndent + 1)
                             write(RDF_EMPTY_STRUCT)
 
                         } else {
@@ -808,8 +808,8 @@ internal class XMPRDFWriter(
 
                             write(">")
                             writeNewline()
-                            indent++
-                            writeIndent(indent)
+                            actualIndent++
+                            writeIndent(actualIndent)
                             write(RDF_STRUCT_START)
                             write(">")
 
@@ -821,13 +821,13 @@ internal class XMPRDFWriter(
                         writeNewline()
 
                         for (child in node.getChildren())
-                            serializeCanonicalRDFProperty(child, useCanonicalRDF, false, indent + 1)
+                            serializeCanonicalRDFProperty(child, useCanonicalRDF, false, actualIndent + 1)
 
                         if (useCanonicalRDF) {
-                            writeIndent(indent)
+                            writeIndent(actualIndent)
                             write(RDF_STRUCT_END)
                             writeNewline()
-                            indent--
+                            actualIndent--
                         }
                     }
 
@@ -843,7 +843,7 @@ internal class XMPRDFWriter(
                             throw XMPException("Can't mix rdf:resource and complex fields", XMPError.BADRDF)
 
                         writeNewline()
-                        writeIndent(indent + 1)
+                        writeIndent(actualIndent + 1)
                         write(' ')
                         write(child.name!!)
                         write("=\"")
@@ -863,7 +863,7 @@ internal class XMPRDFWriter(
         if (emitEndTag) {
 
             if (indentEndTag)
-                writeIndent(indent)
+                writeIndent(actualIndent)
 
             write("</")
             write(elemName)
