@@ -124,7 +124,7 @@ interface XMPMeta {
      * *Note:* Qualifiers are only supported for simple leaf properties.
      *
      * @param schemaNS   The namespace URI for the struct. Has the same usage as in getProperty.
-     * @param structName The name of the struct.
+     * @param propName   The name of the struct.
      *                   May be a general path expression, must not be `null` or the empty string.
      *                   Has the same namespace prefix usage as propName in `getProperty()`.
      * @param qualNS   The namespace URI for the qualifier. Has the same URI and prefix usage as the

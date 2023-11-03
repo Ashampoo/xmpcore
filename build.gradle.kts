@@ -148,8 +148,10 @@ kotlin {
 
         dependencies {
 
-            /* Needed for Charset class. */
-            /* Defined as api() to prevent problems when used from a pure-java project. */
+            /*
+             * Needed for Charset class.
+             * Defined as api() to prevent problems when used from a pure-java project.
+             */
             api("io.ktor:ktor-io:$ktorVersion")
 
             /* Needed to parse XML and create a DOM Document */

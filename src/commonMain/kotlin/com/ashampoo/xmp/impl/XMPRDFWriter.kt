@@ -472,8 +472,8 @@ internal class XMPRDFWriter(
     /**
      * Serializes the general qualifier.
      *
-     * @param node   the root node of the subtree
      * @param indent the current indent level
+     * @param node   the root node of the subtree
      */
     private fun serializeCompactRDFGeneralQualifier(indent: Int, node: XMPNode) {
 

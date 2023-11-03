@@ -303,7 +303,8 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
                     aliasForm.toPropertyOptions(),
                     null
                 ).getOptions()
-            ) else
+            )
+        else
             AliasOptions()
 
         if (simpleProperyPattern.matches(aliasProp) || simpleProperyPattern.matches(actualProp))
