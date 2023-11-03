@@ -153,7 +153,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException("Can't delete empty property name.", XMPError.BADPARAM)
 
         val propNode = findNode(
             xmpTree = this.root,
@@ -299,7 +299,7 @@ class XMPMetaImpl : XMPMeta {
         if (specificLang.isEmpty())
             throw XMPException("Empty specific language", XMPError.BADPARAM)
 
-        val normalizedGenericLang = if (genericLang != null) normalizeLangValue(genericLang) else null
+        val normalizedGenericLang = genericLang?.let { normalizeLangValue(it) }
         val normalizedSpecificLang = normalizeLangValue(specificLang)
 
         val arrayPath = expandXPath(schemaNS, altTextName)
@@ -313,21 +313,18 @@ class XMPMetaImpl : XMPMeta {
         return if (match != XMPNodeUtils.CLT_NO_VALUES) {
 
             object : XMPProperty {
-                override fun getValue(): String {
-                    return itemNode!!.value!!
-                }
 
-                override fun getOptions(): PropertyOptions {
-                    return itemNode!!.options
-                }
+                override fun getValue(): String =
+                    itemNode!!.value!!
 
-                override fun getLanguage(): String {
-                    return itemNode!!.getQualifier(1).value!!
-                }
+                override fun getOptions(): PropertyOptions =
+                    itemNode!!.options
 
-                override fun toString(): String {
-                    return itemNode!!.value.toString()
-                }
+                override fun getLanguage(): String =
+                    itemNode!!.getQualifier(1).value!!
+
+                override fun toString(): String =
+                    itemNode!!.value.toString()
             }
 
         } else {
@@ -353,7 +350,7 @@ class XMPMetaImpl : XMPMeta {
         if (specificLang.isEmpty())
             throw XMPException("Empty specific language", XMPError.BADPARAM)
 
-        val normalizedGenericLang = if (genericLang != null) normalizeLangValue(genericLang) else null
+        val normalizedGenericLang = genericLang?.let { normalizeLangValue(it) }
         val normalizedSpecificLang = normalizeLangValue(specificLang)
 
         val arrayPath = expandXPath(schemaNS, altTextName)
@@ -522,21 +519,17 @@ class XMPMetaImpl : XMPMeta {
 
         return object : XMPProperty {
 
-            override fun getValue(): String? {
-                return value?.toString()
-            }
+            override fun getValue(): String? =
+                value?.toString()
 
-            override fun getOptions(): PropertyOptions {
-                return propNode.options
-            }
+            override fun getOptions(): PropertyOptions =
+                propNode.options
 
-            override fun getLanguage(): String? {
-                return null
-            }
+            override fun getLanguage(): String? =
+                null
 
-            override fun toString(): String {
-                return value.toString()
-            }
+            override fun toString(): String =
+                value.toString()
         }
     }
 

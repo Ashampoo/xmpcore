@@ -123,8 +123,10 @@ class XMPIteratorImpl(
             else
                 nodeIterator = NodeIteratorChildren(startNode, initialPath)
 
-        } else
+        } else {
+
             nodeIterator = emptySequence<XMPPropertyInfo>().iterator()
+        }
     }
 
     override fun skipSubtree() {

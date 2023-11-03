@@ -353,7 +353,7 @@ object XMPNodeUtils {
             val index = when (stepKind) {
 
                 XMPPath.ARRAY_INDEX_STEP ->
-                    findIndexedItem(parentNode, nextStep.name, createNodes)
+                    findIndexedItem(parentNode, nextStep.name!!, createNodes)
 
                 XMPPath.ARRAY_LAST_STEP ->
                     parentNode.getChildrenLength()
@@ -418,15 +418,15 @@ object XMPNodeUtils {
      * @param createNodes flag if new nodes are allowed to be created.
      * @return Returns the index or index = -1 if not found
      */
-    private fun findIndexedItem(arrayNode: XMPNode?, segment: String?, createNodes: Boolean): Int {
+    private fun findIndexedItem(arrayNode: XMPNode, segment: String, createNodes: Boolean): Int {
 
         var index: Int
 
         try {
 
-            var segment = segment!!.substring(1, segment.length - 1)
+            val innerSegment = segment.substring(1, segment.length - 1)
 
-            index = segment.toInt()
+            index = innerSegment.toInt()
 
             if (index < 1)
                 throw XMPException("Array index must be larger than zero", XMPError.BADXPATH)
@@ -435,7 +435,7 @@ object XMPNodeUtils {
             throw XMPException("Array index not digits.", XMPError.BADXPATH, ex)
         }
 
-        if (createNodes && index == arrayNode!!.getChildrenLength() + 1) {
+        if (createNodes && index == arrayNode.getChildrenLength() + 1) {
 
             // Append a new last + 1 node.
             val newItem = XMPNode(XMPConst.ARRAY_ITEM_NAME, null)

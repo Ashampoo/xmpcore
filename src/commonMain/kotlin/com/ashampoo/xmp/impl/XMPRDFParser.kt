@@ -436,8 +436,10 @@ internal object XMPRDFParser {
 
                 parseRdfLiteralPropertyElement(xmp, xmpParent, xmlNode, isTopLevel)
 
-            } else
+            } else {
+
                 parseEmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel)
+            }
         }
     }
 
@@ -477,7 +479,7 @@ internal object XMPRDFParser {
             if (XMPConst.XML_LANG == attribute.nodeName)
                 addQualifierNode(newCompound, XMPConst.XML_LANG, attribute.value)
             else if ("ID" == attribute.localName && XMPConst.NS_RDF == attribute.namespaceURI)
-                continue // Ignore all rdf:ID attributes.
+                continue
             else
                 throw XMPException("Invalid attribute for resource property element", XMPError.BADRDF)
         }
@@ -582,7 +584,7 @@ internal object XMPRDFParser {
                 XMPConst.NS_RDF == attribute.namespaceURI &&
                 ("ID" == attribute.localName || "datatype" == attribute.localName)
             )
-                continue // Ignore all rdf:ID and rdf:datatype attributes.
+                continue
             else
                 throw XMPException("Invalid attribute for literal property element", XMPError.BADRDF)
         }

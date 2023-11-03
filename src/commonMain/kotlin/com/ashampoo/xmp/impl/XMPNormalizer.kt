@@ -72,17 +72,15 @@ internal object XMPNormalizer {
                 val path = expandXPath(XMPConst.NS_XMP_MM, "InstanceID")
                 val idNode = XMPNodeUtils.findNode(tree, path, true, null)
 
-                if (idNode != null) {
-
-                    idNode.options = PropertyOptions() // Clobber any existing xmpMM:InstanceID.
-                    idNode.value = "uuid:$nameStr"
-                    idNode.removeChildren()
-                    idNode.removeQualifiers()
-
-                    tree.name = null
-
-                } else
+                if (idNode == null)
                     throw XMPException("Failure creating xmpMM:InstanceID", XMPError.INTERNALFAILURE)
+
+                idNode.options = PropertyOptions() // Clobber any existing xmpMM:InstanceID.
+                idNode.value = "uuid:$nameStr"
+                idNode.removeChildren()
+                idNode.removeQualifiers()
+
+                tree.name = null
             }
         }
     }
