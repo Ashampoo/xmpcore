@@ -123,8 +123,6 @@ class XMPIteratorImpl(
             else
                 nodeIterator = NodeIteratorChildren(startNode, initialPath)
 
-
-
         } else {
 
             nodeIterator = emptySequence<XMPPropertyInfo>().iterator()
