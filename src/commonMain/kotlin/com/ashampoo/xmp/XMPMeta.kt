@@ -1329,14 +1329,12 @@ class XMPMeta {
         propName: String,
         propValue: Boolean,
         options: PropertyOptions = PropertyOptions()
-    ) {
-        setProperty(
-            schemaNS,
-            propName,
-            if (propValue) XMPConst.TRUE_STRING else XMPConst.FALSE_STRING,
-            options
-        )
-    }
+    ) = setProperty(
+        schemaNS,
+        propName,
+        if (propValue) XMPConst.TRUE_STRING else XMPConst.FALSE_STRING,
+        options
+    )
 
     /**
      * Convenience method to set a property to a literal `int` value.
@@ -1351,9 +1349,7 @@ class XMPMeta {
         propName: String,
         propValue: Int,
         options: PropertyOptions = PropertyOptions()
-    ) {
-        setProperty(schemaNS, propName, propValue, options)
-    }
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Convenience method to set a property to a literal `long` value.
@@ -1368,9 +1364,7 @@ class XMPMeta {
         propName: String,
         propValue: Long,
         options: PropertyOptions = PropertyOptions()
-    ) {
-        setProperty(schemaNS, propName, propValue, options)
-    }
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Convenience method to set a property to a literal `double` value.
@@ -1385,9 +1379,7 @@ class XMPMeta {
         propName: String,
         propValue: Double,
         options: PropertyOptions = PropertyOptions()
-    ) {
-        setProperty(schemaNS, propName, propValue, options)
-    }
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Convenience method to set a property from a binary `byte[]`-array,
@@ -1403,9 +1395,7 @@ class XMPMeta {
         propName: String,
         propValue: ByteArray,
         options: PropertyOptions = PropertyOptions()
-    ) {
-        setProperty(schemaNS, propName, propValue, options)
-    }
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Constructs an iterator for the properties within this XMP object.
@@ -1421,7 +1411,7 @@ class XMPMeta {
      * @param options Option flags to control the iteration.
      * @return Returns an `XMPIterator`.
      */
-    fun iterator(options: IteratorOptions): com.ashampoo.xmp.XMPIterator =
+    fun iterator(options: IteratorOptions): XMPIterator =
         iterator(null, null, options)
 
     /**
@@ -1441,7 +1431,7 @@ class XMPMeta {
         propName: String?,
         options: IteratorOptions
     ): XMPIterator =
-        XMPIteratorImpl(this, schemaNS, propName, options)
+        XMPIterator(this, schemaNS, propName, options)
 
     /**
      * This correlates to the about-attribute,
@@ -1485,9 +1475,8 @@ class XMPMeta {
      *  * Qualifier are sorted, with the exception of "xml:lang" and/or "rdf:type"
      * that stay at the top of the list in that order.
      */
-    fun sort() {
-        this.root.sort()
-    }
+    fun sort() =
+        root.sort()
 
     /**
      * Perform the normalization as a separate parsing step.
@@ -1496,9 +1485,8 @@ class XMPMeta {
      * *Note:* It does no harm to call this method to an already normalized xmp object.
      * It was a PDF/A requirement to get hand on the unnormalized `XMPMeta` object.
      */
-    fun normalize(options: ParseOptions) {
+    fun normalize(options: ParseOptions) =
         normalize(this, options)
-    }
 
     fun printAllToConsole() {
 
