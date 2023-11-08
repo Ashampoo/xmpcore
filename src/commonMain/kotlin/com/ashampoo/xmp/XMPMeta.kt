@@ -318,7 +318,7 @@ class XMPMeta {
         schemaNS: String,
         propName: String,
         propValue: Any?,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -361,7 +361,7 @@ class XMPMeta {
         arrayName: String,
         itemIndex: Int,
         itemValue: String,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -401,7 +401,7 @@ class XMPMeta {
         arrayName: String,
         itemIndex: Int,
         itemValue: String,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -447,9 +447,9 @@ class XMPMeta {
     fun appendArrayItem(
         schemaNS: String,
         arrayName: String,
-        arrayOptions: PropertyOptions,
+        arrayOptions: PropertyOptions = PropertyOptions(),
         itemValue: String,
-        itemOptions: PropertyOptions
+        itemOptions: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -521,7 +521,7 @@ class XMPMeta {
         fieldNS: String,
         fieldName: String,
         fieldValue: String?,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -564,7 +564,7 @@ class XMPMeta {
         qualNS: String,
         qualName: String,
         qualValue: String,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -957,7 +957,7 @@ class XMPMeta {
         genericLang: String?,
         specificLang: String,
         itemValue: String,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
 
         if (schemaNS.isEmpty())
@@ -1212,7 +1212,7 @@ class XMPMeta {
         schemaNS: String,
         propName: String,
         propValue: Boolean,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
         setProperty(
             schemaNS,
@@ -1229,13 +1229,12 @@ class XMPMeta {
      * @param propName  The name of the property. Has the same usage as in `getProperty()`.
      * @param propValue the literal property value as `int`.
      * @param options   options of the property to set (optional).
-     *
      */
     fun setPropertyInteger(
         schemaNS: String,
         propName: String,
         propValue: Int,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
         setProperty(schemaNS, propName, propValue, options)
     }
@@ -1252,7 +1251,7 @@ class XMPMeta {
         schemaNS: String,
         propName: String,
         propValue: Long,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
         setProperty(schemaNS, propName, propValue, options)
     }
@@ -1269,7 +1268,7 @@ class XMPMeta {
         schemaNS: String,
         propName: String,
         propValue: Double,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
         setProperty(schemaNS, propName, propValue, options)
     }
@@ -1287,7 +1286,7 @@ class XMPMeta {
         schemaNS: String,
         propName: String,
         propValue: ByteArray,
-        options: PropertyOptions
+        options: PropertyOptions = PropertyOptions()
     ) {
         setProperty(schemaNS, propName, propValue, options)
     }
@@ -1411,7 +1410,7 @@ class XMPMeta {
         arrayNode: XMPNode,
         itemIndex: Int,
         itemValue: String,
-        itemOptions: PropertyOptions,
+        itemOptions: PropertyOptions = PropertyOptions(),
         insert: Boolean
     ) {
 
@@ -1447,7 +1446,12 @@ class XMPMeta {
     /**
      * The internals for setProperty() and related calls, used after the node is found or created.
      */
-    private fun setNode(node: XMPNode, value: Any?, newOptions: PropertyOptions, deleteExisting: Boolean) {
+    private fun setNode(
+        node: XMPNode,
+        value: Any?,
+        newOptions: PropertyOptions,
+        deleteExisting: Boolean
+    ) {
 
         val compositeMask = PropertyOptions.ARRAY or PropertyOptions.ARRAY_ALT_TEXT or
             PropertyOptions.ARRAY_ALTERNATE or PropertyOptions.ARRAY_ORDERED or PropertyOptions.STRUCT
