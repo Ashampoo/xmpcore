@@ -53,6 +53,8 @@ class XMPMeta {
      */
     private var packetHeader: String? = null
 
+    private val arrayOptions = PropertyOptions().setArray(true)
+
     /**
      * Constructor for an empty metadata object.
      */
@@ -1511,6 +1513,239 @@ class XMPMeta {
 
             println("${propertyInfo.getPath()} = ${propertyInfo.getValue()}")
         }
+    }
+
+    /*
+     * Convenience methods for commonly used fields
+     *
+     * Note that these are not standard API for XMP Core.
+     * This was added by Ashampoo.
+     */
+
+    /** Returns the ISO date string */
+    fun getDateTimeOriginal(): String? =
+        getPropertyString(XMPConst.NS_EXIF, "DateTimeOriginal")
+
+    fun setDateTimeOriginal(isoDate: String) =
+        setProperty(XMPConst.NS_EXIF, "DateTimeOriginal", isoDate)
+
+    fun deleteDateTimeOriginal() =
+        deleteProperty(XMPConst.NS_EXIF, "DateTimeOriginal")
+
+    fun getOrientation(): Int? =
+        getPropertyInteger(XMPConst.NS_TIFF, "Orientation")
+
+    fun setOrientation(orientation: Int) =
+        setPropertyInteger(XMPConst.NS_TIFF, "Orientation", orientation)
+
+    fun getRating(): Int? =
+        getPropertyInteger(XMPConst.NS_XMP, "Rating")
+
+    fun setRating(rating: Int) =
+        setPropertyInteger(XMPConst.NS_XMP, "Rating", rating)
+
+    fun getGpsLatitude(): String? =
+        getPropertyString(XMPConst.NS_EXIF, "GPSLatitude")
+
+    fun getGpsLongitude(): String? =
+        getPropertyString(XMPConst.NS_EXIF, "GPSLongitude")
+
+    fun setGpsCoordinates(
+        latitudeDdm: String,
+        longitudeDdm: String
+    ) {
+
+        /* This was a mandatory flag in the past, so we write it. */
+        setProperty(XMPConst.NS_EXIF, "GPSVersionID", XMPConst.DEFAULT_GPS_VERSION_ID)
+
+        setProperty(XMPConst.NS_EXIF, "GPSLatitude", latitudeDdm)
+        setProperty(XMPConst.NS_EXIF, "GPSLongitude", longitudeDdm)
+    }
+
+    fun deleteGpsCoordinates() {
+
+        deleteProperty(XMPConst.NS_EXIF, "GPSVersionID")
+        deleteProperty(XMPConst.NS_EXIF, "GPSLatitude")
+        deleteProperty(XMPConst.NS_EXIF, "GPSLongitude")
+    }
+
+    /**
+     * Gets the regular keywords specified by XMP standard.
+     */
+    fun getKeywords(): Set<String> {
+
+        val subjectCount = countArrayItems(XMPConst.NS_DC, XMPConst.XMP_DC_SUBJECT)
+
+        if (subjectCount == 0)
+            return emptySet()
+
+        val keywords = mutableSetOf<String>()
+
+        for (index in 1..subjectCount) {
+
+            val keyword = getPropertyString(
+                XMPConst.NS_DC,
+                "${XMPConst.XMP_DC_SUBJECT}[$index]"
+            ) ?: continue
+
+            keywords.add(keyword)
+        }
+
+        return keywords
+    }
+
+    fun setKeywords(keywords: Set<String>) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_DC, XMPConst.XMP_DC_SUBJECT)
+
+        if (keywords.isEmpty())
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_DC,
+            XMPConst.XMP_DC_SUBJECT,
+            null,
+            arrayOptions
+        )
+
+        /* Fill the new array with keywords. */
+        for (keyword in keywords.sorted())
+            appendArrayItem(
+                schemaNS = XMPConst.NS_DC,
+                arrayName = XMPConst.XMP_DC_SUBJECT,
+                itemValue = keyword
+            )
+    }
+
+    /**
+     * Gets ACDSee keywords from the ACDSee namespace.
+     * This can be used as an alternative if the regular keyword property is empty.
+     */
+    fun getAcdSeeKeywords(): Set<String> {
+
+        val propertyExists = doesPropertyExist(XMPConst.NS_ACDSEE, XMPConst.XMP_ACDSEE_KEYWORDS)
+
+        if (!propertyExists)
+            return emptySet()
+
+        val keywordCount = countArrayItems(XMPConst.NS_ACDSEE, XMPConst.XMP_ACDSEE_KEYWORDS)
+
+        if (keywordCount == 0)
+            return emptySet()
+
+        val keywords = mutableSetOf<String>()
+
+        for (index in 1..keywordCount) {
+
+            val keyword = getPropertyString(
+                XMPConst.NS_ACDSEE,
+                "${XMPConst.XMP_ACDSEE_KEYWORDS}[$index]"
+            ) ?: continue
+
+            keywords.add(keyword)
+        }
+
+        return keywords
+    }
+
+    fun getFaces(): Map<String, XMPRegionArea> {
+
+        val regionListExists = doesPropertyExist(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+
+        if (!regionListExists)
+            return emptyMap()
+
+        val regionCount = countArrayItems(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+
+        if (regionCount == 0)
+            return emptyMap()
+
+        val faces = mutableMapOf<String, XMPRegionArea>()
+
+        for (index in 1..regionCount) {
+
+            val prefix = "Regions/mwg-rs:RegionList[$index]/mwg-rs"
+
+            val regionType = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Type")
+
+            /* We only want faces. */
+            if (regionType != "Face")
+                continue
+
+            val name = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Name")
+            val xPos = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:x")
+            val yPos = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:y")
+            val width = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:w")
+            val height = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:h")
+
+            /* Skip regions with missing data. */
+            @Suppress("ComplexCondition")
+            if (name == null || xPos == null || yPos == null || width == null || height == null)
+                continue
+
+            faces[name] = XMPRegionArea(xPos, yPos, width, height)
+        }
+
+        return faces
+    }
+
+//    fun setFaces(faces: Map<String, XMPRegionArea>) {
+//
+//        /* Delete existing entries, if any */
+//        deleteProperty(NS_MWG_RS, "Regions")
+//
+//        // TODO Write faces
+//    }
+
+    fun getPersonsInImage(): Set<String> {
+
+        val personsInImageCount =
+            countArrayItems(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE)
+
+        if (personsInImageCount == 0)
+            return emptySet()
+
+        val personsInImage = mutableSetOf<String>()
+
+        for (index in 1..personsInImageCount) {
+
+            val personName =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE}[$index]"
+                ) ?: continue
+
+            personsInImage.add(personName)
+        }
+
+        return personsInImage
+    }
+
+    fun setPersonsInImage(personsInImage: Set<String>) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE)
+
+        if (personsInImage.isEmpty())
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_IPTC_EXT,
+            XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE,
+            null,
+            arrayOptions
+        )
+
+        /* Fill the new array with persons. */
+        for (person in personsInImage.sorted())
+            appendArrayItem(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                arrayName = XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE,
+                itemValue = person
+            )
     }
 
     companion object {
