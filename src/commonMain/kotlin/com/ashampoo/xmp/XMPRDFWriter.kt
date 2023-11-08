@@ -16,7 +16,48 @@ import com.ashampoo.xmp.options.SerializeOptions
  * The output is a XMP String according to the `SerializeOptions`.
  */
 @Suppress("TooManyFunctions")
-internal class XMPRDFWriter {
+internal object XMPRDFWriter {
+
+    /** linefeed (U+000A) is the standard XML line terminator. XMP defaults to it. */
+    const val XMP_DEFAULT_NEWLINE = "\n"
+
+    /** Two ASCII spaces (U+0020) are the default indent for XMP files. */
+    const val XMP_DEFAULT_INDENT = "  "
+
+    private const val PACKET_HEADER = "<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>"
+
+    /**
+     * The w/r is missing inbetween
+     */
+    private const val PACKET_TRAILER = "<?xpacket end=\""
+
+    private const val PACKET_TRAILER2 = "\"?>"
+
+    private const val RDF_XMPMETA_START = "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\""
+
+    private const val RDF_XMPMETA_END = "</x:xmpmeta>"
+
+    private const val RDF_RDF_START =
+        "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">"
+
+    private const val RDF_RDF_END = "</rdf:RDF>"
+
+    private const val RDF_SCHEMA_START = "<rdf:Description rdf:about="
+
+    private const val RDF_SCHEMA_END = "</rdf:Description>"
+
+    private const val RDF_STRUCT_START = "<rdf:Description"
+
+    private const val RDF_STRUCT_END = "</rdf:Description>"
+
+    private const val RDF_EMPTY_STRUCT = "<rdf:Description/>"
+
+    /**
+     * a set of all rdf attribute qualifier
+     */
+    val RDF_ATTR_QUALIFIER: Set<String> = setOf(
+        XMPConst.XML_LANG, "rdf:resource", "rdf:ID", "rdf:bagID", "rdf:nodeID"
+    )
 
     /**
      * The actual serialization.
@@ -1009,48 +1050,4 @@ internal class XMPRDFWriter {
 
     private fun writeIndent(sb: StringBuilder, times: Int) =
         repeat(times) { sb.append(XMP_DEFAULT_INDENT) }
-
-    companion object {
-
-        /** linefeed (U+000A) is the standard XML line terminator. XMP defaults to it. */
-        const val XMP_DEFAULT_NEWLINE = "\n"
-
-        /** Two ASCII spaces (U+0020) are the default indent for XMP files. */
-        const val XMP_DEFAULT_INDENT = "  "
-
-        private const val PACKET_HEADER = "<?xpacket begin=\"\uFEFF\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>"
-
-        /**
-         * The w/r is missing inbetween
-         */
-        private const val PACKET_TRAILER = "<?xpacket end=\""
-
-        private const val PACKET_TRAILER2 = "\"?>"
-
-        private const val RDF_XMPMETA_START = "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\""
-
-        private const val RDF_XMPMETA_END = "</x:xmpmeta>"
-
-        private const val RDF_RDF_START =
-            "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">"
-
-        private const val RDF_RDF_END = "</rdf:RDF>"
-
-        private const val RDF_SCHEMA_START = "<rdf:Description rdf:about="
-
-        private const val RDF_SCHEMA_END = "</rdf:Description>"
-
-        private const val RDF_STRUCT_START = "<rdf:Description"
-
-        private const val RDF_STRUCT_END = "</rdf:Description>"
-
-        private const val RDF_EMPTY_STRUCT = "<rdf:Description/>"
-
-        /**
-         * a set of all rdf attribute qualifier
-         */
-        val RDF_ATTR_QUALIFIER: Set<String> = setOf(
-            XMPConst.XML_LANG, "rdf:resource", "rdf:ID", "rdf:bagID", "rdf:nodeID"
-        )
-    }
 }
