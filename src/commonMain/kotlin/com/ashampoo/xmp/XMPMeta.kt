@@ -142,6 +142,40 @@ class XMPMeta {
     }
 
     /**
+     * Evaluates a raw node value to the given value type, apply special
+     * conversions for defined types in XMP.
+     */
+    private fun evaluateNodeValue(valueType: Int, propNode: XMPNode): Any? {
+
+        val value: Any?
+        val rawValue = propNode.value
+
+        value = when (valueType) {
+
+            VALUE_BOOLEAN -> convertToBoolean(rawValue)
+
+            VALUE_INTEGER -> convertToInteger(rawValue)
+
+            VALUE_LONG -> convertToLong(rawValue)
+
+            VALUE_DOUBLE -> convertToDouble(rawValue)
+
+            VALUE_BASE64 -> decodeBase64(rawValue!!)
+
+            // leaf values return empty string instead of null
+            // for the other cases the converter methods provides a "null" value.
+            // a default value can only occur if this method is made public.
+            VALUE_STRING ->
+                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
+
+            else ->
+                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
+        }
+
+        return value
+    }
+
+    /**
      * Provides access to items within an array. The index is passed as an integer, you need not
      * worry about the path string syntax for array items, convert a loop index to a string, etc.
      *
@@ -340,6 +374,45 @@ class XMPMeta {
     }
 
     /**
+     * The internals for setProperty() and related calls, used after the node is found or created.
+     */
+    private fun setNode(
+        node: XMPNode,
+        value: Any?,
+        newOptions: PropertyOptions,
+        deleteExisting: Boolean
+    ) {
+
+        val compositeMask = PropertyOptions.ARRAY or PropertyOptions.ARRAY_ALT_TEXT or
+            PropertyOptions.ARRAY_ALTERNATE or PropertyOptions.ARRAY_ORDERED or PropertyOptions.STRUCT
+
+        if (deleteExisting)
+            node.clear()
+
+        // its checked by setOptions(), if the merged result is a valid options set
+        node.options.mergeWith(newOptions)
+
+        if (node.options.getOptions() and compositeMask == 0) {
+
+            // This is setting the value of a leaf node.
+            setNodeValue(node, value)
+
+        } else {
+
+            if (value != null && value.toString().isNotEmpty())
+                throw XMPException("Composite nodes can't have values", XMPError.BADXPATH)
+
+            // Can't change an array to a struct, or vice versa.
+            if (node.options.getOptions() and compositeMask != 0 &&
+                newOptions.getOptions() and compositeMask != node.options.getOptions() and compositeMask
+            )
+                throw XMPException("Requested and existing composite form mismatch", XMPError.BADXPATH)
+
+            node.removeChildren()
+        }
+    }
+
+    /**
      * Replaces an item within an array. The index is passed as an integer, you need not worry about
      * the path string syntax for array items, convert a loop index to a string, etc. The array
      * passed must already exist. In normal usage the selected array item is modified. A new item is
@@ -495,6 +568,50 @@ class XMPMeta {
         }
 
         doSetArrayItem(arrayNode, XMPConst.ARRAY_LAST_ITEM, itemValue, itemOptions, true)
+    }
+
+    /**
+     * Locate or create the item node and set the value. Note the index
+     * parameter is one-based! The index can be in the range [1..size + 1] or
+     * "last()", normalize it and check the insert flags. The order of the
+     * normalization checks is important. If the array is empty we end up with
+     * an index and location to set item size + 1.
+     */
+    private fun doSetArrayItem(
+        arrayNode: XMPNode,
+        itemIndex: Int,
+        itemValue: String,
+        itemOptions: PropertyOptions = PropertyOptions(),
+        insert: Boolean
+    ) {
+
+        val itemNode = XMPNode(XMPConst.ARRAY_ITEM_NAME, null)
+
+        val verifiedItemOptions = verifySetOptions(itemOptions, itemValue)
+
+        // in insert mode the index after the last is allowed,
+        // even ARRAY_LAST_ITEM points to the index *after* the last.
+        val maxIndex = if (insert)
+            arrayNode.getChildrenLength() + 1
+        else
+            arrayNode.getChildrenLength()
+
+        val limitedItemIndex = if (itemIndex == XMPConst.ARRAY_LAST_ITEM)
+            maxIndex
+        else
+            itemIndex
+
+        if (1 <= limitedItemIndex && limitedItemIndex <= maxIndex) {
+
+            if (!insert)
+                arrayNode.removeChild(limitedItemIndex)
+
+            arrayNode.addChild(limitedItemIndex, itemNode)
+            setNode(itemNode, itemValue, verifiedItemOptions, false)
+
+        } else {
+            throw XMPException("Array index out of bounds", XMPError.BADINDEX)
+        }
     }
 
     /**
@@ -1394,126 +1511,6 @@ class XMPMeta {
 
             println("${propertyInfo.getPath()} = ${propertyInfo.getValue()}")
         }
-    }
-
-    // -------------------------------------------------------------------------------------
-    // private
-
-    /**
-     * Locate or create the item node and set the value. Note the index
-     * parameter is one-based! The index can be in the range [1..size + 1] or
-     * "last()", normalize it and check the insert flags. The order of the
-     * normalization checks is important. If the array is empty we end up with
-     * an index and location to set item size + 1.
-     */
-    private fun doSetArrayItem(
-        arrayNode: XMPNode,
-        itemIndex: Int,
-        itemValue: String,
-        itemOptions: PropertyOptions = PropertyOptions(),
-        insert: Boolean
-    ) {
-
-        val itemNode = XMPNode(XMPConst.ARRAY_ITEM_NAME, null)
-
-        val verifiedItemOptions = verifySetOptions(itemOptions, itemValue)
-
-        // in insert mode the index after the last is allowed,
-        // even ARRAY_LAST_ITEM points to the index *after* the last.
-        val maxIndex = if (insert)
-            arrayNode.getChildrenLength() + 1
-        else
-            arrayNode.getChildrenLength()
-
-        val limitedItemIndex = if (itemIndex == XMPConst.ARRAY_LAST_ITEM)
-            maxIndex
-        else
-            itemIndex
-
-        if (1 <= limitedItemIndex && limitedItemIndex <= maxIndex) {
-
-            if (!insert)
-                arrayNode.removeChild(limitedItemIndex)
-
-            arrayNode.addChild(limitedItemIndex, itemNode)
-            setNode(itemNode, itemValue, verifiedItemOptions, false)
-
-        } else {
-            throw XMPException("Array index out of bounds", XMPError.BADINDEX)
-        }
-    }
-
-    /**
-     * The internals for setProperty() and related calls, used after the node is found or created.
-     */
-    private fun setNode(
-        node: XMPNode,
-        value: Any?,
-        newOptions: PropertyOptions,
-        deleteExisting: Boolean
-    ) {
-
-        val compositeMask = PropertyOptions.ARRAY or PropertyOptions.ARRAY_ALT_TEXT or
-            PropertyOptions.ARRAY_ALTERNATE or PropertyOptions.ARRAY_ORDERED or PropertyOptions.STRUCT
-
-        if (deleteExisting)
-            node.clear()
-
-        // its checked by setOptions(), if the merged result is a valid options set
-        node.options.mergeWith(newOptions)
-
-        if (node.options.getOptions() and compositeMask == 0) {
-
-            // This is setting the value of a leaf node.
-            setNodeValue(node, value)
-
-        } else {
-
-            if (value != null && value.toString().isNotEmpty())
-                throw XMPException("Composite nodes can't have values", XMPError.BADXPATH)
-
-            // Can't change an array to a struct, or vice versa.
-            if (node.options.getOptions() and compositeMask != 0 &&
-                newOptions.getOptions() and compositeMask != node.options.getOptions() and compositeMask
-            )
-                throw XMPException("Requested and existing composite form mismatch", XMPError.BADXPATH)
-
-            node.removeChildren()
-        }
-    }
-
-    /**
-     * Evaluates a raw node value to the given value type, apply special
-     * conversions for defined types in XMP.
-     */
-    private fun evaluateNodeValue(valueType: Int, propNode: XMPNode): Any? {
-
-        val value: Any?
-        val rawValue = propNode.value
-
-        value = when (valueType) {
-
-            VALUE_BOOLEAN -> convertToBoolean(rawValue)
-
-            VALUE_INTEGER -> convertToInteger(rawValue)
-
-            VALUE_LONG -> convertToLong(rawValue)
-
-            VALUE_DOUBLE -> convertToDouble(rawValue)
-
-            VALUE_BASE64 -> decodeBase64(rawValue!!)
-
-            // leaf values return empty string instead of null
-            // for the other cases the converter methods provides a "null" value.
-            // a default value can only occur if this method is made public.
-            VALUE_STRING ->
-                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
-
-            else ->
-                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
-        }
-
-        return value
     }
 
     companion object {
