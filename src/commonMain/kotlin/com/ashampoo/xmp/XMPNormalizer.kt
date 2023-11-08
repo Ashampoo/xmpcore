@@ -250,7 +250,7 @@ internal object XMPNormalizer {
                 currProp.isAlias = false
 
                 // Find the base path, look for the base schema and root node.
-                val info = XMPSchemaRegistryImpl.findAlias(currProp.name!!)
+                val info = XMPSchemaRegistry.findAlias(currProp.name!!)
 
                 if (info != null) {
 

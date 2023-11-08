@@ -564,7 +564,7 @@ internal class XMPRDFWriter(
             actualPrefix = qname.prefix!!
 
             // add colon for lookup
-            actualNamespace = XMPSchemaRegistryImpl.getNamespaceURI("$actualPrefix:")
+            actualNamespace = XMPSchemaRegistry.getNamespaceURI("$actualPrefix:")
 
             // prefix w/o colon
             declareNamespace(actualPrefix, actualNamespace, usedPrefixes, indent)

@@ -71,12 +71,12 @@ object XMPNodeUtils {
             schemaNode.isImplicit = true
 
             // only previously registered schema namespaces are allowed in the XMP tree.
-            var prefix = XMPSchemaRegistryImpl.getNamespacePrefix(namespaceURI!!)
+            var prefix = XMPSchemaRegistry.getNamespacePrefix(namespaceURI!!)
 
             if (prefix == null) {
 
                 prefix = if (!suggestedPrefix.isNullOrEmpty())
-                    XMPSchemaRegistryImpl.registerNamespace(namespaceURI, suggestedPrefix)
+                    XMPSchemaRegistry.registerNamespace(namespaceURI, suggestedPrefix)
                 else
                     throw XMPException("Unregistered schema namespace URI", XMPError.BADSCHEMA)
             }

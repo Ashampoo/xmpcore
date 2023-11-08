@@ -9,7 +9,7 @@
 package com.ashampoo.xmp.options
 
 /**
- * Options for XMPSchemaRegistryImpl#registerAlias.
+ * Options for XMPSchemaRegistry#registerAlias.
  */
 class AliasOptions : Options {
 

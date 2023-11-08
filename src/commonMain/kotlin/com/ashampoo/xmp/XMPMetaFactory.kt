@@ -17,7 +17,7 @@ import com.ashampoo.xmp.options.SerializeOptions
 object XMPMetaFactory {
 
     @kotlin.jvm.JvmStatic
-    val schemaRegistry = XMPSchemaRegistryImpl
+    val schemaRegistry = XMPSchemaRegistry
 
     @kotlin.jvm.JvmStatic
     val versionInfo = XMPVersionInfo

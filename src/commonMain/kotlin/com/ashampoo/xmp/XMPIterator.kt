@@ -440,7 +440,7 @@ class XMPIterator(
                     // determine namespace of leaf node
                     val qname = QName(node.name!!)
 
-                    return XMPSchemaRegistryImpl.getNamespaceURI(qname.prefix!!)!!
+                    return XMPSchemaRegistry.getNamespaceURI(qname.prefix!!)!!
                 }
 
                 override fun getPath(): String = path

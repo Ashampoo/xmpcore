@@ -865,7 +865,7 @@ internal object XMPRDFParser {
         if (XMPConst.NS_DC_DEPRECATED == namespace)
             namespace = XMPConst.NS_DC
 
-        var prefix = XMPSchemaRegistryImpl.getNamespacePrefix(namespace)
+        var prefix = XMPSchemaRegistry.getNamespacePrefix(namespace)
 
         if (prefix == null) {
 
@@ -880,7 +880,7 @@ internal object XMPRDFParser {
             else
                 DEFAULT_PREFIX
 
-            prefix = XMPSchemaRegistryImpl.registerNamespace(namespace, prefix)
+            prefix = XMPSchemaRegistry.registerNamespace(namespace, prefix)
         }
 
         val xmlNodeLocalName = when (xmlNode) {
@@ -917,7 +917,7 @@ internal object XMPRDFParser {
 
             // If this is an alias set the alias flag in the node
             // and the hasAliases flag in the tree.
-            if (XMPSchemaRegistryImpl.findAlias(childName) != null) {
+            if (XMPSchemaRegistry.findAlias(childName) != null) {
                 isAlias = true
                 xmp.root.hasAliases = true
                 schemaNode.hasAliases = true
