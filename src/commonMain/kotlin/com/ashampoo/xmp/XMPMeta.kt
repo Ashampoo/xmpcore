@@ -39,6 +39,7 @@ import com.ashampoo.xmp.properties.XMPPropertyInfo
  * modify all kinds of properties, create an iterator over all properties and serialize the metadata
  * to a String.
  */
+@Suppress("TooManyFunctions")
 class XMPMeta {
 
     /**
@@ -56,7 +57,6 @@ class XMPMeta {
      * Constructor for an empty metadata object.
      */
     constructor() {
-        // create root node
         this.root = XMPNode(null, null, PropertyOptions())
     }
 
