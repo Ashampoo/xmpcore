@@ -111,7 +111,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val propNode = findNode(
             xmpTree = this.root,
@@ -161,7 +161,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val itemPath = composeArrayItemPath(arrayName, itemIndex)
 
@@ -183,7 +183,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val arrayPath = expandXPath(schemaNS, arrayName)
         val arrayNode = findNode(this.root, arrayPath, false, null) ?: return 0
@@ -229,7 +229,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
 
@@ -278,7 +278,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val qualPath = propName + composeQualifierPath(qualNS, qualName)
 
@@ -325,7 +325,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val verifiedOptions = verifySetOptions(options, propValue)
 
@@ -368,7 +368,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         // Just lookup, don't try to create.
         val arrayPath = expandXPath(schemaNS, arrayName)
@@ -408,7 +408,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         // Just lookup, don't try to create.
         val arrayPath = expandXPath(schemaNS, arrayName)
@@ -456,7 +456,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         if (!arrayOptions.isOnlyArrayOptions())
             throw XMPException("Only array form flags allowed for arrayOptions", XMPError.BADOPTIONS)
@@ -528,7 +528,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
 
@@ -571,7 +571,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         if (!doesPropertyExist(schemaNS, propName))
             throw XMPException("Specified property does not exist!", XMPError.BADXPATH)
@@ -628,7 +628,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val itemPath = composeArrayItemPath(arrayName, itemIndex)
 
@@ -662,7 +662,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
 
@@ -689,7 +689,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val qualPath = propName + composeQualifierPath(qualNS, qualName)
 
@@ -709,7 +709,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val propNode = findNode(
             xmpTree = this.root,
@@ -739,7 +739,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val path = composeArrayItemPath(arrayName, itemIndex)
 
@@ -773,7 +773,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         val path = composeStructFieldPath(fieldNS, fieldName)
 
@@ -806,7 +806,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val path = composeQualifierPath(qualNS, qualName)
 
@@ -884,7 +884,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (altTextName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         if (specificLang.isEmpty())
             throw XMPException("Empty specific language", XMPError.BADPARAM)
@@ -964,7 +964,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (altTextName.isEmpty())
-            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
 
         if (specificLang.isEmpty())
             throw XMPException("Empty specific language", XMPError.BADPARAM)
@@ -1185,7 +1185,7 @@ class XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (propName.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         val propNode = findNode(
             xmpTree = this.root,

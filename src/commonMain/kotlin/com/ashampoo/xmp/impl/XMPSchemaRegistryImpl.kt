@@ -288,13 +288,13 @@ object XMPSchemaRegistryImpl : XMPSchemaRegistry {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (aliasProp.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         if (actualNS.isEmpty())
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (actualProp.isEmpty())
-            throw XMPException("Empty property name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
 
         // Fix the alias options
         val aliasOpts = if (aliasForm != null)
