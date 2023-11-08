@@ -76,7 +76,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         if (!arrayOptions.isOnlyArrayOptions())
             throw XMPException("Only array form flags allowed for arrayOptions", XMPError.BADOPTIONS)
@@ -123,7 +123,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val arrayPath = expandXPath(schemaNS, arrayName)
         val arrayNode = findNode(this.root, arrayPath, false, null) ?: return 0
@@ -140,7 +140,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val itemPath = composeArrayItemPath(arrayName, itemIndex)
 
@@ -192,7 +192,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
 
@@ -223,7 +223,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val path = composeArrayItemPath(arrayName, itemIndex)
 
@@ -243,7 +243,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val path = composeStructFieldPath(fieldNS, fieldName)
 
@@ -276,7 +276,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val itemPath = composeArrayItemPath(arrayName, itemIndex)
 
@@ -294,7 +294,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (altTextName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         if (specificLang.isEmpty())
             throw XMPException("Empty specific language", XMPError.BADPARAM)
@@ -345,7 +345,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (altTextName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         if (specificLang.isEmpty())
             throw XMPException("Empty specific language", XMPError.BADPARAM)
@@ -657,7 +657,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
 
@@ -689,7 +689,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         // Just lookup, don't try to create.
         val arrayPath = expandXPath(schemaNS, arrayName)
@@ -713,7 +713,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (arrayName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         // Just lookup, don't try to create.
         val arrayPath = expandXPath(schemaNS, arrayName)
@@ -786,7 +786,7 @@ class XMPMetaImpl : XMPMeta {
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
 
         if (structName.isEmpty())
-            throw XMPException("Empty array name", XMPError.BADPARAM)
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME, XMPError.BADPARAM)
 
         val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
 

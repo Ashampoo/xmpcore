@@ -10,6 +10,7 @@ package com.ashampoo.xmp
 
 object XMPError {
 
+    const val EMPTY_ARRAY_NAME: String = "Empty array name"
     const val EMPTY_SCHEMA_TEXT: String = "Empty schema namespace URI"
     const val EMPTY_CONVERT_STRING_TEXT: String = "Empty convert-string"
 
