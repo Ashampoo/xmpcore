@@ -6,15 +6,10 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPMeta
-import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
-import com.ashampoo.xmp.impl.Utils.checkUUIDFormat
-import com.ashampoo.xmp.impl.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.Utils.checkUUIDFormat
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 
@@ -34,7 +29,7 @@ internal object XMPNormalizer {
      *
      */
     @kotlin.jvm.JvmStatic
-    fun normalize(xmp: XMPMetaImpl, options: ParseOptions): XMPMeta {
+    fun normalize(xmp: XMPMeta, options: ParseOptions): XMPMeta {
 
         val tree = xmp.root
 
@@ -88,7 +83,7 @@ internal object XMPNormalizer {
     /**
      * Visit all schemas to do general fixes and handle special cases.
      */
-    private fun touchUpDataModel(xmp: XMPMetaImpl) {
+    private fun touchUpDataModel(xmp: XMPMeta) {
 
         // make sure the DC schema is existing, because it might be needed within the normalization
         // if not touched it will be removed by removeEmptySchemas
@@ -255,7 +250,7 @@ internal object XMPNormalizer {
                 currProp.isAlias = false
 
                 // Find the base path, look for the base schema and root node.
-                val info = schemaRegistry.findAlias(currProp.name!!)
+                val info = XMPSchemaRegistry.findAlias(currProp.name!!)
 
                 if (info != null) {
 

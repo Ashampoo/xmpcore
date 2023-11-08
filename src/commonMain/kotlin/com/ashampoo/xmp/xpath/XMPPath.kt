@@ -6,7 +6,7 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl.xpath
+package com.ashampoo.xmp.xpath
 
 /**
  * Representates an XMP XMPPath with segment accessor methods.

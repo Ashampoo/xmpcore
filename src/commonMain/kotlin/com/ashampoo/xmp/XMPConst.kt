@@ -290,6 +290,8 @@ object XMPConst {
 
     const val XMP_DC_SUBJECT: String = "subject"
 
+    const val XMP_ACDSEE_KEYWORDS: String = "keywords"
+
     const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
 
 }

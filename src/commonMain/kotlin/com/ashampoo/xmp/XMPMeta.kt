@@ -8,18 +8,60 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
+import com.ashampoo.xmp.XMPPathFactory.composeArrayItemPath
+import com.ashampoo.xmp.XMPPathFactory.composeQualifierPath
+import com.ashampoo.xmp.XMPPathFactory.composeStructFieldPath
+import com.ashampoo.xmp.XMPUtils.convertToBoolean
+import com.ashampoo.xmp.XMPUtils.convertToDouble
+import com.ashampoo.xmp.XMPUtils.convertToInteger
+import com.ashampoo.xmp.XMPUtils.convertToLong
+import com.ashampoo.xmp.XMPUtils.decodeBase64
+import com.ashampoo.xmp.Utils.normalizeLangValue
+import com.ashampoo.xmp.XMPNodeUtils.appendLangItem
+import com.ashampoo.xmp.XMPNodeUtils.chooseLocalizedText
+import com.ashampoo.xmp.XMPNodeUtils.deleteNode
+import com.ashampoo.xmp.XMPNodeUtils.findNode
+import com.ashampoo.xmp.XMPNodeUtils.setNodeValue
+import com.ashampoo.xmp.XMPNodeUtils.verifySetOptions
+import com.ashampoo.xmp.XMPNormalizer.normalize
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.properties.XMPProperty
+import com.ashampoo.xmp.properties.XMPPropertyInfo
 
 /**
  * This class represents the set of XMP metadata as a DOM representation. It has methods to read and
  * modify all kinds of properties, create an iterator over all properties and serialize the metadata
- * to a String, byte-array or `OutputStream`.
+ * to a String.
  */
-@Suppress("ComplexInterface", "TooManyFunctions")
-interface XMPMeta {
+@Suppress("TooManyFunctions")
+class XMPMeta {
+
+    /**
+     * root of the metadata tree
+     */
+    var root: XMPNode
+        private set
+
+    /**
+     * the xpacket processing instructions content
+     */
+    private var packetHeader: String? = null
+
+    private val arrayOptions = PropertyOptions().setArray(true)
+
+    /**
+     * Constructor for an empty metadata object.
+     */
+    constructor() {
+        this.root = XMPNode(null, null, PropertyOptions())
+    }
+
+    constructor(tree: XMPNode) {
+        this.root = tree
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Basic property manipulation functions
@@ -52,7 +94,85 @@ interface XMPMeta {
      * @return Returns a `XMPProperty` containing the value and the options or `null`
      *         if the property does not exist.
      */
-    fun getProperty(schemaNS: String, propName: String): XMPProperty?
+    fun getProperty(schemaNS: String, propName: String): XMPProperty? =
+        getProperty(schemaNS, propName, VALUE_STRING)
+
+    /**
+     * Returns a property, but the result value can be requested. It can be one
+     * of [XMPMeta.VALUE_STRING], [XMPMeta.VALUE_BOOLEAN],
+     * [XMPMeta.VALUE_INTEGER], [XMPMeta.VALUE_LONG],
+     * [XMPMeta.VALUE_DOUBLE], [XMPMeta.VALUE_DATE],
+     * [XMPMeta.VALUE_TIME_IN_MILLIS], [XMPMeta.VALUE_BASE64].
+     */
+    private fun getProperty(schemaNS: String, propName: String, valueType: Int): XMPProperty? {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val propNode = findNode(
+            xmpTree = this.root,
+            xpath = expandXPath(schemaNS, propName),
+            createNodes = false,
+            leafOptions = null
+        ) ?: return null
+
+        if (valueType != VALUE_STRING && propNode.options.isCompositeProperty())
+            throw XMPException("Property must be simple when a value type is requested", XMPError.BADXPATH)
+
+        val value = evaluateNodeValue(valueType, propNode)
+
+        return object : XMPProperty {
+
+            override fun getValue(): String? =
+                value?.toString()
+
+            override fun getOptions(): PropertyOptions =
+                propNode.options
+
+            override fun getLanguage(): String? =
+                null
+
+            override fun toString(): String =
+                value.toString()
+        }
+    }
+
+    /**
+     * Evaluates a raw node value to the given value type, apply special
+     * conversions for defined types in XMP.
+     */
+    private fun evaluateNodeValue(valueType: Int, propNode: XMPNode): Any? {
+
+        val value: Any?
+        val rawValue = propNode.value
+
+        value = when (valueType) {
+
+            VALUE_BOOLEAN -> convertToBoolean(rawValue)
+
+            VALUE_INTEGER -> convertToInteger(rawValue)
+
+            VALUE_LONG -> convertToLong(rawValue)
+
+            VALUE_DOUBLE -> convertToDouble(rawValue)
+
+            VALUE_BASE64 -> decodeBase64(rawValue!!)
+
+            // leaf values return empty string instead of null
+            // for the other cases the converter methods provides a "null" value.
+            // a default value can only occur if this method is made public.
+            VALUE_STRING ->
+                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
+
+            else ->
+                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
+        }
+
+        return value
+    }
 
     /**
      * Provides access to items within an array. The index is passed as an integer, you need not
@@ -68,7 +188,18 @@ interface XMPMeta {
      * @return Returns a `XMPProperty` containing the value and the options or
      *         `null` if the property does not exist.
      */
-    fun getArrayItem(schemaNS: String, arrayName: String, itemIndex: Int): XMPProperty?
+    fun getArrayItem(schemaNS: String, arrayName: String, itemIndex: Int): XMPProperty? {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val itemPath = composeArrayItemPath(arrayName, itemIndex)
+
+        return getProperty(schemaNS, itemPath)
+    }
 
     /**
      * Returns the number of items in the array.
@@ -79,7 +210,22 @@ interface XMPMeta {
      *                  Has the same namespace prefix usage as propName in `getProperty()`.
      * @return Returns the number of items in the array.
      */
-    fun countArrayItems(schemaNS: String, arrayName: String): Int
+    fun countArrayItems(schemaNS: String, arrayName: String): Int {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val arrayPath = expandXPath(schemaNS, arrayName)
+        val arrayNode = findNode(this.root, arrayPath, false, null) ?: return 0
+
+        if (!arrayNode.options.isArray())
+            throw XMPException("The named property is not an array", XMPError.BADXPATH)
+
+        return arrayNode.getChildrenLength()
+    }
 
     /**
      * Provides access to fields within a nested structure. The namespace for the field is passed as
@@ -108,7 +254,20 @@ interface XMPMeta {
         structName: String,
         fieldNS: String,
         fieldName: String
-    ): XMPProperty?
+    ): XMPProperty? {
+
+        /* Note that fieldNS and fieldName are checked inside composeStructFieldPath */
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (structName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
+
+        return getProperty(schemaNS, fieldPath)
+    }
 
     /**
      * Provides access to a qualifier attached to a property. The namespace for the qualifier is
@@ -145,7 +304,19 @@ interface XMPMeta {
         propName: String,
         qualNS: String,
         qualName: String
-    ): XMPProperty?
+    ): XMPProperty? {
+
+        // qualNS and qualName are checked inside composeQualfierPath
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val qualPath = propName + composeQualifierPath(qualNS, qualName)
+
+        return getProperty(schemaNS, qualPath)
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Functions for setting property values
@@ -181,7 +352,64 @@ interface XMPMeta {
         propName: String,
         propValue: Any?,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val verifiedOptions = verifySetOptions(options, propValue)
+
+        val propNode = findNode(
+            xmpTree = this.root,
+            xpath = expandXPath(schemaNS, propName),
+            createNodes = true,
+            leafOptions = verifySetOptions(options, propValue)
+        ) ?: throw XMPException("Specified property does not exist", XMPError.BADXPATH)
+
+        setNode(propNode, propValue, verifiedOptions, false)
+    }
+
+    /**
+     * The internals for setProperty() and related calls, used after the node is found or created.
+     */
+    private fun setNode(
+        node: XMPNode,
+        value: Any?,
+        newOptions: PropertyOptions,
+        deleteExisting: Boolean
+    ) {
+
+        val compositeMask = PropertyOptions.ARRAY or PropertyOptions.ARRAY_ALT_TEXT or
+            PropertyOptions.ARRAY_ALTERNATE or PropertyOptions.ARRAY_ORDERED or PropertyOptions.STRUCT
+
+        if (deleteExisting)
+            node.clear()
+
+        // its checked by setOptions(), if the merged result is a valid options set
+        node.options.mergeWith(newOptions)
+
+        if (node.options.getOptions() and compositeMask == 0) {
+
+            // This is setting the value of a leaf node.
+            setNodeValue(node, value)
+
+        } else {
+
+            if (value != null && value.toString().isNotEmpty())
+                throw XMPException("Composite nodes can't have values", XMPError.BADXPATH)
+
+            // Can't change an array to a struct, or vice versa.
+            if (node.options.getOptions() and compositeMask != 0 &&
+                newOptions.getOptions() and compositeMask != node.options.getOptions() and compositeMask
+            )
+                throw XMPException("Requested and existing composite form mismatch", XMPError.BADXPATH)
+
+            node.removeChildren()
+        }
+    }
 
     /**
      * Replaces an item within an array. The index is passed as an integer, you need not worry about
@@ -206,7 +434,23 @@ interface XMPMeta {
         itemIndex: Int,
         itemValue: String,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        // Just lookup, don't try to create.
+        val arrayPath = expandXPath(schemaNS, arrayName)
+        val arrayNode = findNode(this.root, arrayPath, false, null)
+
+        if (arrayNode == null)
+            throw XMPException("Specified array does not exist", XMPError.BADXPATH)
+
+        doSetArrayItem(arrayNode, itemIndex, itemValue, options, false)
+    }
 
     /**
      * Inserts an item into an array previous to the given index. The index is passed as an integer,
@@ -230,7 +474,23 @@ interface XMPMeta {
         itemIndex: Int,
         itemValue: String,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        // Just lookup, don't try to create.
+        val arrayPath = expandXPath(schemaNS, arrayName)
+        val arrayNode = findNode(this.root, arrayPath, false, null)
+
+        if (arrayNode == null)
+            throw XMPException("Specified array does not exist", XMPError.BADXPATH)
+
+        doSetArrayItem(arrayNode, itemIndex, itemValue, options, true)
+    }
 
     /**
      * Simplifies the construction of an array by not requiring that you pre-create an empty array.
@@ -262,7 +522,96 @@ interface XMPMeta {
         arrayOptions: PropertyOptions = PropertyOptions(),
         itemValue: String,
         itemOptions: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        if (!arrayOptions.isOnlyArrayOptions())
+            throw XMPException("Only array form flags allowed for arrayOptions", XMPError.BADOPTIONS)
+
+        // Check if array options are set correctly.
+        val verifiedArrayOptions = verifySetOptions(arrayOptions, null)
+
+        // Locate or create the array. If it already exists, make sure the array form from the options
+        // parameter is compatible with the current state.
+        val arrayPath = expandXPath(schemaNS, arrayName)
+
+        // Just lookup, don't try to create.
+        var arrayNode = findNode(this.root, arrayPath, false, null)
+
+        if (arrayNode != null) {
+
+            // The array exists, make sure the form is compatible. Zero arrayForm means take what exists.
+            if (!arrayNode.options.isArray())
+                throw XMPException("The named property is not an array", XMPError.BADXPATH)
+
+        } else {
+
+            // The array does not exist, try to create it.
+            if (verifiedArrayOptions.isArray()) {
+
+                arrayNode = findNode(this.root, arrayPath, true, verifiedArrayOptions)
+
+                if (arrayNode == null)
+                    throw XMPException("Failure creating array node", XMPError.BADXPATH)
+
+            } else {
+
+                // array options missing
+                throw XMPException("Explicit arrayOptions required to create new array", XMPError.BADOPTIONS)
+            }
+        }
+
+        doSetArrayItem(arrayNode, XMPConst.ARRAY_LAST_ITEM, itemValue, itemOptions, true)
+    }
+
+    /**
+     * Locate or create the item node and set the value. Note the index
+     * parameter is one-based! The index can be in the range [1..size + 1] or
+     * "last()", normalize it and check the insert flags. The order of the
+     * normalization checks is important. If the array is empty we end up with
+     * an index and location to set item size + 1.
+     */
+    private fun doSetArrayItem(
+        arrayNode: XMPNode,
+        itemIndex: Int,
+        itemValue: String,
+        itemOptions: PropertyOptions = PropertyOptions(),
+        insert: Boolean
+    ) {
+
+        val itemNode = XMPNode(XMPConst.ARRAY_ITEM_NAME, null)
+
+        val verifiedItemOptions = verifySetOptions(itemOptions, itemValue)
+
+        // in insert mode the index after the last is allowed,
+        // even ARRAY_LAST_ITEM points to the index *after* the last.
+        val maxIndex = if (insert)
+            arrayNode.getChildrenLength() + 1
+        else
+            arrayNode.getChildrenLength()
+
+        val limitedItemIndex = if (itemIndex == XMPConst.ARRAY_LAST_ITEM)
+            maxIndex
+        else
+            itemIndex
+
+        if (1 <= limitedItemIndex && limitedItemIndex <= maxIndex) {
+
+            if (!insert)
+                arrayNode.removeChild(limitedItemIndex)
+
+            arrayNode.addChild(limitedItemIndex, itemNode)
+            setNode(itemNode, itemValue, verifiedItemOptions, false)
+
+        } else {
+            throw XMPException("Array index out of bounds", XMPError.BADINDEX)
+        }
+    }
 
     /**
      * Provides access to fields within a nested structure. The namespace for the field is passed as
@@ -289,7 +638,18 @@ interface XMPMeta {
         fieldName: String,
         fieldValue: String?,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (structName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
+
+        setProperty(schemaNS, fieldPath, fieldValue, options)
+    }
 
     /**
      * Provides access to a qualifier attached to a property. The namespace for the qualifier is
@@ -321,7 +681,21 @@ interface XMPMeta {
         qualName: String,
         qualValue: String,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        if (!doesPropertyExist(schemaNS, propName))
+            throw XMPException("Specified property does not exist!", XMPError.BADXPATH)
+
+        val qualPath = propName + composeQualifierPath(qualNS, qualName)
+
+        setProperty(schemaNS, qualPath, qualValue, options)
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Functions for deleting and detecting properties.
@@ -334,7 +708,23 @@ interface XMPMeta {
      * @param schemaNS The namespace URI for the property. Has the same usage as in `getProperty()`.
      * @param propName The name of the property. Has the same usage as in getProperty.
      */
-    fun deleteProperty(schemaNS: String, propName: String)
+    fun deleteProperty(schemaNS: String, propName: String) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException("Can't delete empty property name.", XMPError.BADPARAM)
+
+        val propNode = findNode(
+            xmpTree = this.root,
+            xpath = expandXPath(schemaNS, propName),
+            createNodes = false,
+            leafOptions = null
+        ) ?: return
+
+        deleteNode(propNode)
+    }
 
     /**
      * Deletes the given XMP subtree rooted at the given array item.
@@ -348,7 +738,18 @@ interface XMPMeta {
      * constant `XMPConst.ARRAY_LAST_ITEM` always refers to the last
      * existing array item.
      */
-    fun deleteArrayItem(schemaNS: String, arrayName: String, itemIndex: Int)
+    fun deleteArrayItem(schemaNS: String, arrayName: String, itemIndex: Int) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val itemPath = composeArrayItemPath(arrayName, itemIndex)
+
+        deleteProperty(schemaNS, itemPath)
+    }
 
     /**
      * Deletes the given XMP subtree rooted at the given struct field.
@@ -364,7 +765,25 @@ interface XMPMeta {
      * `null` or the empty string. Has the same namespace prefix usage as the
      * structName parameter.
      */
-    fun deleteStructField(schemaNS: String, structName: String, fieldNS: String, fieldName: String)
+    fun deleteStructField(
+        schemaNS: String,
+        structName: String,
+        fieldNS: String,
+        fieldName: String
+    ) {
+
+        // fieldNS and fieldName are checked inside composeStructFieldPath
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (structName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val fieldPath = structName + composeStructFieldPath(fieldNS, fieldName)
+
+        deleteProperty(schemaNS, fieldPath)
+    }
 
     /**
      * Deletes the given XMP subtree rooted at the given qualifier.
@@ -379,7 +798,19 @@ interface XMPMeta {
      * `null` or the empty string. Has the same namespace prefix usage as the
      * propName parameter.
      */
-    fun deleteQualifier(schemaNS: String, propName: String, qualNS: String, qualName: String)
+    fun deleteQualifier(schemaNS: String, propName: String, qualNS: String, qualName: String) {
+
+        // Note: qualNS and qualName are checked inside composeQualfierPath
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val qualPath = propName + composeQualifierPath(qualNS, qualName)
+
+        deleteProperty(schemaNS, qualPath)
+    }
 
     /**
      * Returns whether the property exists.
@@ -388,7 +819,23 @@ interface XMPMeta {
      * @param propName The name of the property. Has the same usage as in `getProperty()`.
      * @return Returns true if the property exists.
      */
-    fun doesPropertyExist(schemaNS: String, propName: String): Boolean
+    fun doesPropertyExist(schemaNS: String, propName: String): Boolean {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val propNode = findNode(
+            xmpTree = this.root,
+            xpath = expandXPath(schemaNS, propName),
+            createNodes = false,
+            leafOptions = null
+        )
+
+        return propNode != null
+    }
 
     /**
      * Tells if the array item exists.
@@ -402,7 +849,18 @@ interface XMPMeta {
      * existing array item.
      * @return Returns `true` if the array exists, `false` otherwise.
      */
-    fun doesArrayItemExist(schemaNS: String, arrayName: String, itemIndex: Int): Boolean
+    fun doesArrayItemExist(schemaNS: String, arrayName: String, itemIndex: Int): Boolean {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (arrayName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val path = composeArrayItemPath(arrayName, itemIndex)
+
+        return doesPropertyExist(schemaNS, path)
+    }
 
     /**
      * Tells if the struct field exists.
@@ -423,7 +881,20 @@ interface XMPMeta {
         structName: String,
         fieldNS: String,
         fieldName: String
-    ): Boolean
+    ): Boolean {
+
+        // fieldNS and fieldName are checked inside composeStructFieldPath()
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (structName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        val path = composeStructFieldPath(fieldNS, fieldName)
+
+        return doesPropertyExist(schemaNS, structName + path)
+    }
 
     /**
      * Tells if the qualifier exists.
@@ -438,7 +909,25 @@ interface XMPMeta {
      * propName parameter.
      * @return Returns true if the qualifier exists.
      */
-    fun doesQualifierExist(schemaNS: String, propName: String, qualNS: String, qualName: String): Boolean
+    fun doesQualifierExist(
+        schemaNS: String,
+        propName: String,
+        qualNS: String,
+        qualName: String
+    ): Boolean {
+
+        // qualNS and qualName are checked inside composeQualifierPath()
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val path = composeQualifierPath(qualNS, qualName)
+
+        return doesPropertyExist(schemaNS, propName + path)
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Specialized Get and Set functions
@@ -498,16 +987,56 @@ interface XMPMeta {
      * `null` or the empty string.
      * @return Returns an `XMPProperty` containing the value, the actual language and
      * the options if an appropriate alternate collection item exists, `null`
-     * if the property.
-     * does not exist.
-     *
+     * if the property does not exist.
      */
     fun getLocalizedText(
         schemaNS: String,
         altTextName: String,
         genericLang: String?,
         specificLang: String
-    ): XMPProperty?
+    ): XMPProperty? {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (altTextName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        if (specificLang.isEmpty())
+            throw XMPException("Empty specific language", XMPError.BADPARAM)
+
+        val normalizedGenericLang = genericLang?.let { normalizeLangValue(it) }
+        val normalizedSpecificLang = normalizeLangValue(specificLang)
+
+        val arrayPath = expandXPath(schemaNS, altTextName)
+
+        // *** This expand/find idiom is used in 3 Getters.
+        val arrayNode = findNode(this.root, arrayPath, false, null) ?: return null
+        val result = chooseLocalizedText(arrayNode, normalizedGenericLang, normalizedSpecificLang)
+        val match = result[0] as Int
+        val itemNode = result[1] as? XMPNode
+
+        return if (match != XMPNodeUtils.CLT_NO_VALUES) {
+
+            object : XMPProperty {
+
+                override fun getValue(): String =
+                    itemNode!!.value!!
+
+                override fun getOptions(): PropertyOptions =
+                    itemNode!!.options
+
+                override fun getLanguage(): String =
+                    itemNode!!.getQualifier(1).value!!
+
+                override fun toString(): String =
+                    itemNode!!.value.toString()
+            }
+
+        } else {
+            null
+        }
+    }
 
     /**
      * Modifies the value of a selected item in an alt-text array. Creates an appropriate array item
@@ -545,7 +1074,153 @@ interface XMPMeta {
         specificLang: String,
         itemValue: String,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (altTextName.isEmpty())
+            throw XMPException(XMPError.EMPTY_ARRAY_NAME_TEXT, XMPError.BADPARAM)
+
+        if (specificLang.isEmpty())
+            throw XMPException("Empty specific language", XMPError.BADPARAM)
+
+        val normalizedGenericLang = genericLang?.let { normalizeLangValue(it) }
+        val normalizedSpecificLang = normalizeLangValue(specificLang)
+
+        val arrayPath = expandXPath(schemaNS, altTextName)
+
+        // Find the array node and set the options if it was just created.
+        val arrayNode = findNode(
+            this.root, arrayPath, true,
+            PropertyOptions(
+                PropertyOptions.ARRAY or PropertyOptions.ARRAY_ORDERED
+                    or PropertyOptions.ARRAY_ALTERNATE or PropertyOptions.ARRAY_ALT_TEXT
+            )
+        )
+
+        if (arrayNode == null) {
+
+            throw XMPException("Failed to find or create array node", XMPError.BADXPATH)
+
+        } else if (!arrayNode.options.isArrayAltText()) {
+
+            if (!arrayNode.hasChildren() && arrayNode.options.isArrayAlternate())
+                arrayNode.options.setArrayAltText(true)
+            else
+                throw XMPException("Specified property is no alt-text array", XMPError.BADXPATH)
+        }
+
+        // Make sure the x-default item, if any, is first.
+        var haveXDefault = false
+        var xdItem: XMPNode? = null
+
+        for (item in arrayNode.iterateChildren()) {
+
+            if (!item.hasQualifier() || XMPConst.XML_LANG != item.getQualifier(1).name)
+                throw XMPException("Language qualifier must be first", XMPError.BADXPATH)
+
+            if (XMPConst.X_DEFAULT == item.getQualifier(1).value) {
+                xdItem = item
+                haveXDefault = true
+                break
+            }
+        }
+
+        // Moves x-default to the beginning of the array
+        if (xdItem != null && arrayNode.getChildrenLength() > 1) {
+
+            arrayNode.removeChild(xdItem)
+            arrayNode.addChild(1, xdItem)
+        }
+
+        // Find the appropriate item.
+        // chooseLocalizedText will make sure the array is a language alternative.
+        val result = chooseLocalizedText(arrayNode, normalizedGenericLang, normalizedSpecificLang)
+        val match = result[0] as Int
+        val itemNode = result[1] as? XMPNode
+
+        val specificXDefault = XMPConst.X_DEFAULT == normalizedSpecificLang
+
+        when (match) {
+
+            XMPNodeUtils.CLT_NO_VALUES -> {
+
+                // Create the array items for the specificLang and x-default, with x-default first.
+                appendLangItem(arrayNode, XMPConst.X_DEFAULT, itemValue)
+
+                haveXDefault = true
+
+                if (!specificXDefault)
+                    appendLangItem(arrayNode, normalizedSpecificLang, itemValue)
+            }
+
+            XMPNodeUtils.CLT_SPECIFIC_MATCH -> if (!specificXDefault) {
+
+                // Update the specific item, update x-default if it matches the old value.
+                if (haveXDefault && xdItem != itemNode && xdItem != null && xdItem.value == itemNode!!.value)
+                    xdItem.value = itemValue
+
+                // ! Do this after the x-default check!
+                itemNode!!.value = itemValue
+
+            } else {
+
+                // Update all items whose values match the old x-default value.
+                check(haveXDefault && xdItem == itemNode)
+
+                val it = arrayNode.iterateChildren()
+
+                while (it.hasNext()) {
+
+                    val currItem = it.next()
+
+                    if (currItem == xdItem || currItem.value != xdItem?.value)
+                        continue
+
+                    currItem.value = itemValue
+                }
+
+                // And finally do the x-default item.
+                if (xdItem != null)
+                    xdItem.value = itemValue
+            }
+
+            XMPNodeUtils.CLT_SINGLE_GENERIC -> {
+
+                // Update the generic item, update x-default if it matches the old value.
+                if (haveXDefault && xdItem != itemNode && xdItem != null && xdItem.value == itemNode!!.value)
+                    xdItem.value = itemValue
+
+                // ! Do this after the x-default check!
+                itemNode!!.value = itemValue
+            }
+
+            XMPNodeUtils.CLT_FIRST_ITEM, XMPNodeUtils.CLT_MULTIPLE_GENERIC -> {
+
+                // Create the specific language, ignore x-default.
+                appendLangItem(arrayNode, normalizedSpecificLang, itemValue)
+
+                if (specificXDefault) haveXDefault = true
+            }
+
+            XMPNodeUtils.CLT_XDEFAULT -> {
+
+                // Create the specific language, update x-default if it was the only item.
+                if (xdItem != null && arrayNode.getChildrenLength() == 1)
+                    xdItem.value = itemValue
+
+                appendLangItem(arrayNode, normalizedSpecificLang, itemValue)
+            }
+
+            else -> // does not happen under normal circumstances
+                throw XMPException("Unexpected result from ChooseLocalizedText", XMPError.INTERNALFAILURE)
+        }
+
+        // Add an x-default at the front if needed.
+        if (!haveXDefault && arrayNode.getChildrenLength() == 1)
+            appendLangItem(arrayNode, XMPConst.X_DEFAULT, itemValue)
+    }
 
     // ---------------------------------------------------------------------------------------------
     // Functions accessing properties as binary values.
@@ -560,7 +1235,8 @@ interface XMPMeta {
      * @param propName The name of the property. Has the same usage as in `getProperty()`.
      * @return Returns a `Boolean` value or `null` if the property does not exist.
      */
-    fun getPropertyBoolean(schemaNS: String, propName: String): Boolean?
+    fun getPropertyBoolean(schemaNS: String, propName: String): Boolean? =
+        getPropertyObject(schemaNS, propName, VALUE_BOOLEAN) as? Boolean
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -569,7 +1245,8 @@ interface XMPMeta {
      * @param propName The name of the property. Has the same usage as in `getProperty()`.
      * @return Returns an `Integer` value or `null` if the property does not exist.
      */
-    fun getPropertyInteger(schemaNS: String, propName: String): Int?
+    fun getPropertyInteger(schemaNS: String, propName: String): Int? =
+        getPropertyObject(schemaNS, propName, VALUE_INTEGER) as? Int
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -578,7 +1255,8 @@ interface XMPMeta {
      * @param propName The name of the property. Has the same usage as in `getProperty()`.
      * @return Returns a `Long` value or `null` if the property does not exist.
      */
-    fun getPropertyLong(schemaNS: String, propName: String): Long?
+    fun getPropertyLong(schemaNS: String, propName: String): Long? =
+        getPropertyObject(schemaNS, propName, VALUE_LONG) as? Long
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -587,7 +1265,8 @@ interface XMPMeta {
      * @param propName The name of the property. Has the same usage as in `getProperty()`.
      * @return Returns a `Double` value or `null` if the property does not exist.
      */
-    fun getPropertyDouble(schemaNS: String, propName: String): Double?
+    fun getPropertyDouble(schemaNS: String, propName: String): Double? =
+        getPropertyObject(schemaNS, propName, VALUE_DOUBLE) as? Double
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -597,7 +1276,8 @@ interface XMPMeta {
      * @return Returns a `byte[]`-array contained the decoded base64 value or `null` if the property does
      * not exist.
      */
-    fun getPropertyBase64(schemaNS: String, propName: String): ByteArray?
+    fun getPropertyBase64(schemaNS: String, propName: String): ByteArray? =
+        getPropertyObject(schemaNS, propName, VALUE_BASE64) as? ByteArray
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -609,7 +1289,32 @@ interface XMPMeta {
      * @param propName The name of the property. Has the same usage as in `getProperty()`.
      * @return Returns a `String` value or `null` if the property does not exist.
      */
-    fun getPropertyString(schemaNS: String, propName: String): String?
+    fun getPropertyString(schemaNS: String, propName: String): String? =
+        getPropertyObject(schemaNS, propName, VALUE_STRING) as? String
+
+    /**
+     * Returns a property, but the result value can be requested.
+     */
+    private fun getPropertyObject(schemaNS: String, propName: String, valueType: Int): Any? {
+
+        if (schemaNS.isEmpty())
+            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+
+        if (propName.isEmpty())
+            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+
+        val propNode = findNode(
+            xmpTree = this.root,
+            xpath = expandXPath(schemaNS, propName),
+            createNodes = false,
+            leafOptions = null
+        ) ?: return null
+
+        if (valueType != VALUE_STRING && propNode.options.isCompositeProperty())
+            throw XMPException("Property must be simple when a value type is requested", XMPError.BADXPATH)
+
+        return evaluateNodeValue(valueType, propNode)
+    }
 
     /**
      * Convenience method to set a property to a literal `boolean` value.
@@ -624,6 +1329,11 @@ interface XMPMeta {
         propName: String,
         propValue: Boolean,
         options: PropertyOptions = PropertyOptions()
+    ) = setProperty(
+        schemaNS,
+        propName,
+        if (propValue) XMPConst.TRUE_STRING else XMPConst.FALSE_STRING,
+        options
     )
 
     /**
@@ -633,14 +1343,13 @@ interface XMPMeta {
      * @param propName  The name of the property. Has the same usage as in `getProperty()`.
      * @param propValue the literal property value as `int`.
      * @param options   options of the property to set (optional).
-     *
      */
     fun setPropertyInteger(
         schemaNS: String,
         propName: String,
         propValue: Int,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Convenience method to set a property to a literal `long` value.
@@ -655,7 +1364,7 @@ interface XMPMeta {
         propName: String,
         propValue: Long,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Convenience method to set a property to a literal `double` value.
@@ -670,7 +1379,7 @@ interface XMPMeta {
         propName: String,
         propValue: Double,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Convenience method to set a property from a binary `byte[]`-array,
@@ -686,14 +1395,15 @@ interface XMPMeta {
         propName: String,
         propValue: ByteArray,
         options: PropertyOptions = PropertyOptions()
-    )
+    ) = setProperty(schemaNS, propName, propValue, options)
 
     /**
      * Constructs an iterator for the properties within this XMP object.
      *
      * @return Returns an `XMPIterator`.
      */
-    fun iterator(): XMPIterator
+    fun iterator(): XMPIterator =
+        iterator(IteratorOptions())
 
     /**
      * Constructs an iterator for the properties within this XMP object using some options.
@@ -701,7 +1411,8 @@ interface XMPMeta {
      * @param options Option flags to control the iteration.
      * @return Returns an `XMPIterator`.
      */
-    fun iterator(options: IteratorOptions): XMPIterator
+    fun iterator(options: IteratorOptions): XMPIterator =
+        iterator(null, null, options)
 
     /**
      * Construct an iterator for the properties within an XMP object. According to the parameters it iterates
@@ -718,8 +1429,9 @@ interface XMPMeta {
     fun iterator(
         schemaNS: String?,
         propName: String?,
-        options: IteratorOptions = IteratorOptions()
-    ): XMPIterator
+        options: IteratorOptions
+    ): XMPIterator =
+        XMPIterator(this, schemaNS, propName, options)
 
     /**
      * This correlates to the about-attribute,
@@ -727,12 +1439,15 @@ interface XMPMeta {
      *
      * @return Returns the name of the XMP object.
      */
-    fun getObjectName(): String
+    fun getObjectName(): String =
+        root.name ?: ""
 
     /**
      * @param name Sets the name of the XMP object.
      */
-    fun setObjectName(name: String)
+    fun setObjectName(name: String) {
+        root.name = name
+    }
 
     /**
      * @return Returns the unparsed content of the &lt;?xpacket&gt; processing instruction.
@@ -741,7 +1456,15 @@ interface XMPMeta {
      * 'encoding="XXX"'. If the parsed packet has not been wrapped into an xpacket,
      * `null` is returned.
      */
-    fun getPacketHeader(): String?
+    fun getPacketHeader(): String? =
+        packetHeader
+
+    /**
+     * Sets the packetHeader attributes, only used by the parser.
+     */
+    fun setPacketHeader(packetHeader: String?) {
+        this.packetHeader = packetHeader
+    }
 
     /**
      * Sorts the complete datamodel according to the following rules:
@@ -752,7 +1475,8 @@ interface XMPMeta {
      *  * Qualifier are sorted, with the exception of "xml:lang" and/or "rdf:type"
      * that stay at the top of the list in that order.
      */
-    fun sort()
+    fun sort() =
+        root.sort()
 
     /**
      * Perform the normalization as a separate parsing step.
@@ -761,8 +1485,265 @@ interface XMPMeta {
      * *Note:* It does no harm to call this method to an already normalized xmp object.
      * It was a PDF/A requirement to get hand on the unnormalized `XMPMeta` object.
      */
-    fun normalize(options: ParseOptions = ParseOptions())
+    fun normalize(options: ParseOptions) =
+        normalize(this, options)
 
-    fun printAllToConsole()
+    fun printAllToConsole() {
 
+        val iterator: XMPIterator = iterator()
+
+        while (iterator.hasNext()) {
+
+            val propertyInfo = iterator.next() as? XMPPropertyInfo ?: continue
+
+            println("${propertyInfo.getPath()} = ${propertyInfo.getValue()}")
+        }
+    }
+
+    /*
+     * Convenience methods for commonly used fields
+     *
+     * Note that these are not standard API for XMP Core.
+     * This was added by Ashampoo.
+     */
+
+    /** Returns the ISO date string */
+    fun getDateTimeOriginal(): String? =
+        getPropertyString(XMPConst.NS_EXIF, "DateTimeOriginal")
+
+    fun setDateTimeOriginal(isoDate: String) =
+        setProperty(XMPConst.NS_EXIF, "DateTimeOriginal", isoDate)
+
+    fun deleteDateTimeOriginal() =
+        deleteProperty(XMPConst.NS_EXIF, "DateTimeOriginal")
+
+    fun getOrientation(): Int? =
+        getPropertyInteger(XMPConst.NS_TIFF, "Orientation")
+
+    fun setOrientation(orientation: Int) =
+        setPropertyInteger(XMPConst.NS_TIFF, "Orientation", orientation)
+
+    fun getRating(): Int? =
+        getPropertyInteger(XMPConst.NS_XMP, "Rating")
+
+    fun setRating(rating: Int) =
+        setPropertyInteger(XMPConst.NS_XMP, "Rating", rating)
+
+    fun getGpsLatitude(): String? =
+        getPropertyString(XMPConst.NS_EXIF, "GPSLatitude")
+
+    fun getGpsLongitude(): String? =
+        getPropertyString(XMPConst.NS_EXIF, "GPSLongitude")
+
+    fun setGpsCoordinates(
+        latitudeDdm: String,
+        longitudeDdm: String
+    ) {
+
+        /* This was a mandatory flag in the past, so we write it. */
+        setProperty(XMPConst.NS_EXIF, "GPSVersionID", XMPConst.DEFAULT_GPS_VERSION_ID)
+
+        setProperty(XMPConst.NS_EXIF, "GPSLatitude", latitudeDdm)
+        setProperty(XMPConst.NS_EXIF, "GPSLongitude", longitudeDdm)
+    }
+
+    fun deleteGpsCoordinates() {
+
+        deleteProperty(XMPConst.NS_EXIF, "GPSVersionID")
+        deleteProperty(XMPConst.NS_EXIF, "GPSLatitude")
+        deleteProperty(XMPConst.NS_EXIF, "GPSLongitude")
+    }
+
+    /**
+     * Gets the regular keywords specified by XMP standard.
+     */
+    fun getKeywords(): Set<String> {
+
+        val subjectCount = countArrayItems(XMPConst.NS_DC, XMPConst.XMP_DC_SUBJECT)
+
+        if (subjectCount == 0)
+            return emptySet()
+
+        val keywords = mutableSetOf<String>()
+
+        for (index in 1..subjectCount) {
+
+            val keyword = getPropertyString(
+                XMPConst.NS_DC,
+                "${XMPConst.XMP_DC_SUBJECT}[$index]"
+            ) ?: continue
+
+            keywords.add(keyword)
+        }
+
+        return keywords
+    }
+
+    fun setKeywords(keywords: Set<String>) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_DC, XMPConst.XMP_DC_SUBJECT)
+
+        if (keywords.isEmpty())
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_DC,
+            XMPConst.XMP_DC_SUBJECT,
+            null,
+            arrayOptions
+        )
+
+        /* Fill the new array with keywords. */
+        for (keyword in keywords.sorted())
+            appendArrayItem(
+                schemaNS = XMPConst.NS_DC,
+                arrayName = XMPConst.XMP_DC_SUBJECT,
+                itemValue = keyword
+            )
+    }
+
+    /**
+     * Gets ACDSee keywords from the ACDSee namespace.
+     * This can be used as an alternative if the regular keyword property is empty.
+     */
+    fun getAcdSeeKeywords(): Set<String> {
+
+        val propertyExists = doesPropertyExist(XMPConst.NS_ACDSEE, XMPConst.XMP_ACDSEE_KEYWORDS)
+
+        if (!propertyExists)
+            return emptySet()
+
+        val keywordCount = countArrayItems(XMPConst.NS_ACDSEE, XMPConst.XMP_ACDSEE_KEYWORDS)
+
+        if (keywordCount == 0)
+            return emptySet()
+
+        val keywords = mutableSetOf<String>()
+
+        for (index in 1..keywordCount) {
+
+            val keyword = getPropertyString(
+                XMPConst.NS_ACDSEE,
+                "${XMPConst.XMP_ACDSEE_KEYWORDS}[$index]"
+            ) ?: continue
+
+            keywords.add(keyword)
+        }
+
+        return keywords
+    }
+
+    fun getFaces(): Map<String, XMPRegionArea> {
+
+        val regionListExists = doesPropertyExist(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+
+        if (!regionListExists)
+            return emptyMap()
+
+        val regionCount = countArrayItems(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+
+        if (regionCount == 0)
+            return emptyMap()
+
+        val faces = mutableMapOf<String, XMPRegionArea>()
+
+        for (index in 1..regionCount) {
+
+            val prefix = "Regions/mwg-rs:RegionList[$index]/mwg-rs"
+
+            val regionType = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Type")
+
+            /* We only want faces. */
+            if (regionType != "Face")
+                continue
+
+            val name = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Name")
+            val xPos = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:x")
+            val yPos = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:y")
+            val width = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:w")
+            val height = getPropertyDouble(XMPConst.NS_MWG_RS, "$prefix:Area/stArea:h")
+
+            /* Skip regions with missing data. */
+            @Suppress("ComplexCondition")
+            if (name == null || xPos == null || yPos == null || width == null || height == null)
+                continue
+
+            faces[name] = XMPRegionArea(xPos, yPos, width, height)
+        }
+
+        return faces
+    }
+
+//    fun setFaces(faces: Map<String, XMPRegionArea>) {
+//
+//        /* Delete existing entries, if any */
+//        deleteProperty(NS_MWG_RS, "Regions")
+//
+//        // TODO Write faces
+//    }
+
+    fun getPersonsInImage(): Set<String> {
+
+        val personsInImageCount =
+            countArrayItems(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE)
+
+        if (personsInImageCount == 0)
+            return emptySet()
+
+        val personsInImage = mutableSetOf<String>()
+
+        for (index in 1..personsInImageCount) {
+
+            val personName =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE}[$index]"
+                ) ?: continue
+
+            personsInImage.add(personName)
+        }
+
+        return personsInImage
+    }
+
+    fun setPersonsInImage(personsInImage: Set<String>) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE)
+
+        if (personsInImage.isEmpty())
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_IPTC_EXT,
+            XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE,
+            null,
+            arrayOptions
+        )
+
+        /* Fill the new array with persons. */
+        for (person in personsInImage.sorted())
+            appendArrayItem(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                arrayName = XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE,
+                itemValue = person
+            )
+    }
+
+    companion object {
+
+        /**
+         * Property values are Strings by default
+         */
+
+        private const val VALUE_STRING = 0
+        private const val VALUE_BOOLEAN = 1
+        private const val VALUE_INTEGER = 2
+        private const val VALUE_LONG = 3
+        private const val VALUE_DOUBLE = 4
+        private const val VALUE_BASE64 = 7
+    }
 }

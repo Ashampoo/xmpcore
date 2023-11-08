@@ -8,10 +8,6 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.impl.XMPMetaImpl
-import com.ashampoo.xmp.impl.XMPMetaParser
-import com.ashampoo.xmp.impl.XMPRDFWriter
-import com.ashampoo.xmp.impl.XMPSchemaRegistryImpl
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.SerializeOptions
 
@@ -21,12 +17,12 @@ import com.ashampoo.xmp.options.SerializeOptions
 object XMPMetaFactory {
 
     @kotlin.jvm.JvmStatic
-    val schemaRegistry = XMPSchemaRegistryImpl
+    val schemaRegistry = XMPSchemaRegistry
 
     @kotlin.jvm.JvmStatic
     val versionInfo = XMPVersionInfo
 
-    fun create(): XMPMeta = XMPMetaImpl()
+    fun create(): XMPMeta = XMPMeta()
 
     @Throws(XMPException::class)
     fun parseFromString(
@@ -41,14 +37,12 @@ object XMPMetaFactory {
         options: SerializeOptions? = null
     ): String {
 
-        require(xmp is XMPMetaImpl) { "Serialization only works with XMPMetaImpl" }
-
         val actualOptions = options ?: SerializeOptions()
 
         /* sort the internal data model on demand */
         if (actualOptions.getSort())
             xmp.sort()
 
-        return XMPRDFWriter(xmp, actualOptions).serialize()
+        return XMPRDFWriter.serialize(xmp, actualOptions)
     }
 }

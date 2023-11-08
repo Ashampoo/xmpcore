@@ -6,12 +6,8 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import nl.adaptivity.xmlutil.dom.Attr
@@ -106,9 +102,9 @@ internal object XMPRDFParser {
      *
      */
     @kotlin.jvm.JvmStatic
-    fun parse(xmlRoot: Node, options: ParseOptions): XMPMetaImpl {
+    fun parse(xmlRoot: Node, options: ParseOptions): XMPMeta {
 
-        val xmp = XMPMetaImpl()
+        val xmp = XMPMeta()
 
         parseRdfRoot(xmp, xmlRoot, options)
 
@@ -121,7 +117,7 @@ internal object XMPRDFParser {
      * They simply return for success, failures will throw an exception.
      */
     @Suppress("ThrowsCount")
-    fun parseRdfRoot(xmp: XMPMetaImpl, rdfRdfNode: Node, options: ParseOptions) {
+    fun parseRdfRoot(xmp: XMPMeta, rdfRdfNode: Node, options: ParseOptions) {
 
         if (rdfRdfNode.nodeName != "rdf:RDF")
             throw XMPException("Root node should be of type rdf:RDF", XMPError.BADRDF)
@@ -158,7 +154,7 @@ internal object XMPRDFParser {
      * term.
      */
     private fun parseRdfNodeElement(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean,
@@ -192,7 +188,7 @@ internal object XMPRDFParser {
      */
     @Suppress("ThrowsCount")
     private fun parseRdfNodeElementAttrs(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean
@@ -258,7 +254,7 @@ internal object XMPRDFParser {
      *
      */
     private fun parseRdfPropertyElementList(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlParent: Node?,
         isTopLevel: Boolean,
@@ -334,7 +330,7 @@ internal object XMPRDFParser {
      *
      */
     private fun parseRdfPropertyElement(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean,
@@ -454,7 +450,7 @@ internal object XMPRDFParser {
      * properties written with rdf:Description and rdf:value.
      */
     private fun parseRdfResourcePropertyElement(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean,
@@ -562,7 +558,7 @@ internal object XMPRDFParser {
      * Add a leaf node with the text value and qualifiers for the attributes.
      */
     private fun parseRdfLiteralPropertyElement(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean
@@ -615,7 +611,7 @@ internal object XMPRDFParser {
      * Then process the XML child nodes to get the struct fields.
      */
     private fun parseTypeResourcePropertyElement(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean,
@@ -688,7 +684,7 @@ internal object XMPRDFParser {
      *  4. Otherwise this is a struct, the attributes other than xml:lang, rdf:ID, or rdf:nodeID are fields.
      */
     private fun parseEmptyPropertyElement(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Element,
         isTopLevel: Boolean
@@ -846,7 +842,7 @@ internal object XMPRDFParser {
     }
 
     private fun addChildNode(
-        xmp: XMPMetaImpl,
+        xmp: XMPMeta,
         xmpParent: XMPNode,
         xmlNode: Node,
         value: String?,
@@ -869,7 +865,7 @@ internal object XMPRDFParser {
         if (XMPConst.NS_DC_DEPRECATED == namespace)
             namespace = XMPConst.NS_DC
 
-        var prefix = schemaRegistry.getNamespacePrefix(namespace)
+        var prefix = XMPSchemaRegistry.getNamespacePrefix(namespace)
 
         if (prefix == null) {
 
@@ -884,7 +880,7 @@ internal object XMPRDFParser {
             else
                 DEFAULT_PREFIX
 
-            prefix = schemaRegistry.registerNamespace(namespace, prefix)
+            prefix = XMPSchemaRegistry.registerNamespace(namespace, prefix)
         }
 
         val xmlNodeLocalName = when (xmlNode) {
@@ -921,7 +917,7 @@ internal object XMPRDFParser {
 
             // If this is an alias set the alias flag in the node
             // and the hasAliases flag in the tree.
-            if (schemaRegistry.findAlias(childName) != null) {
+            if (XMPSchemaRegistry.findAlias(childName) != null) {
                 isAlias = true
                 xmp.root.hasAliases = true
                 schemaNode.hasAliases = true
