@@ -8,7 +8,6 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.impl.XMPMetaImpl
 import com.ashampoo.xmp.impl.XMPMetaParser
 import com.ashampoo.xmp.impl.XMPRDFWriter
 import com.ashampoo.xmp.impl.XMPSchemaRegistryImpl
@@ -26,7 +25,7 @@ object XMPMetaFactory {
     @kotlin.jvm.JvmStatic
     val versionInfo = XMPVersionInfo
 
-    fun create(): XMPMeta = XMPMetaImpl()
+    fun create(): XMPMeta = XMPMeta()
 
     @Throws(XMPException::class)
     fun parseFromString(
@@ -40,8 +39,6 @@ object XMPMetaFactory {
         xmp: XMPMeta,
         options: SerializeOptions? = null
     ): String {
-
-        require(xmp is XMPMetaImpl) { "Serialization only works with XMPMetaImpl" }
 
         val actualOptions = options ?: SerializeOptions()
 

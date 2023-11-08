@@ -70,7 +70,7 @@ internal object XMPMetaParser {
         } else {
 
             /* No appropriate root node found, return empty metadata object */
-            XMPMetaImpl()
+            XMPMeta()
         }
     }
 

@@ -34,7 +34,7 @@ internal object XMPNormalizer {
      *
      */
     @kotlin.jvm.JvmStatic
-    fun normalize(xmp: XMPMetaImpl, options: ParseOptions): XMPMeta {
+    fun normalize(xmp: XMPMeta, options: ParseOptions): XMPMeta {
 
         val tree = xmp.root
 
@@ -88,7 +88,7 @@ internal object XMPNormalizer {
     /**
      * Visit all schemas to do general fixes and handle special cases.
      */
-    private fun touchUpDataModel(xmp: XMPMetaImpl) {
+    private fun touchUpDataModel(xmp: XMPMeta) {
 
         // make sure the DC schema is existing, because it might be needed within the normalization
         // if not touched it will be removed by removeEmptySchemas

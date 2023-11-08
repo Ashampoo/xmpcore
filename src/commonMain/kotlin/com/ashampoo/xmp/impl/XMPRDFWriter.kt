@@ -11,6 +11,7 @@ package com.ashampoo.xmp.impl
 import com.ashampoo.xmp.XMPConst
 import com.ashampoo.xmp.XMPError
 import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.XMPMeta
 import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 import com.ashampoo.xmp.XMPMetaFactory.versionInfo
 import com.ashampoo.xmp.impl.Utils.escapeXML
@@ -22,7 +23,7 @@ import com.ashampoo.xmp.options.SerializeOptions
  */
 @Suppress("TooManyFunctions")
 internal class XMPRDFWriter(
-    val xmp: XMPMetaImpl,
+    val xmp: XMPMeta,
     val options: SerializeOptions
 ) {
 

@@ -11,6 +11,7 @@ package com.ashampoo.xmp.impl
 import com.ashampoo.xmp.XMPError
 import com.ashampoo.xmp.XMPException
 import com.ashampoo.xmp.XMPIterator
+import com.ashampoo.xmp.XMPMeta
 import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 import com.ashampoo.xmp.impl.XMPNodeUtils.findNode
 import com.ashampoo.xmp.impl.XMPNodeUtils.findSchemaNode
@@ -27,7 +28,7 @@ import com.ashampoo.xmp.properties.XMPPropertyInfo
  * Calls to `skipSubtree()` / `skipSiblings()` will affect the iteration.
  */
 class XMPIteratorImpl(
-    xmp: XMPMetaImpl,
+    xmp: XMPMeta,
     schemaNS: String?,
     propPath: String?,
     options: IteratorOptions?
