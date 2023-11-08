@@ -33,7 +33,7 @@ class WriteXmpTest {
      */
     @OptIn(ExperimentalStdlibApi::class)
     @Test
-    fun createEmptyXmp() {
+    fun testCreateEmptyXmp() {
 
         val xmpMeta = XMPMetaFactory.create()
 
@@ -61,11 +61,11 @@ class WriteXmpTest {
      */
     @OptIn(ExperimentalStdlibApi::class)
     @Test
-    fun createRatingXmp() {
+    fun testCreateRatingXmp() {
 
         val xmpMeta = XMPMetaFactory.create()
 
-        xmpMeta.setPropertyInteger(XMPConst.NS_XMP, "Rating", 3)
+        xmpMeta.setRating(3)
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
@@ -91,7 +91,7 @@ class WriteXmpTest {
      */
     @OptIn(ExperimentalStdlibApi::class)
     @Test
-    fun createNewXmp() {
+    fun testCreateNewXmp() {
 
         val xmpMeta = XMPMetaFactory.create()
 
@@ -121,7 +121,7 @@ class WriteXmpTest {
      */
     @OptIn(ExperimentalStdlibApi::class)
     @Test
-    fun updateXmp() {
+    fun testUpdateXmp() {
 
         val existingXmp = """
             <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -171,26 +171,19 @@ class WriteXmpTest {
     private fun writeTestValues(xmpMeta: XMPMeta) {
 
         /* Write rating. */
-        xmpMeta.setPropertyInteger(XMPConst.NS_XMP, "Rating", 3)
+        xmpMeta.setRating(3)
 
         /* Write taken date. */
-        xmpMeta.setProperty(XMPConst.NS_EXIF, "DateTimeOriginal", "2023-07-07T13:37:42")
+        xmpMeta.setDateTimeOriginal("2023-07-07T13:37:42")
 
         /* Write GPS coordinates. */
-        xmpMeta.setProperty(XMPConst.NS_EXIF, "GPSVersionID", DEFAULT_GPS_VERSION_ID)
-        xmpMeta.setProperty(XMPConst.NS_EXIF, "GPSLatitude", "53,13.1635N")
-        xmpMeta.setProperty(XMPConst.NS_EXIF, "GPSLongitude", "8,14.3797E")
 
-        /* Create a new array property for keywords. */
-        xmpMeta.setProperty(XMPConst.NS_DC, XMP_DC_SUBJECT, null, arrayOptions)
+        xmpMeta.setGpsCoordinates(
+            latitudeDdm = "53,13.1635N",
+            longitudeDdm = "8,14.3797E"
+        )
 
-        /* Fill the new array with keywords. */
-        for (keyword in listOf("bird", "cat", "dog"))
-            xmpMeta.appendArrayItem(
-                schemaNS = XMPConst.NS_DC,
-                arrayName = XMP_DC_SUBJECT,
-                itemValue = keyword
-            )
+        xmpMeta.setKeywords(setOf("bird", "cat", "dog"))
     }
 
     private fun getXmp(name: String): String =

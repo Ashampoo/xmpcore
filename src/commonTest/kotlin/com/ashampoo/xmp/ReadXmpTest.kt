@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 class ReadXmpTest {
 
     @Test
-    fun readXmp() {
+    fun testReadXmp() {
 
         val testXmp = """
             <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -37,17 +37,17 @@ class ReadXmpTest {
 
         assertEquals(
             expected = "1980-03-15T08:15:30",
-            actual = xmpMeta.getPropertyString(XMPConst.NS_EXIF, "DateTimeOriginal")
+            actual = xmpMeta.getDateTimeOriginal()
         )
 
         assertEquals(
             expected = "53,13.1635N",
-            actual = xmpMeta.getPropertyString(XMPConst.NS_EXIF, "GPSLatitude")
+            actual = xmpMeta.getGpsLatitude()
         )
 
         assertEquals(
             expected = "8,14.3797E",
-            actual = xmpMeta.getPropertyString(XMPConst.NS_EXIF, "GPSLongitude")
+            actual = xmpMeta.getGpsLongitude()
         )
 
         assertEquals(
@@ -56,8 +56,8 @@ class ReadXmpTest {
         )
 
         assertEquals(
-            expected = "2",
-            actual = xmpMeta.getPropertyString(XMPConst.NS_XMP, "Rating")
+            expected = 2,
+            actual = xmpMeta.getRating()
         )
 
         assertEquals(
@@ -73,6 +73,11 @@ class ReadXmpTest {
         assertEquals(
             expected = "swiper",
             actual = xmpMeta.getPropertyString(XMPConst.NS_DC, "$XMP_DC_SUBJECT[2]")
+        )
+
+        assertEquals(
+            expected = setOf("fox", "swiper"),
+            actual = xmpMeta.getKeywords()
         )
     }
 }
