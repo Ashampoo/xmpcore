@@ -6,12 +6,12 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl.xpath
+package com.ashampoo.xmp.xpath
 
 import com.ashampoo.xmp.XMPError
 import com.ashampoo.xmp.XMPException
 import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
-import com.ashampoo.xmp.impl.Utils
+import com.ashampoo.xmp.Utils
 
 /**
  * Parser for XMP XPaths.

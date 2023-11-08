@@ -6,17 +6,12 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPIterator
-import com.ashampoo.xmp.XMPMeta
-import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
-import com.ashampoo.xmp.impl.XMPNodeUtils.findNode
-import com.ashampoo.xmp.impl.XMPNodeUtils.findSchemaNode
-import com.ashampoo.xmp.impl.xpath.XMPPath
-import com.ashampoo.xmp.impl.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.XMPNodeUtils.findNode
+import com.ashampoo.xmp.XMPNodeUtils.findSchemaNode
+import com.ashampoo.xmp.xpath.XMPPath
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.properties.XMPPropertyInfo
@@ -393,7 +388,7 @@ class XMPIteratorImpl(
                     // determine namespace of leaf node
                     val qname = QName(node.name!!)
 
-                    return schemaRegistry.getNamespaceURI(qname.prefix!!)!!
+                    return XMPSchemaRegistryImpl.getNamespaceURI(qname.prefix!!)!!
                 }
 
                 override fun getPath(): String = path

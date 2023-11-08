@@ -6,15 +6,9 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPMeta
-import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
-import com.ashampoo.xmp.XMPMetaFactory.versionInfo
-import com.ashampoo.xmp.impl.Utils.escapeXML
+import com.ashampoo.xmp.Utils.escapeXML
 import com.ashampoo.xmp.options.SerializeOptions
 
 /**
@@ -66,7 +60,7 @@ internal class XMPRDFWriter(
 
             writeIndent(level)
             write(RDF_XMPMETA_START)
-            write(versionInfo.message)
+            write(XMPVersionInfo.message)
             write("\">")
             writeNewline()
 
@@ -570,7 +564,7 @@ internal class XMPRDFWriter(
             actualPrefix = qname.prefix!!
 
             // add colon for lookup
-            actualNamespace = schemaRegistry.getNamespaceURI("$actualPrefix:")
+            actualNamespace = XMPSchemaRegistryImpl.getNamespaceURI("$actualPrefix:")
 
             // prefix w/o colon
             declareNamespace(actualPrefix, actualNamespace, usedPrefixes, indent)

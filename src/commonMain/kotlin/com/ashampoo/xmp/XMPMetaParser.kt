@@ -6,11 +6,9 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPMeta
-import com.ashampoo.xmp.impl.XMPNormalizer.normalize
+import com.ashampoo.xmp.XMPNormalizer.normalize
 import com.ashampoo.xmp.options.ParseOptions
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node

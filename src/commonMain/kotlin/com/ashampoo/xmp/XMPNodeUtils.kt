@@ -6,18 +6,14 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 import com.ashampoo.xmp.XMPUtils.encodeBase64
-import com.ashampoo.xmp.impl.Utils.normalizeLangValue
-import com.ashampoo.xmp.impl.Utils.replaceControlCharsWithSpace
-import com.ashampoo.xmp.impl.Utils.splitNameAndValue
-import com.ashampoo.xmp.impl.xpath.XMPPath
-import com.ashampoo.xmp.impl.xpath.XMPPathSegment
+import com.ashampoo.xmp.Utils.normalizeLangValue
+import com.ashampoo.xmp.Utils.replaceControlCharsWithSpace
+import com.ashampoo.xmp.Utils.splitNameAndValue
+import com.ashampoo.xmp.xpath.XMPPath
+import com.ashampoo.xmp.xpath.XMPPathSegment
 import com.ashampoo.xmp.options.AliasOptions
 import com.ashampoo.xmp.options.PropertyOptions
 
@@ -75,12 +71,12 @@ object XMPNodeUtils {
             schemaNode.isImplicit = true
 
             // only previously registered schema namespaces are allowed in the XMP tree.
-            var prefix = schemaRegistry.getNamespacePrefix(namespaceURI!!)
+            var prefix = XMPSchemaRegistryImpl.getNamespacePrefix(namespaceURI!!)
 
             if (prefix == null) {
 
                 prefix = if (!suggestedPrefix.isNullOrEmpty())
-                    schemaRegistry.registerNamespace(namespaceURI, suggestedPrefix)
+                    XMPSchemaRegistryImpl.registerNamespace(namespaceURI, suggestedPrefix)
                 else
                     throw XMPException("Unregistered schema namespace URI", XMPError.BADSCHEMA)
             }

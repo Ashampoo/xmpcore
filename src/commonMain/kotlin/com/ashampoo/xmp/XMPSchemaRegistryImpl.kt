@@ -6,13 +6,9 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPSchemaRegistry
-import com.ashampoo.xmp.impl.Utils.isXMLNameNS
+import com.ashampoo.xmp.Utils.isXMLNameNS
 import com.ashampoo.xmp.options.AliasOptions
 import com.ashampoo.xmp.properties.XMPAliasInfo
 

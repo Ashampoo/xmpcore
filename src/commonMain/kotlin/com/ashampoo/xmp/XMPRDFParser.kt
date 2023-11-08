@@ -6,13 +6,8 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPError
-import com.ashampoo.xmp.XMPException
-import com.ashampoo.xmp.XMPMeta
-import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import nl.adaptivity.xmlutil.dom.Attr
@@ -870,7 +865,7 @@ internal object XMPRDFParser {
         if (XMPConst.NS_DC_DEPRECATED == namespace)
             namespace = XMPConst.NS_DC
 
-        var prefix = schemaRegistry.getNamespacePrefix(namespace)
+        var prefix = XMPSchemaRegistryImpl.getNamespacePrefix(namespace)
 
         if (prefix == null) {
 
@@ -885,7 +880,7 @@ internal object XMPRDFParser {
             else
                 DEFAULT_PREFIX
 
-            prefix = schemaRegistry.registerNamespace(namespace, prefix)
+            prefix = XMPSchemaRegistryImpl.registerNamespace(namespace, prefix)
         }
 
         val xmlNodeLocalName = when (xmlNode) {
@@ -922,7 +917,7 @@ internal object XMPRDFParser {
 
             // If this is an alias set the alias flag in the node
             // and the hasAliases flag in the tree.
-            if (schemaRegistry.findAlias(childName) != null) {
+            if (XMPSchemaRegistryImpl.findAlias(childName) != null) {
                 isAlias = true
                 xmp.root.hasAliases = true
                 schemaNode.hasAliases = true

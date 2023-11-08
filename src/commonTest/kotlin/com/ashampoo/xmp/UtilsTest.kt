@@ -1,5 +1,6 @@
-package com.ashampoo.xmp.impl
+package com.ashampoo.xmp
 
+import com.ashampoo.xmp.Utils
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

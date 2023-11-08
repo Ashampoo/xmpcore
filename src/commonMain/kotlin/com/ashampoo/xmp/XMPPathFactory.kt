@@ -8,9 +8,8 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.impl.Utils
-import com.ashampoo.xmp.impl.xpath.XMPPath
-import com.ashampoo.xmp.impl.xpath.XMPPathParser
+import com.ashampoo.xmp.xpath.XMPPath
+import com.ashampoo.xmp.xpath.XMPPathParser
 
 /**
  * Utility services for the metadata object. It has only public static functions, you cannot create
