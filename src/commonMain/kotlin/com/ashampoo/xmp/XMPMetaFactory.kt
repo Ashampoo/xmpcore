@@ -43,6 +43,6 @@ object XMPMetaFactory {
         if (actualOptions.getSort())
             xmp.sort()
 
-        return XMPRDFWriter(actualOptions).serialize(xmp)
+        return XMPRDFWriter().serialize(xmp, actualOptions)
     }
 }

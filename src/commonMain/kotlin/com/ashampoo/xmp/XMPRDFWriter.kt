@@ -16,20 +16,18 @@ import com.ashampoo.xmp.options.SerializeOptions
  * The output is a XMP String according to the `SerializeOptions`.
  */
 @Suppress("TooManyFunctions")
-internal class XMPRDFWriter(
-    val options: SerializeOptions
-) {
+internal class XMPRDFWriter {
 
     /**
      * The actual serialization.
      */
-    fun serialize(xmp: XMPMeta): String {
+    fun serialize(xmp: XMPMeta, options: SerializeOptions): String {
 
         try {
 
             val sb: StringBuilder = StringBuilder()
 
-            serializeAsRDF(sb, xmp)
+            serializeAsRDF(sb, xmp, options)
 
             return sb.toString()
 
@@ -43,7 +41,8 @@ internal class XMPRDFWriter(
      */
     private fun serializeAsRDF(
         sb: StringBuilder,
-        xmp: XMPMeta
+        xmp: XMPMeta,
+        options: SerializeOptions
     ) {
 
         var level = 0
@@ -74,7 +73,7 @@ internal class XMPRDFWriter(
 
         // Write all of the properties.
         if (options.getUseCanonicalFormat())
-            serializeCanonicalRDFSchemas(sb, xmp, level)
+            serializeCanonicalRDFSchemas(sb, xmp, options, level)
         else
             serializeCompactRDFSchemas(sb, xmp, level)
 
@@ -121,6 +120,7 @@ internal class XMPRDFWriter(
     private fun serializeCanonicalRDFSchemas(
         sb: StringBuilder,
         xmp: XMPMeta,
+        options: SerializeOptions,
         level: Int
     ) {
 
@@ -129,7 +129,7 @@ internal class XMPRDFWriter(
             startOuterRDFDescription(sb, xmp, xmp.root, level)
 
             for (schema in xmp.root.getChildren())
-                serializeCanonicalRDFSchema(sb, schema, level)
+                serializeCanonicalRDFSchema(sb, options, schema, level)
 
             endOuterRDFDescription(sb, level)
 
@@ -529,6 +529,7 @@ internal class XMPRDFWriter(
      */
     private fun serializeCanonicalRDFSchema(
         sb: StringBuilder,
+        options: SerializeOptions,
         schemaNode: XMPNode,
         level: Int
     ) {
