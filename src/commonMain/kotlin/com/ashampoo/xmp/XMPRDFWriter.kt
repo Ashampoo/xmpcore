@@ -17,20 +17,19 @@ import com.ashampoo.xmp.options.SerializeOptions
  */
 @Suppress("TooManyFunctions")
 internal class XMPRDFWriter(
-    val xmp: XMPMeta,
     val options: SerializeOptions
 ) {
 
     /**
      * The actual serialization.
      */
-    fun serialize(): String {
+    fun serialize(xmp: XMPMeta): String {
 
         try {
 
             val sb: StringBuilder = StringBuilder()
 
-            serializeAsRDF(sb)
+            serializeAsRDF(sb, xmp)
 
             return sb.toString()
 
@@ -42,7 +41,10 @@ internal class XMPRDFWriter(
     /**
      * Writes the (optional) packet header and the outer rdf-tags.
      */
-    private fun serializeAsRDF(sb: StringBuilder) {
+    private fun serializeAsRDF(
+        sb: StringBuilder,
+        xmp: XMPMeta
+    ) {
 
         var level = 0
 
@@ -72,9 +74,9 @@ internal class XMPRDFWriter(
 
         // Write all of the properties.
         if (options.getUseCanonicalFormat())
-            serializeCanonicalRDFSchemas(sb, level)
+            serializeCanonicalRDFSchemas(sb, xmp, level)
         else
-            serializeCompactRDFSchemas(sb, level)
+            serializeCompactRDFSchemas(sb, xmp, level)
 
         // Write the rdf:RDF end tag.
         writeIndent(sb, level)
@@ -118,12 +120,13 @@ internal class XMPRDFWriter(
      */
     private fun serializeCanonicalRDFSchemas(
         sb: StringBuilder,
+        xmp: XMPMeta,
         level: Int
     ) {
 
         if (xmp.root.hasChildren()) {
 
-            startOuterRDFDescription(sb, xmp.root, level)
+            startOuterRDFDescription(sb, xmp, xmp.root, level)
 
             for (schema in xmp.root.getChildren())
                 serializeCanonicalRDFSchema(sb, schema, level)
@@ -134,13 +137,13 @@ internal class XMPRDFWriter(
 
             writeIndent(sb, level + 1)
             sb.append(RDF_SCHEMA_START) // Special case an empty XMP object.
-            writeTreeName(sb)
+            writeTreeName(sb, xmp)
             sb.append("/>")
             sb.append(XMP_DEFAULT_NEWLINE)
         }
     }
 
-    private fun writeTreeName(sb: StringBuilder) {
+    private fun writeTreeName(sb: StringBuilder, xmp: XMPMeta) {
 
         sb.append('"')
 
@@ -159,13 +162,14 @@ internal class XMPRDFWriter(
      */
     private fun serializeCompactRDFSchemas(
         sb: StringBuilder,
+        xmp: XMPMeta,
         level: Int
     ) {
 
         // Begin the rdf:Description start tag.
         writeIndent(sb, level + 1)
         sb.append(RDF_SCHEMA_START)
-        writeTreeName(sb)
+        writeTreeName(sb, xmp)
 
         // Write all necessary xmlns attributes.
         val usedPrefixes: MutableSet<String> = mutableSetOf()
@@ -630,13 +634,14 @@ internal class XMPRDFWriter(
      */
     private fun startOuterRDFDescription(
         sb: StringBuilder,
+        xmp: XMPMeta,
         schemaNode: XMPNode,
         level: Int
     ) {
 
         writeIndent(sb, level + 1)
         sb.append(RDF_SCHEMA_START)
-        writeTreeName(sb)
+        writeTreeName(sb, xmp)
 
         val usedPrefixes: MutableSet<String> = mutableSetOf()
         usedPrefixes.add("xml")
