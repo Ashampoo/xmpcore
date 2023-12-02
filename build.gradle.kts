@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
     kotlin("multiplatform") version "1.9.21"
-    id("com.android.library") version "7.4.2"
+    id("com.android.library") version "8.0.2"
     id("maven-publish")
     id("signing")
     id("io.gitlab.arturbosch.detekt") version "1.23.3"
@@ -22,7 +22,7 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val ktorVersion: String = "2.3.5"
+val ktorVersion: String = "2.3.6"
 val xmlUtilVersion: String = "0.86.2"
 
 description = productName
