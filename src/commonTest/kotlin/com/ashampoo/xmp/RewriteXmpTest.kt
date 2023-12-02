@@ -214,6 +214,11 @@ class RewriteXmpTest {
 
     companion object {
 
+        /*
+         * Note: sample_100.xml is the only one that
+         * triggers XMPNormalizer.tweakOldXMP()
+         */
+
         const val TEST_PHOTO_COUNT = 100
 
         private const val RESOURCE_PATH: String = "src/commonTest/resources/com/ashampoo/xmp"
