@@ -6,8 +6,8 @@ plugins {
     id("com.android.library") version "8.0.2"
     id("maven-publish")
     id("signing")
-    id("io.gitlab.arturbosch.detekt") version "1.23.3"
-    id("org.sonarqube") version "4.3.1.3277"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
+    id("org.sonarqube") version "4.4.1.3373"
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
     id("com.asarkar.gradle.build-time-tracker") version "4.3.0"
     id("me.qoomon.git-versioning") version "6.4.3"
@@ -22,7 +22,6 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val ktorVersion: String = "2.3.6"
 val xmlUtilVersion: String = "0.86.2"
 
 description = productName
@@ -78,18 +77,9 @@ sonar {
             )
         )
 
-        /* Include Android Lint */
-        property("sonar.android.lint.report", "${project.buildDir}/reports/lint-results.xml")
-
-        /* Include Detekt issues */
-        val detektPath = "${project.buildDir}/reports/detekt/detekt.xml"
-        println("Detekt report: $detektPath")
-        property("sonar.kotlin.detekt.reportPaths", detektPath)
-
-        /* Include Kover code coverage */
-        val koverPath = "${project.buildDir}/reports/kover/xml/report.xml"
-        println("Kover report: $koverPath")
-        property("sonar.coverage.jacoco.xmlReportPaths", koverPath)
+        property("sonar.android.lint.report", "build/reports/lint-results.xml")
+        property("sonar.kotlin.detekt.reportPaths", "build/reports/detekt/detekt.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/kover/xml/report.xml")
     }
 }
 
@@ -147,12 +137,6 @@ kotlin {
     val commonMain by sourceSets.getting {
 
         dependencies {
-
-            /*
-             * Needed for Charset class.
-             * Defined as api() to prevent problems when used from a pure-java project.
-             */
-            api("io.ktor:ktor-io:$ktorVersion")
 
             /* Needed to parse XML and create a DOM Document */
             api("io.github.pdvrieze.xmlutil:core:$xmlUtilVersion")
