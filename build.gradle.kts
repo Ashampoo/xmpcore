@@ -84,9 +84,9 @@ sonar {
 }
 
 detekt {
-    source = files("src", "build.gradle.kts")
+    source.from("src", "build.gradle.kts")
     allRules = true
-    config = files("detekt.yml")
+    config.setFrom("$projectDir/../detekt.yml")
     parallel = true
     ignoreFailures = true
     autoCorrect = true
