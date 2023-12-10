@@ -1072,8 +1072,7 @@ class XMPMeta {
         altTextName: String,
         genericLang: String?,
         specificLang: String,
-        itemValue: String,
-        options: PropertyOptions = PropertyOptions()
+        itemValue: String
     ) {
 
         if (schemaNS.isEmpty())
