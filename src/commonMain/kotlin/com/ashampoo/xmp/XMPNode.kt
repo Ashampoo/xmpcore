@@ -305,21 +305,27 @@ class XMPNode(
         return qualifier!!
     }
 
+    private fun childExists(childName: String): Boolean =
+        XMPConst.ARRAY_ITEM_NAME != childName && findChildByName(childName) != null
+
     /**
      * Checks that a node name is not existing on the same level, except for array items.
      */
     private fun assertChildNotExisting(childName: String) {
 
-        if (XMPConst.ARRAY_ITEM_NAME != childName && findChildByName(childName) != null)
+        if (childExists(childName))
             throw XMPException("Duplicate property or field node '$childName'", XMPError.BADXMP)
     }
+
+    private fun qualifierExists(qualifierName: String): Boolean =
+        XMPConst.ARRAY_ITEM_NAME != qualifierName && findQualifierByName(qualifierName) != null
 
     /**
      * Checks that a qualifier name is not existing on the same level.
      */
     private fun assertQualifierNotExisting(qualifierName: String) {
 
-        if (XMPConst.ARRAY_ITEM_NAME != qualifierName && findQualifierByName(qualifierName) != null)
+        if (qualifierExists(qualifierName))
             throw XMPException("Duplicate '$qualifierName' qualifier", XMPError.BADXMP)
     }
 }
