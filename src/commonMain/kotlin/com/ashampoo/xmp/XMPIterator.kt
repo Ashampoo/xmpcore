@@ -10,11 +10,11 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.XMPNodeUtils.findNode
 import com.ashampoo.xmp.XMPNodeUtils.findSchemaNode
-import com.ashampoo.xmp.xpath.XMPPath
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.properties.XMPPropertyInfo
+import com.ashampoo.xmp.xpath.XMPPath
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 
 /**
  * Interface for the `XMPMeta` iteration services.

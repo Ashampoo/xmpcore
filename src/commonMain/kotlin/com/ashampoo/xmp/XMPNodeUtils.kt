@@ -8,14 +8,14 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPUtils.encodeBase64
 import com.ashampoo.xmp.Utils.normalizeLangValue
 import com.ashampoo.xmp.Utils.replaceControlCharsWithSpace
 import com.ashampoo.xmp.Utils.splitNameAndValue
-import com.ashampoo.xmp.xpath.XMPPath
-import com.ashampoo.xmp.xpath.XMPPathSegment
+import com.ashampoo.xmp.XMPUtils.encodeBase64
 import com.ashampoo.xmp.options.AliasOptions
 import com.ashampoo.xmp.options.PropertyOptions
+import com.ashampoo.xmp.xpath.XMPPath
+import com.ashampoo.xmp.xpath.XMPPathSegment
 
 /**
  * Utilities for `XMPNode`.

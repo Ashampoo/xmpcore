@@ -1,14 +1,11 @@
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPConst.DEFAULT_GPS_VERSION_ID
-import com.ashampoo.xmp.XMPConst.XMP_DC_SUBJECT
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.options.SerializeOptions
 import com.goncalossilva.resources.Resource
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.files.sink
 import kotlin.test.Test
 import kotlin.test.fail
 

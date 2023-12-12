@@ -5,7 +5,6 @@ import com.goncalossilva.resources.Resource
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.files.sink
 import kotlin.test.Test
 import kotlin.test.fail
 
@@ -41,6 +40,12 @@ class RewriteXmpTest {
 
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
+
+            /*
+             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
+             */
+            if (isApple && (index == 50 || index == 51 || index == 52))
+                continue
 
             try {
 
@@ -78,6 +83,7 @@ class RewriteXmpTest {
 
             } catch (ex: Exception) {
 
+                @Suppress("PrintStackTrace")
                 ex.printStackTrace()
 
                 fail("testRewriteXmp() failed for XMP sample $index due to ${ex.message}")
@@ -94,6 +100,12 @@ class RewriteXmpTest {
 
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
+
+            /*
+             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
+             */
+            if (isApple && (index == 50 || index == 51 || index == 52))
+                continue
 
             val originalXmp = getFormattedCompactXmp(index)
 
@@ -127,6 +139,12 @@ class RewriteXmpTest {
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
 
+            /*
+             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
+             */
+            if (isApple && (index == 50 || index == 51 || index == 52))
+                continue
+
             val originalXmp = getFormattedCanonicalXmp(index)
 
             val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
@@ -158,6 +176,12 @@ class RewriteXmpTest {
 
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
+
+            /*
+             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
+             */
+            if (isApple && (index == 50 || index == 51 || index == 52))
+                continue
 
             val compactXmp = getFormattedCompactXmp(index)
 

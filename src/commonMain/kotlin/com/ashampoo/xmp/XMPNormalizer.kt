@@ -9,9 +9,9 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.checkUUIDFormat
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 
 internal object XMPNormalizer {
 
@@ -351,7 +351,7 @@ internal object XMPNormalizer {
     /**
      * Moves an alias node of array form to another schema into an array
      *
-     * @param propertyIt the property iterator of the old schema (used to delete the property)
+     * @param removeChildFromTree lambda used to delete the property of the schema
      * @param childNode  the node to be moved
      * @param baseArray  the base array for the array item
      *
