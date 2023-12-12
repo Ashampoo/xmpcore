@@ -155,8 +155,6 @@ internal object XMPRDFWriter {
 
     /**
      * Serializes the metadata in pretty-printed manner.
-     *
-     * @param level indent level
      */
     private fun serializeCanonicalRDFSchemas(
         sb: StringBuilder,
@@ -198,8 +196,6 @@ internal object XMPRDFWriter {
 
     /**
      * Serializes the metadata in compact manner.
-     *
-     * @param level indent level to start with
      */
     private fun serializeCompactRDFSchemas(
         sb: StringBuilder,
@@ -291,9 +287,6 @@ internal object XMPRDFWriter {
      * field of a struct, or an item of an array. The indent is that for the
      * property element. The patterns bwlow ignore attribute qualifiers such as
      * xml:lang, they don't affect the output form.
-     *
-     * @param parentNode the parent node
-     * @param indent     the current indent level
      */
     private fun serializeCompactRDFElementProps(
         sb: StringBuilder,
@@ -383,7 +376,6 @@ internal object XMPRDFWriter {
     /**
      * Serializes a simple property.
      *
-     * @param node an XMPNode
      * @return Returns an array containing the flags emitEndTag and indentEndTag.
      */
     private fun serializeCompactRDFSimpleProp(

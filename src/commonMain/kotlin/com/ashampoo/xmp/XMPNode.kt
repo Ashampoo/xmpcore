@@ -64,7 +64,9 @@ class XMPNode(
 
     fun addChild(node: XMPNode) {
 
-        assertChildNotExisting(node.name!!)
+        /* Ignore doubled childs. */
+        if (childExists(node.name!!))
+            return
 
         node.parent = this
 
@@ -73,7 +75,9 @@ class XMPNode(
 
     fun addChild(index: Int, node: XMPNode) {
 
-        assertChildNotExisting(node.name!!)
+        /* Ignore doubled childs. */
+        if (childExists(node.name!!))
+            return
 
         node.parent = this
 
@@ -146,7 +150,9 @@ class XMPNode(
 
     fun addQualifier(qualNode: XMPNode) {
 
-        assertQualifierNotExisting(qualNode.name!!)
+        /* Ignore doubled qualifiers. */
+        if (qualifierExists(qualNode.name!!))
+            return
 
         qualNode.parent = this
         qualNode.options.setQualifier(true)
@@ -305,21 +311,9 @@ class XMPNode(
         return qualifier!!
     }
 
-    /**
-     * Checks that a node name is not existing on the same level, except for array items.
-     */
-    private fun assertChildNotExisting(childName: String) {
+    private fun childExists(childName: String): Boolean =
+        XMPConst.ARRAY_ITEM_NAME != childName && findChildByName(childName) != null
 
-        if (XMPConst.ARRAY_ITEM_NAME != childName && findChildByName(childName) != null)
-            throw XMPException("Duplicate property or field node '$childName'", XMPError.BADXMP)
-    }
-
-    /**
-     * Checks that a qualifier name is not existing on the same level.
-     */
-    private fun assertQualifierNotExisting(qualifierName: String) {
-
-        if (XMPConst.ARRAY_ITEM_NAME != qualifierName && findQualifierByName(qualifierName) != null)
-            throw XMPException("Duplicate '$qualifierName' qualifier", XMPError.BADXMP)
-    }
+    private fun qualifierExists(qualifierName: String): Boolean =
+        XMPConst.ARRAY_ITEM_NAME != qualifierName && findQualifierByName(qualifierName) != null
 }

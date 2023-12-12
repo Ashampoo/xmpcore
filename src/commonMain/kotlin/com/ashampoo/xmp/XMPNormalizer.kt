@@ -9,9 +9,9 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.checkUUIDFormat
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 
 internal object XMPNormalizer {
 
@@ -230,20 +230,16 @@ internal object XMPNormalizer {
 
         val strictAliasing = options.getStrictAliasing()
 
-        val schemaIt: Iterator<XMPNode> = tree.iterateChildren()
+        val schemas = tree.iterateChildren().asSequence().toList()
 
-        while (schemaIt.hasNext()) {
-
-            val currSchema = schemaIt.next()
+        for (currSchema in schemas) {
 
             if (!currSchema.hasAliases)
                 continue
 
-            val propertyIt = currSchema.iterateChildrenMutable()
+            val properties = currSchema.iterateChildrenMutable().asSequence().toList()
 
-            while (propertyIt.hasNext()) {
-
-                val currProp = propertyIt.next()
+            for (currProp in properties) {
 
                 if (!currProp.isAlias)
                     continue
@@ -282,7 +278,8 @@ internal object XMPNormalizer {
                             baseSchema.addChild(currProp)
 
                             // remove the alias property
-                            propertyIt.remove()
+
+                            currSchema.removeChild(currProp)
 
                         } else {
 
@@ -296,7 +293,9 @@ internal object XMPNormalizer {
 
                             baseSchema.addChild(baseNode)
 
-                            transplantArrayItemAlias(propertyIt, currProp, baseNode)
+                            transplantArrayItemAlias(currProp, baseNode) {
+                                currSchema.removeChild(currProp)
+                            }
                         }
 
                     } else if (info.getAliasForm().isSimple()) {
@@ -307,7 +306,7 @@ internal object XMPNormalizer {
                         if (strictAliasing)
                             compareAliasedSubtrees(currProp, baseNode, true)
 
-                        propertyIt.remove()
+                        currSchema.removeChild(currProp)
 
                     } else {
 
@@ -330,14 +329,16 @@ internal object XMPNormalizer {
 
                         if (itemNode == null) {
 
-                            transplantArrayItemAlias(propertyIt, currProp, baseNode)
+                            transplantArrayItemAlias(currProp, baseNode) {
+                                currSchema.removeChild(currProp)
+                            }
 
                         } else {
 
                             if (strictAliasing)
                                 compareAliasedSubtrees(currProp, itemNode, true)
 
-                            propertyIt.remove()
+                            currSchema.removeChild(currProp)
                         }
                     }
                 }
@@ -350,15 +351,15 @@ internal object XMPNormalizer {
     /**
      * Moves an alias node of array form to another schema into an array
      *
-     * @param propertyIt the property iterator of the old schema (used to delete the property)
+     * @param removeChildFromTree lambda used to delete the property of the schema
      * @param childNode  the node to be moved
      * @param baseArray  the base array for the array item
      *
      */
     private fun transplantArrayItemAlias(
-        propertyIt: MutableIterator<XMPNode>,
         childNode: XMPNode,
-        baseArray: XMPNode
+        baseArray: XMPNode,
+        removeChildFromTree: () -> Unit
     ) {
 
         if (baseArray.options.isArrayAltText()) {
@@ -372,7 +373,7 @@ internal object XMPNormalizer {
             childNode.addQualifier(langQual)
         }
 
-        propertyIt.remove()
+        removeChildFromTree()
 
         childNode.name = XMPConst.ARRAY_ITEM_NAME
 

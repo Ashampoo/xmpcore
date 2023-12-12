@@ -36,7 +36,7 @@ object DomParser {
             return writer.target
 
         } catch (ex: Exception) {
-            throw XMPException("Error reading the XML-file", XMPError.BADSTREAM, ex)
+            throw XMPException("Error reading the XML file: ${ex.message}", XMPError.BADSTREAM, ex)
         }
     }
 }

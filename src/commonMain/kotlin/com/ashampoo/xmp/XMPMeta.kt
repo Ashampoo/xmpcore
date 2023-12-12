@@ -8,14 +8,6 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPPathFactory.composeArrayItemPath
-import com.ashampoo.xmp.XMPPathFactory.composeQualifierPath
-import com.ashampoo.xmp.XMPPathFactory.composeStructFieldPath
-import com.ashampoo.xmp.XMPUtils.convertToBoolean
-import com.ashampoo.xmp.XMPUtils.convertToDouble
-import com.ashampoo.xmp.XMPUtils.convertToInteger
-import com.ashampoo.xmp.XMPUtils.convertToLong
-import com.ashampoo.xmp.XMPUtils.decodeBase64
 import com.ashampoo.xmp.Utils.normalizeLangValue
 import com.ashampoo.xmp.XMPNodeUtils.appendLangItem
 import com.ashampoo.xmp.XMPNodeUtils.chooseLocalizedText
@@ -24,12 +16,20 @@ import com.ashampoo.xmp.XMPNodeUtils.findNode
 import com.ashampoo.xmp.XMPNodeUtils.setNodeValue
 import com.ashampoo.xmp.XMPNodeUtils.verifySetOptions
 import com.ashampoo.xmp.XMPNormalizer.normalize
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.XMPPathFactory.composeArrayItemPath
+import com.ashampoo.xmp.XMPPathFactory.composeQualifierPath
+import com.ashampoo.xmp.XMPPathFactory.composeStructFieldPath
+import com.ashampoo.xmp.XMPUtils.convertToBoolean
+import com.ashampoo.xmp.XMPUtils.convertToDouble
+import com.ashampoo.xmp.XMPUtils.convertToInteger
+import com.ashampoo.xmp.XMPUtils.convertToLong
+import com.ashampoo.xmp.XMPUtils.decodeBase64
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.properties.XMPProperty
 import com.ashampoo.xmp.properties.XMPPropertyInfo
+import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
 
 /**
  * This class represents the set of XMP metadata as a DOM representation. It has methods to read and

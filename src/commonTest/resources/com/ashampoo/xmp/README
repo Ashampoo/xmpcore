@@ -1,0 +1,13 @@
+This document makes comments about special XMP samples in the set.
+We collect problematic files from real-world images to test for regression.
+
+# sample_50.xml
+Problem: Doubled child entries
+
+# sample_51.xml
+Problem: Doubled ImageDescription field
+
+# sample_52.xml
+okb9GBO6w0.jpg
+XMPException: Unrecognized attribute of empty property element
+<rdf:li rdf:about=''/>

@@ -10,6 +10,7 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.XMPNormalizer.normalize
 import com.ashampoo.xmp.options.ParseOptions
+import nl.adaptivity.xmlutil.dom.Comment
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node
 import nl.adaptivity.xmlutil.dom.ProcessingInstruction
@@ -116,6 +117,11 @@ internal object XMPMetaParser {
                 // Store the processing instructions content
                 if (result != null)
                     result[2] = child.getData()
+
+            } else if (child is Comment) {
+
+                /* We ignore comments. */
+                continue
 
             } else if (child !is Text && child !is ProcessingInstruction) {
 

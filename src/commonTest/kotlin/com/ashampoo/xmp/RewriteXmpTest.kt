@@ -5,7 +5,6 @@ import com.goncalossilva.resources.Resource
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
-import kotlinx.io.files.sink
 import kotlin.test.Test
 import kotlin.test.fail
 
@@ -42,35 +41,46 @@ class RewriteXmpTest {
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
 
-            val originalXmp = getOriginalXmp(index)
+            try {
 
-            val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
+                val originalXmp = getOriginalXmp(index)
 
-            val actualCompactXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
-            val actualCanonicalXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCanonical)
+                val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
 
-            val expectedCompactXmp = getFormattedCompactXmp(index)
-            val expectedCanonicalXmp = getFormattedCanonicalXmp(index)
+                val actualCompactXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
+                val actualCanonicalXmp =
+                    XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCanonical)
 
-            val equals = expectedCompactXmp.contentEquals(actualCompactXmp) &&
-                expectedCanonicalXmp.contentEquals(actualCanonicalXmp)
+                val expectedCompactXmp = getFormattedCompactXmp(index)
+                val expectedCanonicalXmp = getFormattedCanonicalXmp(index)
 
-            if (!equals) {
+                val equals = expectedCompactXmp.contentEquals(actualCompactXmp) &&
+                    expectedCanonicalXmp.contentEquals(actualCanonicalXmp)
 
-                SystemFileSystem
-                    .sink(Path("build/sample_${index}_formatted_compact.xmp"))
-                    .buffered()
-                    .use {
-                        it.write(actualCompactXmp.encodeToByteArray())
-                    }
+                if (!equals) {
 
-                SystemFileSystem.sink(Path("build/sample_${index}_formatted_canonical.xmp"))
-                    .buffered()
-                    .use {
-                        it.write(actualCanonicalXmp.encodeToByteArray())
-                    }
+                    SystemFileSystem
+                        .sink(Path("build/sample_${index}_formatted_compact.xmp"))
+                        .buffered()
+                        .use {
+                            it.write(actualCompactXmp.encodeToByteArray())
+                        }
 
-                fail("XMP for sample $index looks different after rewrite.")
+                    SystemFileSystem.sink(Path("build/sample_${index}_formatted_canonical.xmp"))
+                        .buffered()
+                        .use {
+                            it.write(actualCanonicalXmp.encodeToByteArray())
+                        }
+
+                    fail("XMP for sample $index looks different after rewrite.")
+                }
+
+            } catch (ex: Exception) {
+
+                @Suppress("PrintStackTrace")
+                ex.printStackTrace()
+
+                fail("testRewriteXmp() failed for XMP sample $index due to ${ex.message}")
             }
         }
     }

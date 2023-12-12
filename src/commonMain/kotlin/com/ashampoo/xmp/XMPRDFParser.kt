@@ -653,9 +653,7 @@ internal object XMPRDFParser {
     /**
      * 7.2.21 emptyPropertyElt
      * start-element ( URI == propertyElementURIs,
-     * attributes == set (
-     * idAttr?, ( resourceAttr | nodeIdAttr )?, propertyAttr* ) )
-     * end-element()
+     * attributes == set (idAttr?, ( resourceAttr | nodeIdAttr )?, propertyAttr* ) ) end-element()
      *
      * <ns:Prop1></ns:Prop1>
      * <ns:Prop2 rdf:resource="http: *www.adobe.com/"></ns:Prop2>
@@ -701,7 +699,7 @@ internal object XMPRDFParser {
                 "Nested content not allowed with rdf:resource or property attributes", XMPError.BADRDF
             )
 
-        // First figure out what XMP this maps to and remember the XML node for a simple value.
+        /* First figure out what XMP this maps to and remember the XML node for a simple value. */
         for (index in 0 until xmlNode.attributes.length) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
@@ -713,9 +711,15 @@ internal object XMPRDFParser {
 
             when (attrTerm) {
 
-                RDFTERM_ID -> {
-                    /* Do nothing. */
-                }
+                /*
+                 * Do nothing.
+                 */
+                RDFTERM_ID -> continue
+
+                /*
+                 * sample_52.xmp has an <rdf:li rdf:about=''/> we want to skip.
+                 */
+                RDFTERM_ABOUT -> continue
 
                 RDFTERM_RESOURCE -> {
 
@@ -769,8 +773,12 @@ internal object XMPRDFParser {
                     }
                 }
 
+                /* Fail on unknown elements. */
                 else ->
-                    throw XMPException("Unrecognized attribute of empty property element", XMPError.BADRDF)
+                    throw XMPException(
+                        "Unrecognized attribute of empty property element: $attrTerm",
+                        XMPError.BADRDF
+                    )
             }
         }
 
@@ -816,9 +824,13 @@ internal object XMPRDFParser {
 
             when (attrTerm) {
 
-                RDFTERM_ID, RDFTERM_NODE_ID -> {
-                    /* Do nothing. */
-                }
+                /* Do nothing with IDs. */
+                RDFTERM_ID, RDFTERM_NODE_ID -> continue
+
+                /*
+                 * sample_52.xmp has an <rdf:li rdf:about=''/> we want to skip.
+                 */
+                RDFTERM_ABOUT -> continue
 
                 RDFTERM_RESOURCE ->
                     addQualifierNode(childNode, "rdf:resource", attribute.value)
@@ -834,7 +846,7 @@ internal object XMPRDFParser {
                 }
 
                 else -> throw XMPException(
-                    "Unrecognized attribute of empty property element",
+                    "Unrecognized attribute of empty property element: $attrTerm",
                     XMPError.BADRDF
                 )
             }
