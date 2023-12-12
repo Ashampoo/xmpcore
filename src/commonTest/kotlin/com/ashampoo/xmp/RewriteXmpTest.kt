@@ -41,12 +41,6 @@ class RewriteXmpTest {
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
 
-            /*
-             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
-             */
-            if (isApple && (index == 50 || index == 51 || index == 52))
-                continue
-
             try {
 
                 val originalXmp = getOriginalXmp(index)
@@ -101,12 +95,6 @@ class RewriteXmpTest {
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
 
-            /*
-             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
-             */
-            if (isApple && (index == 50 || index == 51 || index == 52))
-                continue
-
             val originalXmp = getFormattedCompactXmp(index)
 
             val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
@@ -139,12 +127,6 @@ class RewriteXmpTest {
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
 
-            /*
-             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
-             */
-            if (isApple && (index == 50 || index == 51 || index == 52))
-                continue
-
             val originalXmp = getFormattedCanonicalXmp(index)
 
             val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
@@ -176,12 +158,6 @@ class RewriteXmpTest {
 
         @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..TEST_PHOTO_COUNT) {
-
-            /*
-             * FIXME See https://github.com/pdvrieze/xmlutil/issues/189
-             */
-            if (isApple && (index == 50 || index == 51 || index == 52))
-                continue
 
             val compactXmp = getFormattedCompactXmp(index)
 
