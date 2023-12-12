@@ -2,8 +2,73 @@
 <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.1.3">
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdf:Description rdf:about=""
+        xmlns:aux="http://ns.adobe.com/exif/1.0/aux/"
+        xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:exif="http://ns.adobe.com/exif/1.0/"
+        xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
         xmlns:xmp="http://ns.adobe.com/xap/1.0/"
-      xmp:Rating="0"/>
+        xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
+      aux:Firmware="1.0.1"
+      aux:FlashCompensation="0/1"
+      aux:ImageNumber="0"
+      aux:Lens="50-50mm"
+      aux:LensID="27"
+      aux:LensInfo="50/1 50/1 0/0 0/0"
+      aux:LensSerialNumber="0000000000"
+      aux:SerialNumber="113063070880"
+      crs:AlreadyApplied="True"
+      dc:format="image/jpeg"
+      exif:ApertureValue="2,00 EV (f/2,0)"
+      exif:BitsPerSample="8, 8, 8"
+      exif:Compression="JPEG compression"
+      exif:DateTime="2013:05:24 14:08:48"
+      exif:DateTimeOriginal="2000:01:01 00:08:04"
+      exif:ExifVersion="Exif Version 2.3"
+      exif:ExposureBiasValue="0,00 EV"
+      exif:ExposureProgram="Shutter priority"
+      exif:ExposureTime="1/1250 sec."
+      exif:FNumber="f/2,0"
+      exif:ImageLength="3456"
+      exif:ImageWidth="5184"
+      exif:Make="Canon"
+      exif:MaxApertureValue="2,00 EV (f/2,0)"
+      exif:MeteringMode="Pattern"
+      exif:Model="Canon EOS 600D"
+      exif:Orientation="Top-left"
+      exif:PhotometricInterpretation="RGB"
+      exif:ResolutionUnit="Inch"
+      exif:SamplesPerPixel="3"
+      exif:ShutterSpeedValue="10,38 EV (1/1327 sec.)"
+      exif:Software="Adobe Photoshop CS5 Windows"
+      exif:XResolution="72,0000"
+      exif:YCbCrPositioning="Co-sited"
+      exif:YResolution="72,0000"
+      photoshop:ColorMode="3"
+      photoshop:DateCreated="2000-01-01T00:08:04.039"
+      photoshop:ICCProfile="sRGB IEC61966-2.1"
+      xmp:CreateDate="2000-01-01T00:08:04.39+02:00"
+      xmp:MetadataDate="2013-05-24T14:08:48+03:00"
+      xmp:ModifyDate="2013-05-24T14:08:48+03:00"
+      xmp:Rating="0"
+      xmpMM:InstanceID="xmp.iid:E2D0CB145FC4E211AD7DCE11772AE6CC"
+      xmpMM:OriginalDocumentID="xmp.did:E2D0CB145FC4E211AD7DCE11772AE6CC">
+      <exif:ComponentsConfiguration>
+        <rdf:Seq>
+          <rdf:li>Y Cb Cr -</rdf:li>
+        </rdf:Seq>
+      </exif:ComponentsConfiguration>
+      <exif:ISOSpeedRatings>
+        <rdf:Seq>
+          <rdf:li>100</rdf:li>
+        </rdf:Seq>
+      </exif:ISOSpeedRatings>
+      <xmpMM:DocumentID
+        rdf:resource="xmp.did:E2D0CB145FC4E211AD7DCE11772AE6CC"/>
+      <xmpMM:History>
+        <rdf:Seq/>
+      </xmpMM:History>
+    </rdf:Description>
   </rdf:RDF>
 </x:xmpmeta>
 <?xpacket end="w"?>
