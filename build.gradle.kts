@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     kotlin("multiplatform") version "1.9.21"
@@ -22,7 +23,7 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val xmlUtilVersion: String = "0.86.2"
+val xmlUtilVersion: String = "0.86.3"
 
 description = productName
 group = "com.ashampoo"
@@ -132,6 +133,12 @@ kotlin {
             targetCompatibility = JavaVersion.VERSION_17
         }
     }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmWasi()
 
     @Suppress("UnusedPrivateMember") // False positive
     val commonMain by sourceSets.getting {

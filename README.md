@@ -5,6 +5,8 @@
 ![Android](https://img.shields.io/badge/-Android-gray.svg?style=flat)
 ![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=flat)
 ![iOS](https://img.shields.io/badge/-iOS-gray.svg?style=flat)
+![Windows](https://img.shields.io/badge/-Windows-gray.svg?style=flat)
+![WASM](https://img.shields.io/badge/-WASM-gray.svg?style=flat)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xmpcore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=xmpcore)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore)
 
@@ -15,7 +17,7 @@ It's part of [Ashampoo Photos](https://ashampoo.com/photos).
 ## Installation
 
 ```
-implementation("com.ashampoo:xmpcore:0.2.4")
+implementation("com.ashampoo:xmpcore:0.3")
 ```
 
 ## How to use
