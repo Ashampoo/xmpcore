@@ -19,12 +19,11 @@ plugins {
 repositories {
     google()
     mavenCentral()
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 val productName = "Ashampoo XMP Core"
 
-val xmlUtilVersion: String = "0.86.3-SNAPSHOT"
+val xmlUtilVersion: String = "0.86.3"
 
 description = productName
 group = "com.ashampoo"
