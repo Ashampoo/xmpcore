@@ -2,7 +2,6 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.options.SerializeOptions
-import com.goncalossilva.resources.Resource
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -184,7 +183,7 @@ class WriteXmpTest {
     }
 
     private fun getXmp(name: String): String =
-        Resource("$RESOURCE_PATH/$name").readText()
+        Path(getPathForResource("$RESOURCE_PATH/$name")).readText()
 
     companion object {
         private const val RESOURCE_PATH: String = "src/commonTest/resources/com/ashampoo/xmp"
