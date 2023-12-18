@@ -137,7 +137,9 @@ kotlin {
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        nodejs()
+        // All tests reading from files fail, because kotlinx-io
+        // has no Path support for WASM (yet?).
+        // nodejs()
     }
 
     @OptIn(ExperimentalWasmDsl::class)
