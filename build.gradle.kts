@@ -14,6 +14,7 @@ plugins {
     id("me.qoomon.git-versioning") version "6.4.3"
     id("com.goncalossilva.resources") version "0.4.0"
     id("com.github.ben-manes.versions") version "0.50.0"
+    id("org.jetbrains.dokka") version "1.9.10"
 }
 
 repositories {
@@ -135,7 +136,11 @@ kotlin {
     }
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
+    wasmJs {
+        // All tests reading from files fail, because kotlinx-io
+        // has no Path support for WASM (yet?).
+        // nodejs()
+    }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmWasi()
@@ -157,9 +162,6 @@ kotlin {
 
             /* Kotlin Test */
             implementation(kotlin("test"))
-
-            /* Multiplatform test resources */
-            implementation("com.goncalossilva:resources:0.4.0")
 
             /* Multiplatform file access */
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
@@ -228,6 +230,22 @@ kotlin {
         iosSimulatorArm64Main.dependsOn(this)
         macosX64Main.dependsOn(this)
         macosArm64Main.dependsOn(this)
+    }
+
+    val iosArm64Test by sourceSets.getting
+    val iosSimulatorArm64Test by sourceSets.getting
+    val macosX64Test by sourceSets.getting
+    val macosArm64Test by sourceSets.getting
+
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
+    val appleTest by sourceSets.creating {
+
+        dependsOn(commonTest)
+
+        iosArm64Test.dependsOn(this)
+        iosSimulatorArm64Test.dependsOn(this)
+        macosX64Test.dependsOn(this)
+        macosArm64Test.dependsOn(this)
     }
 }
 
@@ -400,3 +418,12 @@ publishing {
     }
 }
 // endregion
+
+//rootProject.the<NodeJsRootExtension>().apply {
+//    nodeVersion = "21.0.0-v8-canary202309143a48826a08"
+//    nodeDownloadBaseUrl = "https://nodejs.org/download/v8-canary"
+//}
+//
+//tasks.withType<org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmInstallTask>().configureEach {
+//    args.add("--ignore-engines")
+//}

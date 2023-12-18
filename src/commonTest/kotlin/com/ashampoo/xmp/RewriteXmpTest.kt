@@ -1,7 +1,6 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.options.SerializeOptions
-import com.goncalossilva.resources.Resource
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -214,13 +213,13 @@ class RewriteXmpTest {
     }
 
     private fun getOriginalXmp(index: Int): String =
-        Resource("$RESOURCE_PATH/sample_$index.xmp").readText()
+        Path(getPathForResource("$RESOURCE_PATH/sample_$index.xmp")).readText()
 
     private fun getFormattedCompactXmp(index: Int): String =
-        Resource("$RESOURCE_PATH/sample_${index}_formatted_compact.xmp").readText()
+        Path(getPathForResource("$RESOURCE_PATH/sample_${index}_formatted_compact.xmp")).readText()
 
     private fun getFormattedCanonicalXmp(index: Int): String =
-        Resource("$RESOURCE_PATH/sample_${index}_formatted_canonical.xmp").readText()
+        Path(getPathForResource("$RESOURCE_PATH/sample_${index}_formatted_canonical.xmp")).readText()
 
     companion object {
 
