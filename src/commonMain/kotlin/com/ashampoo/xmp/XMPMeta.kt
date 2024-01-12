@@ -1713,12 +1713,60 @@ class XMPMeta {
 
                 val oneBasedIndex = index + 1
 
+                insertArrayItem(
+                    schemaNS = NS_MWG_RS,
+                    arrayName = "Regions/mwg-rs:RegionList",
+                    itemIndex = oneBasedIndex,
+                    itemValue = "",
+                    options = PropertyOptions().setStruct(true)
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    XMPConst.NS_RDF,
+                    "Type",
+                    "Face"
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    XMPConst.NS_RDF,
+                    "Name",
+                    face.key
+                )
+
                 setStructField(
                     NS_MWG_RS,
                     "Regions/mwg-rs:RegionList[$oneBasedIndex]",
                     XMPConst.TYPE_AREA,
                     "x",
                     face.value.xPos.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    XMPConst.TYPE_AREA,
+                    "y",
+                    face.value.yPos.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    XMPConst.TYPE_AREA,
+                    "w",
+                    face.value.width.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    XMPConst.TYPE_AREA,
+                    "h",
+                    face.value.height.toString()
                 )
             }
 
