@@ -268,6 +268,7 @@ object XMPSchemaRegistry {
         registerNamespace(XMPConst.TYPE_IMAGE, "xmpGImg")
         registerNamespace(XMPConst.TYPE_FONT, "stFnt")
         registerNamespace(XMPConst.TYPE_DIMENSIONS, "stDim")
+        registerNamespace(XMPConst.TYPE_AREA, "stArea")
         registerNamespace(XMPConst.TYPE_RESOURCE_EVENT, "stEvt")
         registerNamespace(XMPConst.TYPE_RESOURCE_REF, "stRef")
         registerNamespace(XMPConst.TYPE_ST_VERSION, "stVer")

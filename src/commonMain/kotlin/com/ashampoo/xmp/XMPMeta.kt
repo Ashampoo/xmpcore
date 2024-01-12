@@ -9,6 +9,7 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.normalizeLangValue
+import com.ashampoo.xmp.XMPConst.NS_MWG_RS
 import com.ashampoo.xmp.XMPNodeUtils.appendLangItem
 import com.ashampoo.xmp.XMPNodeUtils.chooseLocalizedText
 import com.ashampoo.xmp.XMPNodeUtils.deleteNode
@@ -1655,7 +1656,7 @@ class XMPMeta {
             val regionType = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Type")
 
             /* We only want faces. */
-            if (regionType != "Face")
+            if (regionType != XMPConst.XMP_MWG_RS_TYPE_FACE)
                 continue
 
             val name = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Name")
@@ -1675,13 +1676,120 @@ class XMPMeta {
         return faces
     }
 
-//    fun setFaces(faces: Map<String, XMPRegionArea>) {
-//
-//        /* Delete existing entries, if any */
-//        deleteProperty(NS_MWG_RS, "Regions")
-//
-//        // TODO Write faces
-//    }
+    fun setFaces(
+        faces: Map<String, XMPRegionArea>,
+        widthPx: Int,
+        heightPx: Int
+    ) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(NS_MWG_RS, "Regions")
+
+        if (faces.isNotEmpty()) {
+
+            setStructField(
+                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                XMPConst.TYPE_DIMENSIONS, "w",
+                widthPx.toString()
+            )
+
+            setStructField(
+                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                XMPConst.TYPE_DIMENSIONS, "h",
+                heightPx.toString()
+            )
+
+            setStructField(
+                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                XMPConst.TYPE_DIMENSIONS, "unit", "pixel"
+            )
+
+            setStructField(
+                NS_MWG_RS, "Regions", NS_MWG_RS, "RegionList",
+                null, arrayOptions
+            )
+
+            faces.onEachIndexed { index, face ->
+
+                val oneBasedIndex = index + 1
+
+                val structNameItem = "Regions/mwg-rs:RegionList[$oneBasedIndex]"
+                val structNameArea = "$structNameItem/mwg-rs:Area"
+
+                insertArrayItem(
+                    schemaNS = NS_MWG_RS,
+                    arrayName = "Regions/mwg-rs:RegionList",
+                    itemIndex = oneBasedIndex,
+                    itemValue = "",
+                    options = PropertyOptions().setStruct(true)
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameItem,
+                    XMPConst.NS_MWG_RS,
+                    "Type",
+                    XMPConst.XMP_MWG_RS_TYPE_FACE
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameItem,
+                    XMPConst.NS_MWG_RS,
+                    "Name",
+                    face.key
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "x",
+                    face.value.xPos.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "x",
+                    face.value.xPos.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "y",
+                    face.value.yPos.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "w",
+                    face.value.width.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "h",
+                    face.value.height.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "unit",
+                    "normalized"
+                )
+            }
+        }
+    }
 
     fun getPersonsInImage(): Set<String> {
 

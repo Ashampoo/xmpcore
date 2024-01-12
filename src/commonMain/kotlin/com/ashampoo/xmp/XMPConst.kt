@@ -195,6 +195,8 @@ object XMPConst {
      */
     const val TYPE_DIMENSIONS: String = "http://ns.adobe.com/xap/1.0/sType/Dimensions#"
 
+    const val TYPE_AREA: String = "http://ns.adobe.com/xmp/sType/Area#"
+
     const val TYPE_TEXT: String = "http://ns.adobe.com/xap/1.0/t/"
 
     const val TYPE_PAGED_FILE: String = "http://ns.adobe.com/xap/1.0/t/pg/"
@@ -293,5 +295,7 @@ object XMPConst {
     const val XMP_ACDSEE_KEYWORDS: String = "keywords"
 
     const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
+
+    const val XMP_MWG_RS_TYPE_FACE: String = "Face"
 
 }
