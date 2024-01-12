@@ -183,8 +183,8 @@ class WriteXmpTest {
                 "Eye Right" to XMPRegionArea(0.814990, 0.472579, 0.033245, 0.05),
                 "Nothing" to XMPRegionArea(0.501552, 0.905484, 0.033245, 0.05)
             ),
-            width = 1500,
-            height = 1000
+            widthPx = 1500,
+            heightPx = 1000
         )
     }
 

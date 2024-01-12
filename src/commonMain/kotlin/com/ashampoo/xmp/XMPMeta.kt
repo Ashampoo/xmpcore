@@ -1678,8 +1678,8 @@ class XMPMeta {
 
     fun setFaces(
         faces: Map<String, XMPRegionArea>,
-        width: Int,
-        height: Int
+        widthPx: Int,
+        heightPx: Int
     ) {
 
         /* Delete existing entries, if any */
@@ -1690,13 +1690,13 @@ class XMPMeta {
             setStructField(
                 NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
                 XMPConst.TYPE_DIMENSIONS, "w",
-                width.toString()
+                widthPx.toString()
             )
 
             setStructField(
                 NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
                 XMPConst.TYPE_DIMENSIONS, "h",
-                height.toString()
+                heightPx.toString()
             )
 
             setStructField(
