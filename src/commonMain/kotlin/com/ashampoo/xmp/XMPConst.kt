@@ -195,6 +195,8 @@ object XMPConst {
      */
     const val TYPE_DIMENSIONS: String = "http://ns.adobe.com/xap/1.0/sType/Dimensions#"
 
+    const val TYPE_AREA: String = "http://ns.adobe.com/xmp/sType/Area#"
+
     const val TYPE_TEXT: String = "http://ns.adobe.com/xap/1.0/t/"
 
     const val TYPE_PAGED_FILE: String = "http://ns.adobe.com/xap/1.0/t/pg/"
