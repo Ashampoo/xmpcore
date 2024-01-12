@@ -50,11 +50,13 @@ object XMPPathParser {
 
         pos.path = path
 
-        // Pull out the first component and do some special processing on it: add the schema
-        // namespace prefix and see if it is an alias. The start must be a "qualName".
+        /*
+         * Pull out the first component and do some special processing on it: add the schema
+         * namespace prefix and see if it is an alias. The start must be a "qualName".
+         */
         parseRootNode(schemaNS, pos, expandedXPath)
 
-        // Now continue to process the rest of the XMPPath string.
+        /* Now continue to process the rest of the XMPPath string. */
         while (pos.stepEnd < path.length) {
 
             pos.stepBegin = pos.stepEnd
@@ -66,10 +68,13 @@ object XMPPathParser {
             var segment: XMPPathSegment
 
             segment = if (path[pos.stepBegin] != '[') {
-                // A struct field or qualifier.
+
+                /* A struct field or qualifier. */
                 parseStructSegment(pos)
+
             } else {
-                // One of the array forms.
+
+                /* One of the array forms. */
                 parseIndexSegment(pos)
             }
 
@@ -122,7 +127,7 @@ object XMPPathParser {
 
         if (path[pos.stepBegin] == '/') {
 
-            // skip slash
+            /* Skip the slash */
             pos.stepBegin++
 
             if (pos.stepBegin >= path.length)
@@ -131,7 +136,7 @@ object XMPPathParser {
 
         if (path[pos.stepBegin] == '*') {
 
-            // skip asterisk
+            /* Skip the asterisk */
             pos.stepBegin++
 
             if (pos.stepBegin >= path.length || path[pos.stepBegin] != '[')
@@ -164,11 +169,12 @@ object XMPPathParser {
 
         val segment: XMPPathSegment
 
-        pos.stepEnd++ // Look at the character after the leading '['.
+        /* Look at the character after the leading '['. */
+        pos.stepEnd++
 
         if (pos.path!![pos.stepEnd] in '0'..'9') {
 
-            // A numeric (decimal integer) array index.
+            /* A numeric (decimal integer) array index. */
             while (
                 pos.stepEnd < pos.path!!.length &&
                 '0' <= pos.path!![pos.stepEnd] && pos.path!![pos.stepEnd] <= '9'
@@ -179,7 +185,7 @@ object XMPPathParser {
 
         } else {
 
-            // Could be "[last()]" or one of the selector forms. Find the ']' or '='.
+            /* Could be "[last()]" or one of the selector forms. Find the ']' or '='. */
             while (
                 pos.stepEnd < pos.path!!.length && pos.path!![pos.stepEnd] != ']' &&
                 pos.path!![pos.stepEnd] != '='
@@ -201,20 +207,22 @@ object XMPPathParser {
                 pos.nameStart = pos.stepBegin + 1
                 pos.nameEnd = pos.stepEnd
 
-                pos.stepEnd++ // Absorb the '=', remember the quote.
+                /* Absorb the '=', remember the quote. */
+                pos.stepEnd++
 
                 val quote = pos.path!![pos.stepEnd]
 
                 if (quote != '\'' && quote != '"')
                     throw XMPException("Invalid quote in array selector", XMPError.BADXPATH)
 
-                pos.stepEnd++ // Absorb the leading quote.
+                /* Absorb the leading quote */
+                pos.stepEnd++
 
                 while (pos.stepEnd < pos.path!!.length) {
 
                     if (pos.path!![pos.stepEnd] == quote) {
 
-                        // check for escaped quote
+                        /* Check for escaped quote */
                         if (pos.stepEnd + 1 >= pos.path!!.length || pos.path!![pos.stepEnd + 1] != quote)
                             break
 
@@ -227,9 +235,10 @@ object XMPPathParser {
                 if (pos.stepEnd >= pos.path!!.length)
                     throw XMPException("No terminating quote for array selector", XMPError.BADXPATH)
 
-                pos.stepEnd++ // Absorb the trailing quote.
+                /* Absorb the trailing quote. */
+                pos.stepEnd++
 
-                // ! Touch up later, also changing '@' to '?'.
+                /* ! Touch up later, also changing '@' to '?'. */
                 segment = XMPPathSegment(null, XMPPath.FIELD_SELECTOR_STEP)
             }
         }
@@ -261,7 +270,7 @@ object XMPPathParser {
 
         if (aliasInfo == null) {
 
-            // add schema xpath step
+            /* Add schema xpath step */
             expandedXPath.add(XMPPathSegment(schemaNS, XMPPath.SCHEMA_NODE))
 
             val rootStep = XMPPathSegment(rootProp, XMPPath.STRUCT_FIELD_STEP)
@@ -270,7 +279,7 @@ object XMPPathParser {
 
         } else {
 
-            // add schema xpath step and base step of alias
+            /* Add schema xpath step and base step of alias */
             expandedXPath.add(XMPPathSegment(aliasInfo.getNamespace(), XMPPath.SCHEMA_NODE))
 
             val rootStep = XMPPathSegment(
@@ -328,7 +337,7 @@ object XMPPathParser {
             }
         }
 
-        throw XMPException("Ill-formed qualified name", XMPError.BADXPATH)
+        throw XMPException("Ill-formed qualified name: $qualName", XMPError.BADXPATH)
     }
 
     /**
@@ -349,12 +358,15 @@ object XMPPathParser {
      */
     private fun verifyXPathRoot(schemaNS: String?, rootProp: String): String {
 
-        // Do some basic checks on the URI and name. Try to look up the URI. See if the name is qualified.
+        /* Do some basic checks on the URI and name. Try to look up the URI. See if the name is qualified. */
         if (schemaNS.isNullOrEmpty())
             throw XMPException("Schema namespace URI is required", XMPError.BADSCHEMA)
 
         if (rootProp[0] == '?' || rootProp[0] == '@')
-            throw XMPException("Top level name must not be a qualifier, but was '$rootProp'", XMPError.BADXPATH)
+            throw XMPException(
+                "Top level name must not be a qualifier, but was '$rootProp'",
+                XMPError.BADXPATH
+            )
 
         if (rootProp.indexOf('/') >= 0 || rootProp.indexOf('[') >= 0)
             throw XMPException("Top level name must be simple, but was '$rootProp'", XMPError.BADXPATH)
@@ -362,23 +374,26 @@ object XMPPathParser {
         var prefix = schemaRegistry.getNamespacePrefix(schemaNS)
             ?: throw XMPException("Unregistered schema namespace URI: $schemaNS", XMPError.BADSCHEMA)
 
-        // Verify the various URI and prefix combinations. Initialize the expanded XMPPath.
+        /* Verify the various URI and prefix combinations. Initialize the expanded XMPPath. */
         val colonPos = rootProp.indexOf(':')
 
         return if (colonPos < 0) {
 
-            // The propName is unqualified, use the schemaURI and associated prefix.
+            /* The propName is unqualified, use the schemaURI and associated prefix. */
 
-            verifySimpleXMLName(rootProp) // Verify the part before any colon
+            /* Verify the part before any colon */
+            verifySimpleXMLName(rootProp)
 
             prefix + rootProp
 
         } else {
 
-            // The propName is qualified. Make sure the prefix is legit.
-            // Use the associated URI and qualified name.
+            /*
+             * The propName is qualified. Make sure the prefix is legit.
+             * Use the associated URI and qualified name.
+             */
 
-            // Verify the part before any colon
+            /* Verify the part before any colon */
             verifySimpleXMLName(rootProp.substring(0, colonPos))
             verifySimpleXMLName(rootProp.substring(colonPos))
 
