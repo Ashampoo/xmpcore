@@ -9,6 +9,7 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.normalizeLangValue
+import com.ashampoo.xmp.XMPConst.NS_MWG_RS
 import com.ashampoo.xmp.XMPNodeUtils.appendLangItem
 import com.ashampoo.xmp.XMPNodeUtils.chooseLocalizedText
 import com.ashampoo.xmp.XMPNodeUtils.deleteNode
@@ -1675,13 +1676,42 @@ class XMPMeta {
         return faces
     }
 
-//    fun setFaces(faces: Map<String, XMPRegionArea>) {
-//
-//        /* Delete existing entries, if any */
-//        deleteProperty(NS_MWG_RS, "Regions")
-//
-//        // TODO Write faces
-//    }
+    fun setFaces(
+        faces: Map<String, XMPRegionArea>,
+        width: Int,
+        height: Int
+    ) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(NS_MWG_RS, "Regions")
+
+        if (faces.isNotEmpty()) {
+
+            setStructField(
+                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                XMPConst.TYPE_DIMENSIONS, "w",
+                width.toString()
+            )
+
+            setStructField(
+                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                XMPConst.TYPE_DIMENSIONS, "h",
+                height.toString()
+            )
+
+            setStructField(
+                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                XMPConst.TYPE_DIMENSIONS, "unit", "pixel"
+            )
+
+            setStructField(
+                NS_MWG_RS, "Regions", NS_MWG_RS, "RegionList", null,
+                arrayOptions
+            )
+
+            // TODO How to proceed further?
+        }
+    }
 
     fun getPersonsInImage(): Set<String> {
 

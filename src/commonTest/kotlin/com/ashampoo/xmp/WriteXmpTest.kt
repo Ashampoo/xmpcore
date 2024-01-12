@@ -166,13 +166,9 @@ class WriteXmpTest {
 
     private fun writeTestValues(xmpMeta: XMPMeta) {
 
-        /* Write rating. */
         xmpMeta.setRating(3)
 
-        /* Write taken date. */
         xmpMeta.setDateTimeOriginal("2023-07-07T13:37:42")
-
-        /* Write GPS coordinates. */
 
         xmpMeta.setGpsCoordinates(
             latitudeDdm = "53,13.1635N",
@@ -180,6 +176,16 @@ class WriteXmpTest {
         )
 
         xmpMeta.setKeywords(setOf("bird", "cat", "dog"))
+
+        xmpMeta.setFaces(
+            faces = mapOf(
+                "Eye Left" to XMPRegionArea(0.295179, 0.278880, 0.033245, 0.05),
+                "Eye Right" to XMPRegionArea(0.814990, 0.472579, 0.033245, 0.05),
+                "Nothing" to XMPRegionArea(0.501552, 0.905484, 0.033245, 0.05)
+            ),
+            width = 1500,
+            height = 1000
+        )
     }
 
     private fun getXmp(name: String): String =
