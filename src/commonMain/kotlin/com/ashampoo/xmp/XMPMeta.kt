@@ -1713,6 +1713,9 @@ class XMPMeta {
 
                 val oneBasedIndex = index + 1
 
+                val structNameItem = "Regions/mwg-rs:RegionList[$oneBasedIndex]"
+                val structNameArea = "$structNameItem/mwg-rs:Area"
+
                 insertArrayItem(
                     schemaNS = NS_MWG_RS,
                     arrayName = "Regions/mwg-rs:RegionList",
@@ -1723,23 +1726,23 @@ class XMPMeta {
 
                 setStructField(
                     NS_MWG_RS,
-                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
-                    XMPConst.NS_RDF,
+                    structNameItem,
+                    XMPConst.NS_MWG_RS,
                     "Type",
-                    "Face"
+                    "Name"
                 )
 
                 setStructField(
                     NS_MWG_RS,
-                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
-                    XMPConst.NS_RDF,
+                    structNameItem,
+                    XMPConst.NS_MWG_RS,
                     "Name",
                     face.key
                 )
 
                 setStructField(
                     NS_MWG_RS,
-                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    structNameArea,
                     XMPConst.TYPE_AREA,
                     "x",
                     face.value.xPos.toString()
@@ -1747,7 +1750,15 @@ class XMPMeta {
 
                 setStructField(
                     NS_MWG_RS,
-                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "x",
+                    face.value.xPos.toString()
+                )
+
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
                     XMPConst.TYPE_AREA,
                     "y",
                     face.value.yPos.toString()
@@ -1755,7 +1766,7 @@ class XMPMeta {
 
                 setStructField(
                     NS_MWG_RS,
-                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    structNameArea,
                     XMPConst.TYPE_AREA,
                     "w",
                     face.value.width.toString()
@@ -1763,14 +1774,20 @@ class XMPMeta {
 
                 setStructField(
                     NS_MWG_RS,
-                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    structNameArea,
                     XMPConst.TYPE_AREA,
                     "h",
                     face.value.height.toString()
                 )
-            }
 
-            // TODO How to proceed further?
+                setStructField(
+                    NS_MWG_RS,
+                    structNameArea,
+                    XMPConst.TYPE_AREA,
+                    "unit",
+                    "normalized"
+                )
+            }
         }
     }
 
