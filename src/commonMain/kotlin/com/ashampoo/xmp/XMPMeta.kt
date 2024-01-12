@@ -1705,9 +1705,22 @@ class XMPMeta {
             )
 
             setStructField(
-                NS_MWG_RS, "Regions", NS_MWG_RS, "RegionList", null,
-                arrayOptions
+                NS_MWG_RS, "Regions", NS_MWG_RS, "RegionList",
+                null, arrayOptions
             )
+
+            faces.onEachIndexed { index, face ->
+
+                val oneBasedIndex = index + 1
+
+                setStructField(
+                    NS_MWG_RS,
+                    "Regions/mwg-rs:RegionList[$oneBasedIndex]",
+                    XMPConst.TYPE_AREA,
+                    "x",
+                    face.value.xPos.toString()
+                )
+            }
 
             // TODO How to proceed further?
         }

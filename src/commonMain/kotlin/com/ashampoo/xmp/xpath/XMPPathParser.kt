@@ -354,13 +354,13 @@ object XMPPathParser {
             throw XMPException("Schema namespace URI is required", XMPError.BADSCHEMA)
 
         if (rootProp[0] == '?' || rootProp[0] == '@')
-            throw XMPException("Top level name must not be a qualifier", XMPError.BADXPATH)
+            throw XMPException("Top level name must not be a qualifier, but was '$rootProp'", XMPError.BADXPATH)
 
         if (rootProp.indexOf('/') >= 0 || rootProp.indexOf('[') >= 0)
-            throw XMPException("Top level name must be simple", XMPError.BADXPATH)
+            throw XMPException("Top level name must be simple, but was '$rootProp'", XMPError.BADXPATH)
 
         var prefix = schemaRegistry.getNamespacePrefix(schemaNS)
-            ?: throw XMPException("Unregistered schema namespace URI", XMPError.BADSCHEMA)
+            ?: throw XMPException("Unregistered schema namespace URI: $schemaNS", XMPError.BADSCHEMA)
 
         // Verify the various URI and prefix combinations. Initialize the expanded XMPPath.
         val colonPos = rootProp.indexOf(':')

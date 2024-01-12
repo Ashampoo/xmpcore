@@ -100,11 +100,11 @@ object XMPNodeUtils {
 
                 !parent.isImplicit ->
                     throw XMPException(
-                        "Named children only allowed for schemas and structs", XMPError.BADXPATH
+                        "Named children only allowed for schemas and structs: $childName", XMPError.BADXPATH
                     )
 
                 parent.options.isArray() ->
-                    throw XMPException("Named children not allowed for arrays", XMPError.BADXPATH)
+                    throw XMPException("Named children not allowed for arrays: $childName", XMPError.BADXPATH)
 
                 createNodes ->
                     parent.options.setStruct(true)
