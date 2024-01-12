@@ -1656,7 +1656,7 @@ class XMPMeta {
             val regionType = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Type")
 
             /* We only want faces. */
-            if (regionType != "Face")
+            if (regionType != XMPConst.XMP_MWG_RS_TYPE_FACE)
                 continue
 
             val name = getPropertyString(XMPConst.NS_MWG_RS, "$prefix:Name")
@@ -1729,7 +1729,7 @@ class XMPMeta {
                     structNameItem,
                     XMPConst.NS_MWG_RS,
                     "Type",
-                    "Name"
+                    XMPConst.XMP_MWG_RS_TYPE_FACE
                 )
 
                 setStructField(

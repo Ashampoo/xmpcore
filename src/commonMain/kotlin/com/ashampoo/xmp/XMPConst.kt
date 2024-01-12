@@ -296,4 +296,6 @@ object XMPConst {
 
     const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
 
+    const val XMP_MWG_RS_TYPE_FACE: String = "Face"
+
 }
