@@ -46,7 +46,9 @@ class RewriteXmpTest {
 
                 val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
 
-                val actualCompactXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
+                val actualCompactXmp =
+                    XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
+
                 val actualCanonicalXmp =
                     XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCanonical)
 

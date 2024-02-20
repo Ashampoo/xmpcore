@@ -1,6 +1,24 @@
 This document makes comments about special XMP samples in the set.
 We collect problematic files from real-world images to test for regression.
 
+# sample_2.xmp
+Ends with multiple NUL
+
+# sample_3.xmp
+Ends with a single NUL
+
+# sample_4.xml
+Ends with multiple <?xpacket end='w'?>
+
+# sample_5.xml
+Text after </x:xmpmeta>
+
+# sample_6.xml
+Text after <?xpacket end='w'?>
+
+# sample_7.xml
+Missing <?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>
+
 # sample_50.xml
 Problem: Doubled child entries
 

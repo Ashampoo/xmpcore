@@ -23,13 +23,12 @@ import nl.adaptivity.xmlutil.dom.localName
 import nl.adaptivity.xmlutil.dom.namespaceURI
 
 /**
- * This class replaces the `ExpatAdapter.cpp` and does the
- * XML-parsing and fixes the prefix. After the parsing several normalisations
- * are applied to the XMPTree.
+ * This class replaces the `ExpatAdapter.cpp` and does the XML-parsing and fixes the prefix.
+ * After the parsing several normalisations are applied to the XMPTree.
  */
 internal object XMPMetaParser {
 
-    private val XMP_RDF = Any() // "new Object()" in Java
+    private val XMP_RDF = Any()
 
     /**
      * Parses the input source into an XMP metadata object, including
@@ -50,9 +49,7 @@ internal object XMPMetaParser {
 
         val xmpmetaRequired = actualOptions.getRequireXMPMeta()
 
-        var result: Array<Any?>? = arrayOfNulls(3)
-
-        result = findRootNode(document, xmpmetaRequired, result)
+        val result = findRootNode(document, xmpmetaRequired, arrayOfNulls(3))
 
         return if (result != null && result[1] === XMP_RDF) {
 
@@ -60,7 +57,7 @@ internal object XMPMetaParser {
 
             xmp.setPacketHeader(result[2] as? String)
 
-            // Check if the XMP object shall be normalized
+            /* Check if the XMP object shall be normalized */
             if (!actualOptions.getOmitNormalization())
                 normalize(xmp, actualOptions)
             else
@@ -100,64 +97,69 @@ internal object XMPMetaParser {
      *  * [1] - an object that is either XMP_RDF or XMP_PLAIN (the latter is decrecated)
      *  * [2] - the body text of the xpacket-instruction.
      */
-    private fun findRootNode(root: Node, xmpmetaRequired: Boolean, result: Array<Any?>?): Array<Any?>? {
+    private fun findRootNode(root: Node, xmpmetaRequired: Boolean, result: Array<Any?>): Array<Any?>? {
 
-        // Look among this parent's content for x:xapmeta or x:xmpmeta.
-        // The recursion for x:xmpmeta is broader than the strictly defined choice,
-        // but gives us smaller code.
+        /*
+         * Look among this parent's content for x:xapmeta or x:xmpmeta.
+         * The recursion for x:xmpmeta is broader than the strictly
+         * defined choice, but gives us smaller code.
+         */
 
+        @Suppress("LoopWithTooManyJumpStatements")
         for (index in 0 until root.childNodes.length) {
 
             val child = root.childNodes.item(index)
 
             requireNotNull(child)
 
-            if (child is ProcessingInstruction && XMPConst.XMP_PI == child.getTarget()) {
+            when {
 
-                // Store the processing instructions content
-                if (result != null)
+                child is ProcessingInstruction && XMPConst.XMP_PI == child.getTarget() -> {
+
+                    /* Store the processing instructions content */
                     result[2] = child.getData()
-
-            } else if (child is Comment) {
-
-                /* We ignore comments. */
-                continue
-
-            } else if (child !is Text && child !is ProcessingInstruction) {
-
-                val childElement = child as Element
-
-                val rootNS = childElement.namespaceURI
-
-                val rootLocal = childElement.localName
-
-                if (
-                    (XMPConst.TAG_XMPMETA == rootLocal || XMPConst.TAG_XAPMETA == rootLocal) &&
-                    XMPConst.NS_X == rootNS
-                ) {
-
-                    // by not passing the RequireXMPMeta-option, the rdf-Node will be valid
-                    return findRootNode(child, false, result)
                 }
 
-                if (!xmpmetaRequired && "RDF" == rootLocal && XMPConst.NS_RDF == rootNS) {
+                child is Comment -> {
 
-                    if (result != null) {
-                        result[0] = child
-                        result[1] = XMP_RDF
+                    /* Ignore comments */
+                    continue
+                }
+
+                child !is Text && child !is ProcessingInstruction -> {
+
+                    val childElement = child as Element
+
+                    val rootNS = childElement.namespaceURI
+
+                    val rootLocal = childElement.localName
+
+                    if (
+                        (XMPConst.TAG_XMPMETA == rootLocal || XMPConst.TAG_XAPMETA == rootLocal) &&
+                        XMPConst.NS_X == rootNS
+                    ) {
+
+                        /* by not passing the RequireXMPMeta-option, the rdf-Node will be valid */
+                        return findRootNode(child, false, result)
                     }
 
-                    return result
+                    if (!xmpmetaRequired && "RDF" == rootLocal && XMPConst.NS_RDF == rootNS) {
+
+                        result[0] = child
+                        result[1] = XMP_RDF
+
+                        return result
+                    }
+
+                    /* continue searching */
+                    val newResult = findRootNode(child, xmpmetaRequired, result)
+
+                    return newResult ?: continue
                 }
-
-                // continue searching
-                val newResult = findRootNode(child, xmpmetaRequired, result)
-
-                return newResult ?: continue
             }
         }
 
-        // no appropriate node has been found
+        /* Return NULL if no appropriate node has been found. */
         return null
     }
 }
