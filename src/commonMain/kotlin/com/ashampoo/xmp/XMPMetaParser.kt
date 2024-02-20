@@ -18,6 +18,7 @@ import nl.adaptivity.xmlutil.dom.Text
 import nl.adaptivity.xmlutil.dom.childNodes
 import nl.adaptivity.xmlutil.dom.getData
 import nl.adaptivity.xmlutil.dom.getTarget
+import nl.adaptivity.xmlutil.dom.length
 import nl.adaptivity.xmlutil.dom.localName
 import nl.adaptivity.xmlutil.dom.namespaceURI
 
