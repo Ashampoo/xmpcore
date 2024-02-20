@@ -418,12 +418,3 @@ publishing {
     }
 }
 // endregion
-
-//rootProject.the<NodeJsRootExtension>().apply {
-//    nodeVersion = "21.0.0-v8-canary202309143a48826a08"
-//    nodeDownloadBaseUrl = "https://nodejs.org/download/v8-canary"
-//}
-//
-//tasks.withType<org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmInstallTask>().configureEach {
-//    args.add("--ignore-engines")
-//}
