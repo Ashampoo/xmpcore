@@ -2,9 +2,9 @@ package com.ashampoo.xmp
 
 import nl.adaptivity.xmlutil.DomWriter
 import nl.adaptivity.xmlutil.EventType
-import nl.adaptivity.xmlutil.XmlStreaming
 import nl.adaptivity.xmlutil.dom.Document
 import nl.adaptivity.xmlutil.writeCurrent
+import nl.adaptivity.xmlutil.xmlStreaming
 
 object DomParser {
 
@@ -26,7 +26,7 @@ object DomParser {
 
             val writer = DomWriter()
 
-            val reader = XmlStreaming.newReader(trimmedInput)
+            val reader = xmlStreaming.newReader(trimmedInput)
 
             do {
                 val event = reader.next()
