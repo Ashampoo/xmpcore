@@ -18,7 +18,7 @@ It's part of [Ashampoo Photos](https://ashampoo.com/photos).
 ## Installation
 
 ```
-implementation("com.ashampoo:xmpcore:1.0.1")
+implementation("com.ashampoo:xmpcore:1.1.0")
 ```
 
 ## How to use
