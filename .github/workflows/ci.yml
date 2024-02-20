@@ -112,6 +112,18 @@ jobs:
           if-no-files-found: error
           name: xmpcore-macosArm64.kexe
           path: build/bin/macosArm64/releaseExecutable/xmpcore.kexe
+      - name: Upload xmpcore-linuxArm64.kexe
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xmpcore-linuxArm64.kexe
+          path: build/bin/linuxArm64/releaseExecutable/xmpcore.kexe
+      - name: Upload xmpcore-linuxX64.kexe
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error
+          name: xmpcore-linuxX64.kexe
+          path: build/bin/linuxX64/releaseExecutable/xmpcore.kexe
       - name: Export secring.pgp
         if: startsWith(github.ref, 'refs/tags/') # Only for releases
         run: |

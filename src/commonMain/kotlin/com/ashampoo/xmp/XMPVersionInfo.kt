@@ -8,8 +8,8 @@ package com.ashampoo.xmp
 object XMPVersionInfo {
 
     const val MAJOR: Int = 1
-    const val MINOR: Int = 0
-    const val PATCH: Int = 1
+    const val MINOR: Int = 1
+    const val PATCH: Int = 0
 
     const val VERSION_MESSAGE = "Ashampoo XMP Core $MAJOR.$MINOR.$PATCH"
 
