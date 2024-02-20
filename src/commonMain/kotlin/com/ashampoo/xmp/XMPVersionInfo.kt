@@ -1,21 +1,18 @@
 package com.ashampoo.xmp
 
 /**
- * We ported from version 1.5.3, which was the final release available on
- * https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html
- * under the BSD license, prior to the webpage being taken down.
- * Hence we report this as the used version.
+ * Since v1.0.1 we report the library no longer as "Adobe XMP Core 5.1.3"
+ * (which it is based on), but under it's real name and version number.
  */
 @Suppress("MagicNumber")
 object XMPVersionInfo {
 
-    const val VERSION_MESSAGE = "Adobe XMP Core 5.1.3"
+    const val MAJOR: Int = 1
+    const val MINOR: Int = 0
+    const val PATCH: Int = 1
 
-    const val major: Int = 5
-    const val minor: Int = 1
-    const val micro: Int = 3
-    const val build: Int = 0
-    const val isDebug: Boolean = false
-    const val message: String = VERSION_MESSAGE
+    const val VERSION_MESSAGE = "Ashampoo XMP Core $MAJOR.$MINOR.$PATCH"
+
+    const val DEBUG: Boolean = false
 
 }

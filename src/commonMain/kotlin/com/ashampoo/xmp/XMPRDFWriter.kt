@@ -100,7 +100,7 @@ internal object XMPRDFWriter {
 
             writeIndent(sb, level)
             sb.append(RDF_XMPMETA_START)
-            sb.append(XMPVersionInfo.message)
+            sb.append(XMPVersionInfo.VERSION_MESSAGE)
             sb.append("\">")
             sb.append(XMP_DEFAULT_NEWLINE)
 
