@@ -15,6 +15,7 @@ import nl.adaptivity.xmlutil.dom.Node
 import nl.adaptivity.xmlutil.dom.NodeConsts
 import nl.adaptivity.xmlutil.dom.ProcessingInstruction
 import nl.adaptivity.xmlutil.dom.childNodes
+import nl.adaptivity.xmlutil.dom.nodeType
 import nl.adaptivity.xmlutil.dom.getData
 import nl.adaptivity.xmlutil.dom.getTarget
 import nl.adaptivity.xmlutil.dom.length
