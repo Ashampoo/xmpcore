@@ -10,11 +10,10 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.XMPNormalizer.normalize
 import com.ashampoo.xmp.options.ParseOptions
-import nl.adaptivity.xmlutil.dom.Comment
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node
+import nl.adaptivity.xmlutil.dom.NodeConsts
 import nl.adaptivity.xmlutil.dom.ProcessingInstruction
-import nl.adaptivity.xmlutil.dom.Text
 import nl.adaptivity.xmlutil.dom.childNodes
 import nl.adaptivity.xmlutil.dom.getData
 import nl.adaptivity.xmlutil.dom.getTarget
@@ -114,19 +113,18 @@ internal object XMPMetaParser {
 
             when {
 
-                child is ProcessingInstruction && XMPConst.XMP_PI == child.getTarget() -> {
+                child.nodeType == NodeConsts.PROCESSING_INSTRUCTION_NODE &&
+                    XMPConst.XMP_PI == (child as ProcessingInstruction).getTarget() -> {
 
                     /* Store the processing instructions content */
                     result[2] = child.getData()
                 }
 
-                child is Comment -> {
+                /* Ignore comments */
+                child.nodeType == NodeConsts.COMMENT_NODE -> continue
 
-                    /* Ignore comments */
-                    continue
-                }
-
-                child !is Text && child !is ProcessingInstruction -> {
+                child.nodeType != NodeConsts.TEXT_NODE &&
+                    child.nodeType != NodeConsts.PROCESSING_INSTRUCTION_NODE -> {
 
                     val childElement = child as Element
 
