@@ -53,6 +53,7 @@ internal object XMPMetaParser {
 
         return if (result != null && result[1] === XMP_RDF) {
 
+            @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
             val xmp = XMPRDFParser.parse(result[0] as Node, actualOptions)
 
             xmp.setPacketHeader(result[2] as? String)
@@ -97,6 +98,7 @@ internal object XMPMetaParser {
      *  * [1] - an object that is either XMP_RDF or XMP_PLAIN (the latter is decrecated)
      *  * [2] - the body text of the xpacket-instruction.
      */
+    @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun findRootNode(root: Node, xmpmetaRequired: Boolean, result: Array<Any?>): Array<Any?>? {
 
         /*

@@ -117,7 +117,7 @@ internal object XMPRDFParser {
      * syntax production and adding the appropriate structure to the XMP tree.
      * They simply return for success, failures will throw an exception.
      */
-    @Suppress("ThrowsCount")
+    @Suppress("ThrowsCount", "UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     fun parseRdfRoot(xmp: XMPMeta, rdfRdfNode: Node, options: ParseOptions) {
 
         if (rdfRdfNode.nodeName != "rdf:RDF")
@@ -254,8 +254,8 @@ internal object XMPRDFParser {
      * @param xmlParent  the currently processed XML node
      * @param isTopLevel Flag if the node is a top-level node
      * @param options    ParseOptions to indicate the parse options provided by the client
-     *
      */
+    @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun parseRdfPropertyElementList(
         xmp: XMPMeta,
         xmpParent: XMPNode,
@@ -330,8 +330,8 @@ internal object XMPRDFParser {
      *
      * NOTE: The RDF syntax does not explicitly include the xml:lang attribute although it can
      * appear in many of these. We have to allow for it in the attibute counts below.
-     *
      */
+    @Suppress("NestedBlockDepth", "UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun parseRdfPropertyElement(
         xmp: XMPMeta,
         xmpParent: XMPNode,
