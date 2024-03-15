@@ -296,8 +296,8 @@ object XMPConst {
 
     /* <acdsee:tagged>True</acdsee:tagged> or <acdsee:tagged>False</acdsee:tagged> */
     const val FLAGGED_TAG_ACDSEE_NAME = "tagged"
-    const val FLAGGED_TAG_ACDSEE_TRUE = "True"
-    const val FLAGGED_TAG_ACDSEE_FALSE = "False"
+    const val FLAGGED_TAG_ACDSEE_TRUE = TRUE_STRING
+    const val FLAGGED_TAG_ACDSEE_FALSE = FALSE_STRING
 
     /* MY:flag="true" or MY:flag="false" */
     const val FLAGGED_TAG_MYLIO_NAME = "flag"
@@ -306,6 +306,6 @@ object XMPConst {
 
     /* narrative:Tagged="True" or narrative:Tagged="False" */
     const val FLAGGED_TAG_NARRATIVE_NAME = "Tagged"
-    const val FLAGGED_TAG_NARRATIVE_TRUE = "True"
-    const val FLAGGED_TAG_NARRATIVE_FALSE = "False"
+    const val FLAGGED_TAG_NARRATIVE_TRUE = TRUE_STRING
+    const val FLAGGED_TAG_NARRATIVE_FALSE = FALSE_STRING
 }

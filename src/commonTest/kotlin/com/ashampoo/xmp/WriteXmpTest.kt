@@ -165,6 +165,8 @@ class WriteXmpTest {
 
         xmpMeta.setRating(3)
 
+        xmpMeta.setFlagged(true)
+
         xmpMeta.setDateTimeOriginal("2023-07-07T13:37:42")
 
         xmpMeta.setGpsCoordinates(

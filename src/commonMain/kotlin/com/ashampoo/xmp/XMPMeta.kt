@@ -9,6 +9,7 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.normalizeLangValue
+import com.ashampoo.xmp.XMPConst.NS_DM
 import com.ashampoo.xmp.XMPConst.NS_MWG_RS
 import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_APPLIED_TO_DIMENSIONS
 import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_REGION_LIST
@@ -1566,6 +1567,49 @@ class XMPMeta {
             getPropertyBoolean(XMPConst.NS_ACDSEE, XMPConst.FLAGGED_TAG_ACDSEE_NAME) == true ||
             getPropertyBoolean(XMPConst.NS_MYLIO, XMPConst.FLAGGED_TAG_MYLIO_NAME) == true ||
             getPropertyBoolean(XMPConst.NS_NARRATIVE, XMPConst.FLAGGED_TAG_NARRATIVE_NAME) == true
+
+    /**
+     * Sets flagged/tagged/picked marker for standard schema and other commonly used fields by popular tools.
+     */
+    fun setFlagged(flagged: Boolean) {
+
+        /* Set the standard schema */
+        setProperty(
+            schemaNS = XMPConst.NS_DM,
+            propName = XMPConst.FLAGGED_TAG_ADOBE_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_ADOBE_TRUE
+            else
+                XMPConst.FLAGGED_TAG_ADOBE_FALSE
+        )
+
+        setProperty(
+            schemaNS = XMPConst.NS_ACDSEE,
+            propName = XMPConst.FLAGGED_TAG_ACDSEE_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_ACDSEE_TRUE
+            else
+                XMPConst.FLAGGED_TAG_ACDSEE_FALSE
+        )
+
+        setProperty(
+            schemaNS = XMPConst.NS_MYLIO,
+            propName = XMPConst.FLAGGED_TAG_MYLIO_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_MYLIO_TRUE
+            else
+                XMPConst.FLAGGED_TAG_MYLIO_FALSE
+        )
+
+        setProperty(
+            schemaNS = XMPConst.NS_NARRATIVE,
+            propName = XMPConst.FLAGGED_TAG_NARRATIVE_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_NARRATIVE_TRUE
+            else
+                XMPConst.FLAGGED_TAG_NARRATIVE_FALSE
+        )
+    }
 
     /**
      * Gets the regular keywords specified by XMP standard.
