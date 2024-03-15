@@ -99,16 +99,9 @@ class XMPMeta {
      *         if the property does not exist.
      */
     fun getProperty(schemaNS: String, propName: String): XMPProperty? =
-        getProperty(schemaNS, propName, VALUE_STRING)
+        getProperty(schemaNS, propName, XMPValueType.STRING)
 
-    /**
-     * Returns a property, but the result value can be requested. It can be one
-     * of [XMPMeta.VALUE_STRING], [XMPMeta.VALUE_BOOLEAN],
-     * [XMPMeta.VALUE_INTEGER], [XMPMeta.VALUE_LONG],
-     * [XMPMeta.VALUE_DOUBLE], [XMPMeta.VALUE_DATE],
-     * [XMPMeta.VALUE_TIME_IN_MILLIS], [XMPMeta.VALUE_BASE64].
-     */
-    private fun getProperty(schemaNS: String, propName: String, valueType: Int): XMPProperty? {
+    private fun getProperty(schemaNS: String, propName: String, valueType: XMPValueType): XMPProperty? {
 
         if (schemaNS.isEmpty())
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
@@ -123,7 +116,7 @@ class XMPMeta {
             leafOptions = null
         ) ?: return null
 
-        if (valueType != VALUE_STRING && propNode.options.isCompositeProperty())
+        if (valueType != XMPValueType.STRING && propNode.options.isCompositeProperty())
             throw XMPException("Property must be simple when a value type is requested", XMPError.BADXPATH)
 
         val value = evaluateNodeValue(valueType, propNode)
@@ -148,37 +141,30 @@ class XMPMeta {
      * Evaluates a raw node value to the given value type, apply special
      * conversions for defined types in XMP.
      */
-    private fun evaluateNodeValue(valueType: Int, propNode: XMPNode): Any? {
+    private fun evaluateNodeValue(valueType: XMPValueType, propNode: XMPNode): Any? =
+        when (valueType) {
 
-        val value: Any?
-        val rawValue = propNode.value
+            XMPValueType.BOOLEAN -> convertToBoolean(propNode.value)
 
-        value = when (valueType) {
+            XMPValueType.INTEGER -> convertToInteger(propNode.value)
 
-            VALUE_BOOLEAN -> convertToBoolean(rawValue)
+            XMPValueType.LONG -> convertToLong(propNode.value)
 
-            VALUE_INTEGER -> convertToInteger(rawValue)
+            XMPValueType.DOUBLE -> convertToDouble(propNode.value)
 
-            VALUE_LONG -> convertToLong(rawValue)
-
-            VALUE_DOUBLE -> convertToDouble(rawValue)
-
-            VALUE_BASE64 -> decodeBase64(rawValue!!)
+            XMPValueType.BASE64 -> decodeBase64(propNode.value!!)
 
             /*
              * Leaf values return empty string instead of null
              * for the other cases the converter methods provides a "null" value.
              * a default value can only occur if this method is made public.
              */
-            VALUE_STRING ->
-                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
-
-            else ->
-                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
+            XMPValueType.STRING ->
+                if (propNode.value != null || propNode.options.isCompositeProperty())
+                    propNode.value
+                else
+                    ""
         }
-
-        return value
-    }
 
     /**
      * Provides access to items within an array. The index is passed as an integer, you need not
@@ -324,8 +310,8 @@ class XMPMeta {
         return getProperty(schemaNS, qualPath)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Functions for setting property values
+// ---------------------------------------------------------------------------------------------
+// Functions for setting property values
 
     /**
      * The property value `setters` all take a property specification, their
@@ -703,9 +689,9 @@ class XMPMeta {
         setProperty(schemaNS, qualPath, qualValue, options)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Functions for deleting and detecting properties.
-    // These should be obvious from the descriptions of the getters and setters.
+// ---------------------------------------------------------------------------------------------
+// Functions for deleting and detecting properties.
+// These should be obvious from the descriptions of the getters and setters.
 
     /**
      * Deletes the given XMP subtree rooted at the given property.
@@ -935,8 +921,8 @@ class XMPMeta {
         return doesPropertyExist(schemaNS, propName + path)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Specialized Get and Set functions
+// ---------------------------------------------------------------------------------------------
+// Specialized Get and Set functions
 
     /**
      * These functions provide convenient support for localized text properties, including a number
@@ -1227,8 +1213,8 @@ class XMPMeta {
             appendLangItem(arrayNode, XMPConst.X_DEFAULT, itemValue)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Functions accessing properties as binary values.
+// ---------------------------------------------------------------------------------------------
+// Functions accessing properties as binary values.
 
     /**
      * These are very similar to `getProperty()` and `SetProperty()` above,
@@ -1241,7 +1227,7 @@ class XMPMeta {
      * @return Returns a `Boolean` value or `null` if the property does not exist.
      */
     fun getPropertyBoolean(schemaNS: String, propName: String): Boolean? =
-        getPropertyObject(schemaNS, propName, VALUE_BOOLEAN) as? Boolean
+        getPropertyObject(schemaNS, propName, XMPValueType.BOOLEAN) as? Boolean
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1251,7 +1237,7 @@ class XMPMeta {
      * @return Returns an `Integer` value or `null` if the property does not exist.
      */
     fun getPropertyInteger(schemaNS: String, propName: String): Int? =
-        getPropertyObject(schemaNS, propName, VALUE_INTEGER) as? Int
+        getPropertyObject(schemaNS, propName, XMPValueType.INTEGER) as? Int
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1261,7 +1247,7 @@ class XMPMeta {
      * @return Returns a `Long` value or `null` if the property does not exist.
      */
     fun getPropertyLong(schemaNS: String, propName: String): Long? =
-        getPropertyObject(schemaNS, propName, VALUE_LONG) as? Long
+        getPropertyObject(schemaNS, propName, XMPValueType.LONG) as? Long
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1271,7 +1257,7 @@ class XMPMeta {
      * @return Returns a `Double` value or `null` if the property does not exist.
      */
     fun getPropertyDouble(schemaNS: String, propName: String): Double? =
-        getPropertyObject(schemaNS, propName, VALUE_DOUBLE) as? Double
+        getPropertyObject(schemaNS, propName, XMPValueType.DOUBLE) as? Double
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1282,7 +1268,7 @@ class XMPMeta {
      * not exist.
      */
     fun getPropertyBase64(schemaNS: String, propName: String): ByteArray? =
-        getPropertyObject(schemaNS, propName, VALUE_BASE64) as? ByteArray
+        getPropertyObject(schemaNS, propName, XMPValueType.BASE64) as? ByteArray
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1295,12 +1281,12 @@ class XMPMeta {
      * @return Returns a `String` value or `null` if the property does not exist.
      */
     fun getPropertyString(schemaNS: String, propName: String): String? =
-        getPropertyObject(schemaNS, propName, VALUE_STRING) as? String
+        getPropertyObject(schemaNS, propName, XMPValueType.STRING) as? String
 
     /**
      * Returns a property, but the result value can be requested.
      */
-    private fun getPropertyObject(schemaNS: String, propName: String, valueType: Int): Any? {
+    private fun getPropertyObject(schemaNS: String, propName: String, valueType: XMPValueType): Any? {
 
         if (schemaNS.isEmpty())
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
@@ -1315,7 +1301,7 @@ class XMPMeta {
             leafOptions = null
         ) ?: return null
 
-        if (valueType != VALUE_STRING && propNode.options.isCompositeProperty())
+        if (valueType != XMPValueType.STRING && propNode.options.isCompositeProperty())
             throw XMPException("Property must be simple when a value type is requested", XMPError.BADXPATH)
 
         return evaluateNodeValue(valueType, propNode)
@@ -1898,17 +1884,13 @@ class XMPMeta {
             )
     }
 
-    companion object {
+    internal enum class XMPValueType {
 
-        /**
-         * Property values are Strings by default
-         */
-
-        private const val VALUE_STRING = 0
-        private const val VALUE_BOOLEAN = 1
-        private const val VALUE_INTEGER = 2
-        private const val VALUE_LONG = 3
-        private const val VALUE_DOUBLE = 4
-        private const val VALUE_BASE64 = 7
+        STRING,
+        BOOLEAN,
+        INTEGER,
+        LONG,
+        DOUBLE,
+        BASE64
     }
 }
