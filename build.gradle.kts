@@ -25,6 +25,7 @@ repositories {
 val productName = "Ashampoo XMP Core"
 
 val xmlUtilVersion: String = "0.86.3"
+val kotlinIoVersion: String = "0.3.1"
 
 description = productName
 group = "com.ashampoo"
@@ -151,6 +152,8 @@ kotlin {
         }
     }
 
+    js()
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         // All tests reading from files fail, because kotlinx-io
@@ -180,7 +183,7 @@ kotlin {
             implementation(kotlin("test"))
 
             /* Multiplatform file access */
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:$kotlinIoVersion")
         }
     }
 
@@ -351,6 +354,7 @@ afterEvaluate {
         val signWinPublication by tasks.getting
         val signLinuxX64Publication by tasks.getting
         val signLinuxArm64Publication by tasks.getting
+        val signJsPublication by tasks.getting
         val signWasmJsPublication by tasks.getting
         val signWasmWasiPublication by tasks.getting
         val signKotlinMultiplatformPublication by tasks.getting
@@ -365,6 +369,7 @@ afterEvaluate {
         val publishWinPublicationToSonatypeRepository by tasks.getting
         val publishLinuxX64PublicationToSonatypeRepository by tasks.getting
         val publishLinuxArm64PublicationToSonatypeRepository by tasks.getting
+        val publishJsPublicationToSonatypeRepository by tasks.getting
         val publishWasmJsPublicationToSonatypeRepository by tasks.getting
         val publishWasmWasiPublicationToSonatypeRepository by tasks.getting
         val publishKotlinMultiplatformPublicationToSonatypeRepository by tasks.getting
@@ -375,7 +380,8 @@ afterEvaluate {
             signIosArm64Publication, signIosX64Publication, signIosSimulatorArm64Publication,
             signMacosArm64Publication, signMacosX64Publication, signWinPublication,
             signLinuxX64Publication, signLinuxArm64Publication,
-            signWasmJsPublication, signWasmWasiPublication, signKotlinMultiplatformPublication
+            signJsPublication, signWasmJsPublication, signWasmWasiPublication,
+            signKotlinMultiplatformPublication
         )
 
         val publishTasks = listOf(
@@ -389,6 +395,7 @@ afterEvaluate {
             publishWinPublicationToSonatypeRepository,
             publishLinuxX64PublicationToSonatypeRepository,
             publishLinuxArm64PublicationToSonatypeRepository,
+            publishJsPublicationToSonatypeRepository,
             publishWasmJsPublicationToSonatypeRepository,
             publishWasmWasiPublicationToSonatypeRepository,
             publishKotlinMultiplatformPublicationToSonatypeRepository,
