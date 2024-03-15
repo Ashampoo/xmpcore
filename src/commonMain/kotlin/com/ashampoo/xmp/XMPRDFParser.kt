@@ -860,6 +860,7 @@ internal object XMPRDFParser {
         }
     }
 
+    @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun addChildNode(
         xmp: XMPMeta,
         xmpParent: XMPNode,
@@ -1068,6 +1069,7 @@ internal object XMPRDFParser {
      * @param node an XML-node
      * @return Returns whether the node is a whitespace node, i.e. a text node that contains only whitespaces.
      */
+    @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun isWhitespaceNode(node: Node): Boolean {
 
         if (node.nodeType != NodeConsts.TEXT_NODE)
@@ -1122,6 +1124,7 @@ internal object XMPRDFParser {
      * @param node an XML node
      * @return Returns the term ID.
      */
+    @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun getRDFTermKind(node: Node): Int {
 
         val namespace = when {
