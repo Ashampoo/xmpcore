@@ -290,22 +290,24 @@ object XMPConst {
     const val XMP_MWG_RS_APPLIED_TO_DIMENSIONS: String = "Regions/mwg-rs:AppliedToDimensions"
 
     /* xmpDM:pick="1" or xmpDM:pick="0" */
-    const val FLAGGED_TAG_ADOBE_NAME = "pick"
-    const val FLAGGED_TAG_ADOBE_TRUE = "1"
-    const val FLAGGED_TAG_ADOBE_FALSE = "0"
+    const val FLAGGED_TAG_ADOBE_NAME: String = "pick"
+    const val FLAGGED_TAG_ADOBE_TRUE: String = "1"
+    const val FLAGGED_TAG_ADOBE_FALSE: String = "0"
 
     /* <acdsee:tagged>True</acdsee:tagged> or <acdsee:tagged>False</acdsee:tagged> */
-    const val FLAGGED_TAG_ACDSEE_NAME = "tagged"
-    const val FLAGGED_TAG_ACDSEE_TRUE = TRUE_STRING
-    const val FLAGGED_TAG_ACDSEE_FALSE = FALSE_STRING
+    const val FLAGGED_TAG_ACDSEE_NAME: String = "tagged"
+    const val FLAGGED_TAG_ACDSEE_TRUE: String = TRUE_STRING
+    const val FLAGGED_TAG_ACDSEE_FALSE: String = FALSE_STRING
 
     /* MY:flag="true" or MY:flag="false" */
-    const val FLAGGED_TAG_MYLIO_NAME = "flag"
-    const val FLAGGED_TAG_MYLIO_TRUE = "true"
-    const val FLAGGED_TAG_MYLIO_FALSE = "false"
+    const val FLAGGED_TAG_MYLIO_NAME: String = "flag"
+    const val FLAGGED_TAG_MYLIO_TRUE: String = "true"
+    const val FLAGGED_TAG_MYLIO_FALSE: String = "false"
 
     /* narrative:Tagged="True" or narrative:Tagged="False" */
-    const val FLAGGED_TAG_NARRATIVE_NAME = "Tagged"
-    const val FLAGGED_TAG_NARRATIVE_TRUE = TRUE_STRING
-    const val FLAGGED_TAG_NARRATIVE_FALSE = FALSE_STRING
+    const val FLAGGED_TAG_NARRATIVE_NAME: String = "Tagged"
+    const val FLAGGED_TAG_NARRATIVE_TRUE: String = TRUE_STRING
+    const val FLAGGED_TAG_NARRATIVE_FALSE: String = FALSE_STRING
+
+    const val XMP_ASHAMPOO_ALBUMS: String = "albums"
 }

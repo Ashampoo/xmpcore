@@ -185,6 +185,8 @@ class WriteXmpTest {
             widthPx = 1500,
             heightPx = 1000
         )
+
+        xmpMeta.setAlbums(setOf("My wedding", "America trip"))
     }
 
     private fun getXmp(name: String): String =

@@ -9,7 +9,6 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.normalizeLangValue
-import com.ashampoo.xmp.XMPConst.NS_DM
 import com.ashampoo.xmp.XMPConst.NS_MWG_RS
 import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_APPLIED_TO_DIMENSIONS
 import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_REGION_LIST
@@ -1881,6 +1880,56 @@ class XMPMeta {
                 schemaNS = XMPConst.NS_IPTC_EXT,
                 arrayName = XMPConst.XMP_IPTC_EXT_PERSON_IN_IMAGE,
                 itemValue = person
+            )
+    }
+
+    /**
+     * Get album names
+     */
+    fun getAlbums(): Set<String> {
+
+        val subjectCount = countArrayItems(XMPConst.NS_ASHAMPOO, XMPConst.XMP_ASHAMPOO_ALBUMS)
+
+        if (subjectCount == 0)
+            return emptySet()
+
+        val keywords = mutableSetOf<String>()
+
+        for (index in 1..subjectCount) {
+
+            val keyword = getPropertyString(
+                XMPConst.NS_ASHAMPOO,
+                "${XMPConst.XMP_ASHAMPOO_ALBUMS}[$index]"
+            ) ?: continue
+
+            keywords.add(keyword)
+        }
+
+        return keywords
+    }
+
+    fun setAlbums(albums: Set<String>) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_ASHAMPOO, XMPConst.XMP_ASHAMPOO_ALBUMS)
+
+        if (albums.isEmpty())
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_ASHAMPOO,
+            XMPConst.XMP_ASHAMPOO_ALBUMS,
+            null,
+            arrayOptions
+        )
+
+        /* Fill the new array with album names. */
+        for (albumName in albums.sorted())
+            appendArrayItem(
+                schemaNS = XMPConst.NS_ASHAMPOO,
+                arrayName = XMPConst.XMP_ASHAMPOO_ALBUMS,
+                itemValue = albumName
             )
     }
 

@@ -16,6 +16,7 @@ class ReadXmpTest {
         val testXmp = """
             <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
               <rdf:Description rdf:about=""
+                  xmlns:ashampoo="http://ns.ashampoo.com/xmp/1.0/"
                   xmlns:dc="http://purl.org/dc/elements/1.1/"
                   xmlns:exif="http://ns.adobe.com/exif/1.0/"
                   xmlns:xmp="http://ns.adobe.com/xap/1.0/"
@@ -26,6 +27,12 @@ class ReadXmpTest {
                 exif:GPSVersionID="2.3.0.0"
                 xmpDM:pick="1"
                 xmp:Rating="2">
+                <ashampoo:albums>
+                  <rdf:Bag>
+                    <rdf:li>America trip</rdf:li>
+                    <rdf:li>My wedding</rdf:li>
+                  </rdf:Bag>
+                </ashampoo:albums>
                 <dc:subject>
                   <rdf:Bag>
                     <rdf:li>fox</rdf:li>
@@ -83,6 +90,11 @@ class ReadXmpTest {
         assertEquals(
             expected = setOf("fox", "swiper"),
             actual = xmpMeta.getKeywords()
+        )
+
+        assertEquals(
+            expected = setOf("My wedding", "America trip"),
+            actual = xmpMeta.getAlbums()
         )
     }
 }

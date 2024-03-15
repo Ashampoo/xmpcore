@@ -4,6 +4,7 @@
     <rdf:Description rdf:about=""
         xmlns:MY="http://ns.mylollc.com/MyloEdit/"
         xmlns:acdsee="http://ns.acdsee.com/iptc/1.0/"
+        xmlns:ashampoo="http://ns.ashampoo.com/xmp/1.0/"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:exif="http://ns.adobe.com/exif/1.0/"
         xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
@@ -21,6 +22,12 @@
       narrative:Tagged="True"
       xmp:Rating="3"
       xmpDM:pick="1">
+      <ashampoo:albums>
+        <rdf:Bag>
+          <rdf:li>America trip</rdf:li>
+          <rdf:li>My wedding</rdf:li>
+        </rdf:Bag>
+      </ashampoo:albums>
       <dc:subject>
         <rdf:Bag>
           <rdf:li>bird</rdf:li>
