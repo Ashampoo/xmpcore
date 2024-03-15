@@ -21,9 +21,6 @@ class WriteXmpTest {
             .setUseCanonicalFormat(false)
             .setSort(true)
 
-    private val arrayOptions =
-        PropertyOptions().setArray(true)
-
     /**
      * Create an empty XMP file with only the required envelope.
      */
