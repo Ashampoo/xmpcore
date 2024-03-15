@@ -10,6 +10,8 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.normalizeLangValue
 import com.ashampoo.xmp.XMPConst.NS_MWG_RS
+import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_APPLIED_TO_DIMENSIONS
+import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_REGION_LIST
 import com.ashampoo.xmp.XMPNodeUtils.appendLangItem
 import com.ashampoo.xmp.XMPNodeUtils.chooseLocalizedText
 import com.ashampoo.xmp.XMPNodeUtils.deleteNode
@@ -162,9 +164,11 @@ class XMPMeta {
 
             VALUE_BASE64 -> decodeBase64(rawValue!!)
 
-            // leaf values return empty string instead of null
-            // for the other cases the converter methods provides a "null" value.
-            // a default value can only occur if this method is made public.
+            /*
+             * Leaf values return empty string instead of null
+             * for the other cases the converter methods provides a "null" value.
+             * a default value can only occur if this method is made public.
+             */
             VALUE_STRING ->
                 if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
 
@@ -1555,6 +1559,15 @@ class XMPMeta {
     }
 
     /**
+     * Check for common used fields if they have a positive flagged value.
+     */
+    fun isFlagged(): Boolean =
+        getPropertyBoolean(XMPConst.NS_DM, XMPConst.FLAGGED_TAG_ADOBE_NAME) == true ||
+            getPropertyBoolean(XMPConst.NS_ACDSEE, XMPConst.FLAGGED_TAG_ACDSEE_NAME) == true ||
+            getPropertyBoolean(XMPConst.NS_MYLIO, XMPConst.FLAGGED_TAG_MYLIO_NAME) == true ||
+            getPropertyBoolean(XMPConst.NS_NARRATIVE, XMPConst.FLAGGED_TAG_NARRATIVE_NAME) == true
+
+    /**
      * Gets the regular keywords specified by XMP standard.
      */
     fun getKeywords(): Set<String> {
@@ -1637,18 +1650,19 @@ class XMPMeta {
 
     fun getFaces(): Map<String, XMPRegionArea> {
 
-        val regionListExists = doesPropertyExist(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+        val regionListExists = doesPropertyExist(XMPConst.NS_MWG_RS, XMP_MWG_RS_REGION_LIST)
 
         if (!regionListExists)
             return emptyMap()
 
-        val regionCount = countArrayItems(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+        val regionCount = countArrayItems(XMPConst.NS_MWG_RS, XMP_MWG_RS_REGION_LIST)
 
         if (regionCount == 0)
             return emptyMap()
 
         val faces = mutableMapOf<String, XMPRegionArea>()
 
+        @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..regionCount) {
 
             val prefix = "Regions/mwg-rs:RegionList[$index]/mwg-rs"
@@ -1688,19 +1702,19 @@ class XMPMeta {
         if (faces.isNotEmpty()) {
 
             setStructField(
-                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                NS_MWG_RS, XMP_MWG_RS_APPLIED_TO_DIMENSIONS,
                 XMPConst.TYPE_DIMENSIONS, "w",
                 widthPx.toString()
             )
 
             setStructField(
-                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                NS_MWG_RS, XMP_MWG_RS_APPLIED_TO_DIMENSIONS,
                 XMPConst.TYPE_DIMENSIONS, "h",
                 heightPx.toString()
             )
 
             setStructField(
-                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                NS_MWG_RS, XMP_MWG_RS_APPLIED_TO_DIMENSIONS,
                 XMPConst.TYPE_DIMENSIONS, "unit", "pixel"
             )
 

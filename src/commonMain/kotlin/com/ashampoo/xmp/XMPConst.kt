@@ -286,5 +286,26 @@ object XMPConst {
     const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
 
     const val XMP_MWG_RS_TYPE_FACE: String = "Face"
+    const val XMP_MWG_RS_REGION_LIST: String = "Regions/mwg-rs:RegionList"
+    const val XMP_MWG_RS_APPLIED_TO_DIMENSIONS: String = "Regions/mwg-rs:AppliedToDimensions"
 
+    /* xmpDM:pick="1" or xmpDM:pick="0" */
+    const val FLAGGED_TAG_ADOBE_NAME = "pick"
+    const val FLAGGED_TAG_ADOBE_TRUE = "1"
+    const val FLAGGED_TAG_ADOBE_FALSE = "0"
+
+    /* <acdsee:tagged>True</acdsee:tagged> or <acdsee:tagged>False</acdsee:tagged> */
+    const val FLAGGED_TAG_ACDSEE_NAME = "tagged"
+    const val FLAGGED_TAG_ACDSEE_TRUE = "True"
+    const val FLAGGED_TAG_ACDSEE_FALSE = "False"
+
+    /* MY:flag="true" or MY:flag="false" */
+    const val FLAGGED_TAG_MYLIO_NAME = "flag"
+    const val FLAGGED_TAG_MYLIO_TRUE = "true"
+    const val FLAGGED_TAG_MYLIO_FALSE = "false"
+
+    /* narrative:Tagged="True" or narrative:Tagged="False" */
+    const val FLAGGED_TAG_NARRATIVE_NAME = "Tagged"
+    const val FLAGGED_TAG_NARRATIVE_TRUE = "True"
+    const val FLAGGED_TAG_NARRATIVE_FALSE = "False"
 }
