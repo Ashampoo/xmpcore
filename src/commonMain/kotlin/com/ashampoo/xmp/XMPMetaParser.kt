@@ -10,12 +10,12 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.XMPNormalizer.normalize
 import com.ashampoo.xmp.options.ParseOptions
-import nl.adaptivity.xmlutil.dom.Comment
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node
+import nl.adaptivity.xmlutil.dom.NodeConsts
 import nl.adaptivity.xmlutil.dom.ProcessingInstruction
-import nl.adaptivity.xmlutil.dom.Text
 import nl.adaptivity.xmlutil.dom.childNodes
+import nl.adaptivity.xmlutil.dom.nodeType
 import nl.adaptivity.xmlutil.dom.getData
 import nl.adaptivity.xmlutil.dom.getTarget
 import nl.adaptivity.xmlutil.dom.length
@@ -53,6 +53,7 @@ internal object XMPMetaParser {
 
         return if (result != null && result[1] === XMP_RDF) {
 
+            @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
             val xmp = XMPRDFParser.parse(result[0] as Node, actualOptions)
 
             xmp.setPacketHeader(result[2] as? String)
@@ -97,6 +98,7 @@ internal object XMPMetaParser {
      *  * [1] - an object that is either XMP_RDF or XMP_PLAIN (the latter is decrecated)
      *  * [2] - the body text of the xpacket-instruction.
      */
+    @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
     private fun findRootNode(root: Node, xmpmetaRequired: Boolean, result: Array<Any?>): Array<Any?>? {
 
         /*
@@ -114,19 +116,18 @@ internal object XMPMetaParser {
 
             when {
 
-                child is ProcessingInstruction && XMPConst.XMP_PI == child.getTarget() -> {
+                child.nodeType == NodeConsts.PROCESSING_INSTRUCTION_NODE &&
+                    XMPConst.XMP_PI == (child as ProcessingInstruction).getTarget() -> {
 
                     /* Store the processing instructions content */
                     result[2] = child.getData()
                 }
 
-                child is Comment -> {
+                /* Ignore comments */
+                child.nodeType == NodeConsts.COMMENT_NODE -> continue
 
-                    /* Ignore comments */
-                    continue
-                }
-
-                child !is Text && child !is ProcessingInstruction -> {
+                child.nodeType != NodeConsts.TEXT_NODE &&
+                    child.nodeType != NodeConsts.PROCESSING_INSTRUCTION_NODE -> {
 
                     val childElement = child as Element
 

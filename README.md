@@ -1,13 +1,15 @@
 # XMP Core for Kotlin Multiplatform
 
-[![Kotlin](https://img.shields.io/badge/kotlin-1.9.22-blue.svg?logo=kotlin)](httpw://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-1.9.23-blue.svg?logo=kotlin)](httpw://kotlinlang.org)
 ![JVM](https://img.shields.io/badge/-JVM-gray.svg?style=flat)
 ![Android](https://img.shields.io/badge/-Android-gray.svg?style=flat)
-![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=flat)
 ![iOS](https://img.shields.io/badge/-iOS-gray.svg?style=flat)
 ![Windows](https://img.shields.io/badge/-Windows-gray.svg?style=flat)
 ![Linux](https://img.shields.io/badge/-Linux-gray.svg?style=flat)
+![macOS](https://img.shields.io/badge/-macOS-gray.svg?style=flat)
+![JS](https://img.shields.io/badge/-JS-gray.svg?style=flat)
 ![WASM](https://img.shields.io/badge/-WASM-gray.svg?style=flat)
+![WASI](https://img.shields.io/badge/-WASI-gray.svg?style=flat)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xmpcore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=xmpcore)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ashampoo/xmpcore)
 
@@ -18,7 +20,7 @@ It's part of [Ashampoo Photos](https://ashampoo.com/photos).
 ## Installation
 
 ```
-implementation("com.ashampoo:xmpcore:1.1.0")
+implementation("com.ashampoo:xmpcore:1.2.0")
 ```
 
 ## How to use

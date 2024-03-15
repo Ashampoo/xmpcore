@@ -50,10 +50,6 @@ object XMPConst {
 
     const val NS_MWG_RS: String = "http://www.metadataworkinggroup.com/schemas/regions/"
 
-    const val NS_ACDSEE: String = "http://ns.acdsee.com/iptc/1.0/"
-
-    // Adobe standard namespaces
-
     /**
      * The XML namespace Adobe XMP Metadata.
      */
@@ -76,24 +72,12 @@ object XMPConst {
      */
     const val NS_XMP_MM: String = "http://ns.adobe.com/xap/1.0/mm/"
 
-    /**
-     * The XML namespace for the job management schema.
-     */
     const val NS_XMP_BJ: String = "http://ns.adobe.com/xap/1.0/bj/"
 
-    /**
-     * The XML namespace for the job management schema.
-     */
     const val NS_XMP_NOTE: String = "http://ns.adobe.com/xmp/note/"
 
-    /**
-     * The XML namespace for the PDF schema.
-     */
     const val NS_PDF: String = "http://ns.adobe.com/pdf/1.3/"
 
-    /**
-     * The XML namespace for the PDF schema.
-     */
     const val NS_PDFX: String = "http://ns.adobe.com/pdfx/1.3/"
 
     const val NS_PDFX_ID: String = "http://www.npes.org/pdfx/ns/id/"
@@ -109,11 +93,6 @@ object XMPConst {
     const val NS_PDFA_ID: String = "http://www.aiim.org/pdfa/ns/id/"
 
     const val NS_PDFA_EXTENSION: String = "http://www.aiim.org/pdfa/ns/extension/"
-
-    /**
-     * The XML namespace for the Photoshop custom schema.
-     */
-    const val NS_PHOTOSHOP: String = "http://ns.adobe.com/photoshop/1.0/"
 
     /**
      * The XML namespace for the Photoshop Album schema.
@@ -182,6 +161,16 @@ object XMPConst {
      * legacy Dublin Core NS, will be converted to NS_DC
      */
     const val NS_DC_DEPRECATED: String = "http://purl.org/dc/1.1/"
+
+    // Namespaces of products
+    const val NS_ASHAMPOO: String = "http://ns.ashampoo.com/xmp/1.0/"
+    const val NS_ACDSEE: String = "http://ns.acdsee.com/iptc/1.0/"
+    const val NS_DIGIKAM: String = "http://www.digikam.org/ns/1.0/"
+    const val NS_MYLIO: String = "http://ns.mylollc.com/MyloEdit/"
+    const val NS_NARRATIVE: String = "http://ns.narrative.so/narrative_select/1.0/"
+    const val NS_MICROSOFT_PHOTO: String = "http://ns.microsoft.com/photo/1.0/"
+    const val NS_LIGHTROOM: String = "http://ns.adobe.com/lightroom/1.0/"
+    const val NS_PHOTOSHOP: String = "http://ns.adobe.com/photoshop/1.0/"
 
     // XML namespace constants for qualifiers and structured property fields.
 
@@ -297,5 +286,28 @@ object XMPConst {
     const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
 
     const val XMP_MWG_RS_TYPE_FACE: String = "Face"
+    const val XMP_MWG_RS_REGION_LIST: String = "Regions/mwg-rs:RegionList"
+    const val XMP_MWG_RS_APPLIED_TO_DIMENSIONS: String = "Regions/mwg-rs:AppliedToDimensions"
 
+    /* xmpDM:pick="1" or xmpDM:pick="0" */
+    const val FLAGGED_TAG_ADOBE_NAME: String = "pick"
+    const val FLAGGED_TAG_ADOBE_TRUE: String = "1"
+    const val FLAGGED_TAG_ADOBE_FALSE: String = "0"
+
+    /* <acdsee:tagged>True</acdsee:tagged> or <acdsee:tagged>False</acdsee:tagged> */
+    const val FLAGGED_TAG_ACDSEE_NAME: String = "tagged"
+    const val FLAGGED_TAG_ACDSEE_TRUE: String = TRUE_STRING
+    const val FLAGGED_TAG_ACDSEE_FALSE: String = FALSE_STRING
+
+    /* MY:flag="true" or MY:flag="false" */
+    const val FLAGGED_TAG_MYLIO_NAME: String = "flag"
+    const val FLAGGED_TAG_MYLIO_TRUE: String = "true"
+    const val FLAGGED_TAG_MYLIO_FALSE: String = "false"
+
+    /* narrative:Tagged="True" or narrative:Tagged="False" */
+    const val FLAGGED_TAG_NARRATIVE_NAME: String = "Tagged"
+    const val FLAGGED_TAG_NARRATIVE_TRUE: String = TRUE_STRING
+    const val FLAGGED_TAG_NARRATIVE_FALSE: String = FALSE_STRING
+
+    const val XMP_ASHAMPOO_ALBUMS: String = "albums"
 }

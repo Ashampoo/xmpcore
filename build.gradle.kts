@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
+    kotlin("multiplatform") version "1.9.23"
     id("com.android.library") version "8.2.2"
     id("maven-publish")
     id("signing")
@@ -13,8 +13,8 @@ plugins {
     id("com.asarkar.gradle.build-time-tracker") version "4.3.0"
     id("me.qoomon.git-versioning") version "6.4.3"
     id("com.goncalossilva.resources") version "0.4.0"
-    id("com.github.ben-manes.versions") version "0.50.0"
-    id("org.jetbrains.dokka") version "1.9.10"
+    id("com.github.ben-manes.versions") version "0.51.0"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 repositories {
@@ -25,6 +25,7 @@ repositories {
 val productName = "Ashampoo XMP Core"
 
 val xmlUtilVersion: String = "0.86.3"
+val kotlinIoVersion: String = "0.3.1"
 
 description = productName
 group = "com.ashampoo"
@@ -103,7 +104,7 @@ koverMerged {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.5")
 }
 
 kotlin {
@@ -151,6 +152,8 @@ kotlin {
         }
     }
 
+    js()
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         // All tests reading from files fail, because kotlinx-io
@@ -180,7 +183,7 @@ kotlin {
             implementation(kotlin("test"))
 
             /* Multiplatform file access */
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:$kotlinIoVersion")
         }
     }
 
@@ -351,6 +354,7 @@ afterEvaluate {
         val signWinPublication by tasks.getting
         val signLinuxX64Publication by tasks.getting
         val signLinuxArm64Publication by tasks.getting
+        val signJsPublication by tasks.getting
         val signWasmJsPublication by tasks.getting
         val signWasmWasiPublication by tasks.getting
         val signKotlinMultiplatformPublication by tasks.getting
@@ -365,6 +369,7 @@ afterEvaluate {
         val publishWinPublicationToSonatypeRepository by tasks.getting
         val publishLinuxX64PublicationToSonatypeRepository by tasks.getting
         val publishLinuxArm64PublicationToSonatypeRepository by tasks.getting
+        val publishJsPublicationToSonatypeRepository by tasks.getting
         val publishWasmJsPublicationToSonatypeRepository by tasks.getting
         val publishWasmWasiPublicationToSonatypeRepository by tasks.getting
         val publishKotlinMultiplatformPublicationToSonatypeRepository by tasks.getting
@@ -375,7 +380,8 @@ afterEvaluate {
             signIosArm64Publication, signIosX64Publication, signIosSimulatorArm64Publication,
             signMacosArm64Publication, signMacosX64Publication, signWinPublication,
             signLinuxX64Publication, signLinuxArm64Publication,
-            signWasmJsPublication, signWasmWasiPublication, signKotlinMultiplatformPublication
+            signJsPublication, signWasmJsPublication, signWasmWasiPublication,
+            signKotlinMultiplatformPublication
         )
 
         val publishTasks = listOf(
@@ -389,6 +395,7 @@ afterEvaluate {
             publishWinPublicationToSonatypeRepository,
             publishLinuxX64PublicationToSonatypeRepository,
             publishLinuxArm64PublicationToSonatypeRepository,
+            publishJsPublicationToSonatypeRepository,
             publishWasmJsPublicationToSonatypeRepository,
             publishWasmWasiPublicationToSonatypeRepository,
             publishKotlinMultiplatformPublicationToSonatypeRepository,

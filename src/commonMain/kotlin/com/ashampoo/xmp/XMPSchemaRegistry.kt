@@ -218,7 +218,16 @@ object XMPSchemaRegistry {
 
         // register other common schemas
         registerNamespace(XMPConst.NS_MWG_RS, "mwg-rs")
+
+        // register product specific schemas
+        registerNamespace(XMPConst.NS_ASHAMPOO, "ashampoo")
         registerNamespace(XMPConst.NS_ACDSEE, "acdsee")
+        registerNamespace(XMPConst.NS_DIGIKAM, "digiKam")
+        registerNamespace(XMPConst.NS_MYLIO, "MY")
+        registerNamespace(XMPConst.NS_NARRATIVE, "narrative")
+        registerNamespace(XMPConst.NS_MICROSOFT_PHOTO, "MicrosoftPhoto")
+        registerNamespace(XMPConst.NS_LIGHTROOM, "lr")
+        registerNamespace(XMPConst.NS_PHOTOSHOP, "photoshop")
 
         // register Adobe standard namespaces
         registerNamespace(XMPConst.NS_X, "x")
@@ -237,7 +246,6 @@ object XMPSchemaRegistry {
         registerNamespace(XMPConst.NS_PDFA_FIELD, "pdfaField")
         registerNamespace(XMPConst.NS_PDFA_ID, "pdfaid")
         registerNamespace(XMPConst.NS_PDFA_EXTENSION, "pdfaExtension")
-        registerNamespace(XMPConst.NS_PHOTOSHOP, "photoshop")
         registerNamespace(XMPConst.NS_PS_ALBUM, "album")
         registerNamespace(XMPConst.NS_EXIF, "exif")
         registerNamespace(XMPConst.NS_EXIF_CIPA, "exifEX")

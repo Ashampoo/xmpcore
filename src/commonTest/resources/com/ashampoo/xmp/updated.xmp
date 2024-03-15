@@ -1,18 +1,33 @@
 <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.1.0">
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.2.0">
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
     <rdf:Description rdf:about=""
+        xmlns:MY="http://ns.mylollc.com/MyloEdit/"
+        xmlns:acdsee="http://ns.acdsee.com/iptc/1.0/"
+        xmlns:ashampoo="http://ns.ashampoo.com/xmp/1.0/"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
         xmlns:exif="http://ns.adobe.com/exif/1.0/"
         xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
         xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#"
         xmlns:stArea="http://ns.adobe.com/xmp/sType/Area#"
+        xmlns:narrative="http://ns.narrative.so/narrative_select/1.0/"
         xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+        xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
+      MY:flag="true"
+      acdsee:tagged="True"
       exif:DateTimeOriginal="2023-07-07T13:37:42"
       exif:GPSLatitude="53,13.1635N"
       exif:GPSLongitude="8,14.3797E"
       exif:GPSVersionID="2.3.0.0"
-      xmp:Rating="3">
+      narrative:Tagged="True"
+      xmp:Rating="3"
+      xmpDM:pick="1">
+      <ashampoo:albums>
+        <rdf:Bag>
+          <rdf:li>America trip</rdf:li>
+          <rdf:li>My wedding</rdf:li>
+        </rdf:Bag>
+      </ashampoo:albums>
       <dc:subject>
         <rdf:Bag>
           <rdf:li>bird</rdf:li>

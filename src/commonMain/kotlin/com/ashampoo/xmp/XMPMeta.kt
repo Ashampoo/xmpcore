@@ -10,6 +10,8 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.Utils.normalizeLangValue
 import com.ashampoo.xmp.XMPConst.NS_MWG_RS
+import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_APPLIED_TO_DIMENSIONS
+import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_REGION_LIST
 import com.ashampoo.xmp.XMPNodeUtils.appendLangItem
 import com.ashampoo.xmp.XMPNodeUtils.chooseLocalizedText
 import com.ashampoo.xmp.XMPNodeUtils.deleteNode
@@ -96,16 +98,9 @@ class XMPMeta {
      *         if the property does not exist.
      */
     fun getProperty(schemaNS: String, propName: String): XMPProperty? =
-        getProperty(schemaNS, propName, VALUE_STRING)
+        getProperty(schemaNS, propName, XMPValueType.STRING)
 
-    /**
-     * Returns a property, but the result value can be requested. It can be one
-     * of [XMPMeta.VALUE_STRING], [XMPMeta.VALUE_BOOLEAN],
-     * [XMPMeta.VALUE_INTEGER], [XMPMeta.VALUE_LONG],
-     * [XMPMeta.VALUE_DOUBLE], [XMPMeta.VALUE_DATE],
-     * [XMPMeta.VALUE_TIME_IN_MILLIS], [XMPMeta.VALUE_BASE64].
-     */
-    private fun getProperty(schemaNS: String, propName: String, valueType: Int): XMPProperty? {
+    private fun getProperty(schemaNS: String, propName: String, valueType: XMPValueType): XMPProperty? {
 
         if (schemaNS.isEmpty())
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
@@ -120,7 +115,7 @@ class XMPMeta {
             leafOptions = null
         ) ?: return null
 
-        if (valueType != VALUE_STRING && propNode.options.isCompositeProperty())
+        if (valueType != XMPValueType.STRING && propNode.options.isCompositeProperty())
             throw XMPException("Property must be simple when a value type is requested", XMPError.BADXPATH)
 
         val value = evaluateNodeValue(valueType, propNode)
@@ -145,35 +140,30 @@ class XMPMeta {
      * Evaluates a raw node value to the given value type, apply special
      * conversions for defined types in XMP.
      */
-    private fun evaluateNodeValue(valueType: Int, propNode: XMPNode): Any? {
+    private fun evaluateNodeValue(valueType: XMPValueType, propNode: XMPNode): Any? =
+        when (valueType) {
 
-        val value: Any?
-        val rawValue = propNode.value
+            XMPValueType.BOOLEAN -> convertToBoolean(propNode.value)
 
-        value = when (valueType) {
+            XMPValueType.INTEGER -> convertToInteger(propNode.value)
 
-            VALUE_BOOLEAN -> convertToBoolean(rawValue)
+            XMPValueType.LONG -> convertToLong(propNode.value)
 
-            VALUE_INTEGER -> convertToInteger(rawValue)
+            XMPValueType.DOUBLE -> convertToDouble(propNode.value)
 
-            VALUE_LONG -> convertToLong(rawValue)
+            XMPValueType.BASE64 -> decodeBase64(propNode.value!!)
 
-            VALUE_DOUBLE -> convertToDouble(rawValue)
-
-            VALUE_BASE64 -> decodeBase64(rawValue!!)
-
-            // leaf values return empty string instead of null
-            // for the other cases the converter methods provides a "null" value.
-            // a default value can only occur if this method is made public.
-            VALUE_STRING ->
-                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
-
-            else ->
-                if (rawValue != null || propNode.options.isCompositeProperty()) rawValue else ""
+            /*
+             * Leaf values return empty string instead of null
+             * for the other cases the converter methods provides a "null" value.
+             * a default value can only occur if this method is made public.
+             */
+            XMPValueType.STRING ->
+                if (propNode.value != null || propNode.options.isCompositeProperty())
+                    propNode.value
+                else
+                    ""
         }
-
-        return value
-    }
 
     /**
      * Provides access to items within an array. The index is passed as an integer, you need not
@@ -319,8 +309,8 @@ class XMPMeta {
         return getProperty(schemaNS, qualPath)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Functions for setting property values
+// ---------------------------------------------------------------------------------------------
+// Functions for setting property values
 
     /**
      * The property value `setters` all take a property specification, their
@@ -698,9 +688,9 @@ class XMPMeta {
         setProperty(schemaNS, qualPath, qualValue, options)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Functions for deleting and detecting properties.
-    // These should be obvious from the descriptions of the getters and setters.
+// ---------------------------------------------------------------------------------------------
+// Functions for deleting and detecting properties.
+// These should be obvious from the descriptions of the getters and setters.
 
     /**
      * Deletes the given XMP subtree rooted at the given property.
@@ -930,8 +920,8 @@ class XMPMeta {
         return doesPropertyExist(schemaNS, propName + path)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Specialized Get and Set functions
+// ---------------------------------------------------------------------------------------------
+// Specialized Get and Set functions
 
     /**
      * These functions provide convenient support for localized text properties, including a number
@@ -1222,8 +1212,8 @@ class XMPMeta {
             appendLangItem(arrayNode, XMPConst.X_DEFAULT, itemValue)
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Functions accessing properties as binary values.
+// ---------------------------------------------------------------------------------------------
+// Functions accessing properties as binary values.
 
     /**
      * These are very similar to `getProperty()` and `SetProperty()` above,
@@ -1236,7 +1226,7 @@ class XMPMeta {
      * @return Returns a `Boolean` value or `null` if the property does not exist.
      */
     fun getPropertyBoolean(schemaNS: String, propName: String): Boolean? =
-        getPropertyObject(schemaNS, propName, VALUE_BOOLEAN) as? Boolean
+        getPropertyObject(schemaNS, propName, XMPValueType.BOOLEAN) as? Boolean
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1246,7 +1236,7 @@ class XMPMeta {
      * @return Returns an `Integer` value or `null` if the property does not exist.
      */
     fun getPropertyInteger(schemaNS: String, propName: String): Int? =
-        getPropertyObject(schemaNS, propName, VALUE_INTEGER) as? Int
+        getPropertyObject(schemaNS, propName, XMPValueType.INTEGER) as? Int
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1256,7 +1246,7 @@ class XMPMeta {
      * @return Returns a `Long` value or `null` if the property does not exist.
      */
     fun getPropertyLong(schemaNS: String, propName: String): Long? =
-        getPropertyObject(schemaNS, propName, VALUE_LONG) as? Long
+        getPropertyObject(schemaNS, propName, XMPValueType.LONG) as? Long
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1266,7 +1256,7 @@ class XMPMeta {
      * @return Returns a `Double` value or `null` if the property does not exist.
      */
     fun getPropertyDouble(schemaNS: String, propName: String): Double? =
-        getPropertyObject(schemaNS, propName, VALUE_DOUBLE) as? Double
+        getPropertyObject(schemaNS, propName, XMPValueType.DOUBLE) as? Double
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1277,7 +1267,7 @@ class XMPMeta {
      * not exist.
      */
     fun getPropertyBase64(schemaNS: String, propName: String): ByteArray? =
-        getPropertyObject(schemaNS, propName, VALUE_BASE64) as? ByteArray
+        getPropertyObject(schemaNS, propName, XMPValueType.BASE64) as? ByteArray
 
     /**
      * Convenience method to retrieve the literal value of a property.
@@ -1290,12 +1280,12 @@ class XMPMeta {
      * @return Returns a `String` value or `null` if the property does not exist.
      */
     fun getPropertyString(schemaNS: String, propName: String): String? =
-        getPropertyObject(schemaNS, propName, VALUE_STRING) as? String
+        getPropertyObject(schemaNS, propName, XMPValueType.STRING) as? String
 
     /**
      * Returns a property, but the result value can be requested.
      */
-    private fun getPropertyObject(schemaNS: String, propName: String, valueType: Int): Any? {
+    private fun getPropertyObject(schemaNS: String, propName: String, valueType: XMPValueType): Any? {
 
         if (schemaNS.isEmpty())
             throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
@@ -1310,7 +1300,7 @@ class XMPMeta {
             leafOptions = null
         ) ?: return null
 
-        if (valueType != VALUE_STRING && propNode.options.isCompositeProperty())
+        if (valueType != XMPValueType.STRING && propNode.options.isCompositeProperty())
             throw XMPException("Property must be simple when a value type is requested", XMPError.BADXPATH)
 
         return evaluateNodeValue(valueType, propNode)
@@ -1555,6 +1545,58 @@ class XMPMeta {
     }
 
     /**
+     * Check for common used fields if they have a positive flagged value.
+     */
+    fun isFlagged(): Boolean =
+        getPropertyBoolean(XMPConst.NS_DM, XMPConst.FLAGGED_TAG_ADOBE_NAME) == true ||
+            getPropertyBoolean(XMPConst.NS_ACDSEE, XMPConst.FLAGGED_TAG_ACDSEE_NAME) == true ||
+            getPropertyBoolean(XMPConst.NS_MYLIO, XMPConst.FLAGGED_TAG_MYLIO_NAME) == true ||
+            getPropertyBoolean(XMPConst.NS_NARRATIVE, XMPConst.FLAGGED_TAG_NARRATIVE_NAME) == true
+
+    /**
+     * Sets flagged/tagged/picked marker for standard schema and other commonly used fields by popular tools.
+     */
+    fun setFlagged(flagged: Boolean) {
+
+        /* Set the standard schema */
+        setProperty(
+            schemaNS = XMPConst.NS_DM,
+            propName = XMPConst.FLAGGED_TAG_ADOBE_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_ADOBE_TRUE
+            else
+                XMPConst.FLAGGED_TAG_ADOBE_FALSE
+        )
+
+        setProperty(
+            schemaNS = XMPConst.NS_ACDSEE,
+            propName = XMPConst.FLAGGED_TAG_ACDSEE_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_ACDSEE_TRUE
+            else
+                XMPConst.FLAGGED_TAG_ACDSEE_FALSE
+        )
+
+        setProperty(
+            schemaNS = XMPConst.NS_MYLIO,
+            propName = XMPConst.FLAGGED_TAG_MYLIO_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_MYLIO_TRUE
+            else
+                XMPConst.FLAGGED_TAG_MYLIO_FALSE
+        )
+
+        setProperty(
+            schemaNS = XMPConst.NS_NARRATIVE,
+            propName = XMPConst.FLAGGED_TAG_NARRATIVE_NAME,
+            propValue = if (flagged)
+                XMPConst.FLAGGED_TAG_NARRATIVE_TRUE
+            else
+                XMPConst.FLAGGED_TAG_NARRATIVE_FALSE
+        )
+    }
+
+    /**
      * Gets the regular keywords specified by XMP standard.
      */
     fun getKeywords(): Set<String> {
@@ -1637,18 +1679,19 @@ class XMPMeta {
 
     fun getFaces(): Map<String, XMPRegionArea> {
 
-        val regionListExists = doesPropertyExist(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+        val regionListExists = doesPropertyExist(XMPConst.NS_MWG_RS, XMP_MWG_RS_REGION_LIST)
 
         if (!regionListExists)
             return emptyMap()
 
-        val regionCount = countArrayItems(XMPConst.NS_MWG_RS, "Regions/mwg-rs:RegionList")
+        val regionCount = countArrayItems(XMPConst.NS_MWG_RS, XMP_MWG_RS_REGION_LIST)
 
         if (regionCount == 0)
             return emptyMap()
 
         val faces = mutableMapOf<String, XMPRegionArea>()
 
+        @Suppress("LoopWithTooManyJumpStatements")
         for (index in 1..regionCount) {
 
             val prefix = "Regions/mwg-rs:RegionList[$index]/mwg-rs"
@@ -1688,19 +1731,19 @@ class XMPMeta {
         if (faces.isNotEmpty()) {
 
             setStructField(
-                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                NS_MWG_RS, XMP_MWG_RS_APPLIED_TO_DIMENSIONS,
                 XMPConst.TYPE_DIMENSIONS, "w",
                 widthPx.toString()
             )
 
             setStructField(
-                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                NS_MWG_RS, XMP_MWG_RS_APPLIED_TO_DIMENSIONS,
                 XMPConst.TYPE_DIMENSIONS, "h",
                 heightPx.toString()
             )
 
             setStructField(
-                NS_MWG_RS, "Regions/mwg-rs:AppliedToDimensions",
+                NS_MWG_RS, XMP_MWG_RS_APPLIED_TO_DIMENSIONS,
                 XMPConst.TYPE_DIMENSIONS, "unit", "pixel"
             )
 
@@ -1840,17 +1883,63 @@ class XMPMeta {
             )
     }
 
-    companion object {
+    /**
+     * Get album names
+     */
+    fun getAlbums(): Set<String> {
 
-        /**
-         * Property values are Strings by default
-         */
+        val subjectCount = countArrayItems(XMPConst.NS_ASHAMPOO, XMPConst.XMP_ASHAMPOO_ALBUMS)
 
-        private const val VALUE_STRING = 0
-        private const val VALUE_BOOLEAN = 1
-        private const val VALUE_INTEGER = 2
-        private const val VALUE_LONG = 3
-        private const val VALUE_DOUBLE = 4
-        private const val VALUE_BASE64 = 7
+        if (subjectCount == 0)
+            return emptySet()
+
+        val keywords = mutableSetOf<String>()
+
+        for (index in 1..subjectCount) {
+
+            val keyword = getPropertyString(
+                XMPConst.NS_ASHAMPOO,
+                "${XMPConst.XMP_ASHAMPOO_ALBUMS}[$index]"
+            ) ?: continue
+
+            keywords.add(keyword)
+        }
+
+        return keywords
+    }
+
+    fun setAlbums(albums: Set<String>) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_ASHAMPOO, XMPConst.XMP_ASHAMPOO_ALBUMS)
+
+        if (albums.isEmpty())
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_ASHAMPOO,
+            XMPConst.XMP_ASHAMPOO_ALBUMS,
+            null,
+            arrayOptions
+        )
+
+        /* Fill the new array with album names. */
+        for (albumName in albums.sorted())
+            appendArrayItem(
+                schemaNS = XMPConst.NS_ASHAMPOO,
+                arrayName = XMPConst.XMP_ASHAMPOO_ALBUMS,
+                itemValue = albumName
+            )
+    }
+
+    internal enum class XMPValueType {
+
+        STRING,
+        BOOLEAN,
+        INTEGER,
+        LONG,
+        DOUBLE,
+        BASE64
     }
 }
