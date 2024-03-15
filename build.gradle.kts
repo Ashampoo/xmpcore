@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
-    kotlin("multiplatform") version "1.9.22"
+    kotlin("multiplatform") version "1.9.23"
     id("com.android.library") version "8.2.2"
     id("maven-publish")
     id("signing")
@@ -13,8 +13,8 @@ plugins {
     id("com.asarkar.gradle.build-time-tracker") version "4.3.0"
     id("me.qoomon.git-versioning") version "6.4.3"
     id("com.goncalossilva.resources") version "0.4.0"
-    id("com.github.ben-manes.versions") version "0.50.0"
-    id("org.jetbrains.dokka") version "1.9.10"
+    id("com.github.ben-manes.versions") version "0.51.0"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
 
 repositories {
@@ -103,7 +103,7 @@ koverMerged {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.5")
 }
 
 kotlin {
@@ -180,7 +180,7 @@ kotlin {
             implementation(kotlin("test"))
 
             /* Multiplatform file access */
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
         }
     }
 
