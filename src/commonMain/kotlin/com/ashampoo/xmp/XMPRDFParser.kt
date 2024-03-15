@@ -13,6 +13,7 @@ import com.ashampoo.xmp.options.PropertyOptions
 import nl.adaptivity.xmlutil.dom.Attr
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node
+import nl.adaptivity.xmlutil.dom.NodeConsts
 import nl.adaptivity.xmlutil.dom.Text
 import nl.adaptivity.xmlutil.dom.attributes
 import nl.adaptivity.xmlutil.dom.childNodes
@@ -122,8 +123,10 @@ internal object XMPRDFParser {
         if (rdfRdfNode.nodeName != "rdf:RDF")
             throw XMPException("Root node should be of type rdf:RDF", XMPError.BADRDF)
 
-        if (rdfRdfNode !is Element)
+        if (rdfRdfNode.nodeType != NodeConsts.ELEMENT_NODE)
             throw XMPException("Root node must be of element type.", XMPError.BADRDF)
+
+        rdfRdfNode as Element
 
         if (rdfRdfNode.attributes.length == 0)
             throw XMPException("Illegal: rdf:RDF node has no attributes", XMPError.BADRDF)
@@ -268,10 +271,10 @@ internal object XMPRDFParser {
             if (isWhitespaceNode(currChild))
                 continue
 
-            if (currChild !is Element)
+            if (currChild.nodeType != NodeConsts.ELEMENT_NODE)
                 throw XMPException("Expected property element node not found", XMPError.BADRDF)
 
-            parseRdfPropertyElement(xmp, xmpParent, currChild, isTopLevel, options)
+            parseRdfPropertyElement(xmp, xmpParent, currChild as Element, isTopLevel, options)
         }
     }
 
@@ -422,7 +425,7 @@ internal object XMPRDFParser {
 
                     val currentChild = xmlNode.childNodes.item(index)
 
-                    if (currentChild !is Text) {
+                    if (currentChild?.nodeType != NodeConsts.TEXT_NODE) {
 
                         parseRdfResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel, options)
 
@@ -489,7 +492,9 @@ internal object XMPRDFParser {
 
             if (!isWhitespaceNode(currentChild)) {
 
-                if (currentChild is Element && !found) {
+                if (currentChild.nodeType == NodeConsts.ELEMENT_NODE && !found) {
+
+                    currentChild as Element
 
                     val isRDF = XMPConst.NS_RDF == currentChild.namespaceURI
 
@@ -591,8 +596,10 @@ internal object XMPRDFParser {
 
             val child = xmlNode.childNodes.item(index)
 
-            if (child !is Text)
+            if (child?.nodeType != NodeConsts.TEXT_NODE)
                 throw XMPException("Invalid child of literal property element", XMPError.BADRDF)
+
+            child as Text
 
             textValue += child.data
         }
@@ -793,10 +800,10 @@ internal object XMPRDFParser {
 
         if (hasValueAttr || hasResourceAttr) {
 
-            val valueNodeValue = when (valueNode) {
-                null -> null
-                is Attr -> valueNode.value
-                else -> throw XMPException("Unknown Node ${xmlNode.nodeType}", XMPError.BADXMP)
+            val valueNodeValue = when {
+                valueNode == null -> null
+                valueNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (valueNode as Attr).value
+                else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
             }
 
             childNode.value = valueNodeValue ?: ""
@@ -861,10 +868,10 @@ internal object XMPRDFParser {
         isTopLevel: Boolean
     ): XMPNode {
 
-        var namespace = when (xmlNode) {
-            is Element -> xmlNode.namespaceURI
-            is Attr -> xmlNode.namespaceURI
-            else -> throw XMPException("Unknown Node ${xmlNode.nodeType}", XMPError.BADXMP)
+        var namespace = when {
+            xmlNode.nodeType == NodeConsts.ELEMENT_NODE -> (xmlNode as Element).namespaceURI
+            xmlNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (xmlNode as Attr).namespaceURI
+            else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
         }
 
         if (namespace.isNullOrEmpty())
@@ -881,10 +888,10 @@ internal object XMPRDFParser {
 
         if (prefix == null) {
 
-            val xmlNodePrefix = when (xmlNode) {
-                is Element -> xmlNode.prefix
-                is Attr -> xmlNode.prefix
-                else -> throw XMPException("Unknown Node ${xmlNode.nodeType}", XMPError.BADXMP)
+            val xmlNodePrefix = when {
+                xmlNode.nodeType == NodeConsts.ELEMENT_NODE -> (xmlNode as Element).prefix
+                xmlNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (xmlNode as Attr).prefix
+                else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
             }
 
             prefix = if (xmlNodePrefix != null)
@@ -895,10 +902,10 @@ internal object XMPRDFParser {
             prefix = XMPSchemaRegistry.registerNamespace(namespace, prefix)
         }
 
-        val xmlNodeLocalName = when (xmlNode) {
-            is Element -> xmlNode.localName
-            is Attr -> xmlNode.localName
-            else -> throw XMPException("Unknown Node ${xmlNode.nodeType}", XMPError.BADXMP)
+        val xmlNodeLocalName = when {
+            xmlNode.nodeType == NodeConsts.ELEMENT_NODE -> (xmlNode as Element).localName
+            xmlNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (xmlNode as Attr).localName
+            else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
         }
 
         val childName = prefix + xmlNodeLocalName
@@ -1063,10 +1070,10 @@ internal object XMPRDFParser {
      */
     private fun isWhitespaceNode(node: Node): Boolean {
 
-        if (node !is Text)
+        if (node.nodeType != NodeConsts.TEXT_NODE)
             return false
 
-        val value = node.data
+        val value = (node as Text).data
 
         for (index in 0 until value.length)
             if (!value[index].isWhitespace())
@@ -1117,9 +1124,9 @@ internal object XMPRDFParser {
      */
     private fun getRDFTermKind(node: Node): Int {
 
-        val namespace = when (node) {
-            is Element -> node.namespaceURI
-            is Attr -> node.namespaceURI
+        val namespace = when {
+            node.nodeType == NodeConsts.ELEMENT_NODE -> (node as Element).namespaceURI
+            node.nodeType == NodeConsts.ATTRIBUTE_NODE -> (node as Attr).namespaceURI
             else -> throw XMPException("Unknown Node ${node.nodeType}", XMPError.BADXMP)
         }
 
@@ -1133,8 +1140,8 @@ internal object XMPRDFParser {
         @Suppress("ComplexCondition")
         val mustBeRdfNamespace = namespace.isNullOrEmpty() &&
             ("about" == node.nodeName || "ID" == node.nodeName) &&
-            node is Attr &&
-            XMPConst.NS_RDF == node.ownerElement?.namespaceURI
+            node.nodeType == NodeConsts.ATTRIBUTE_NODE &&
+            XMPConst.NS_RDF == (node as Attr).ownerElement?.namespaceURI
 
         if (mustBeRdfNamespace || namespace == XMPConst.NS_RDF) {
 
