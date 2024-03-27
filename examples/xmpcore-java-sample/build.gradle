@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.ashampoo'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'com.ashampoo:xmpcore:f5207af'
+}
