@@ -11,5 +11,5 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.ashampoo:xmpcore:f5207af'
+    implementation 'com.ashampoo:xmpcore:92e2c4a'
 }
