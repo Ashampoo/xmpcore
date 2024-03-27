@@ -224,9 +224,7 @@ kotlin {
     }
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
-    val androidMain by sourceSets.getting {
-        dependsOn(jvmMain)
-    }
+    val androidMain by sourceSets.getting
 
     val posixMain by sourceSets.creating {
         dependsOn(commonMain)
