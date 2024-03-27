@@ -170,8 +170,7 @@ kotlin {
         dependencies {
 
             /* Needed to parse XML and create a DOM Document */
-            api("io.github.pdvrieze.xmlutil:core:$xmlUtilVersion")
-            api("io.github.pdvrieze.xmlutil:serialization:$xmlUtilVersion")
+            implementation("io.github.pdvrieze.xmlutil:core:$xmlUtilVersion")
         }
     }
 
@@ -184,6 +183,16 @@ kotlin {
 
             /* Multiplatform file access */
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:$kotlinIoVersion")
+        }
+    }
+
+    val jvmMain by sourceSets.getting {
+
+        dependencies {
+
+            implementation("io.github.pdvrieze.xmlutil:core-jvm:$xmlUtilVersion") {
+                exclude("io.github.pdvrieze.xmlutil", "core")
+            }
         }
     }
 
@@ -219,8 +228,6 @@ kotlin {
             xcf.add(this)
         }
     }
-
-    val jvmMain by sourceSets.getting
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     val androidMain by sourceSets.getting {
