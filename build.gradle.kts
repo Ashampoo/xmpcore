@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -186,15 +188,7 @@ kotlin {
         }
     }
 
-    val jvmMain by sourceSets.getting {
-
-        dependencies {
-
-            implementation("io.github.pdvrieze.xmlutil:core-jvm:$xmlUtilVersion") {
-                exclude("io.github.pdvrieze.xmlutil", "core")
-            }
-        }
-    }
+    val jvmMain by sourceSets.getting
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     val jvmTest by sourceSets.getting {
@@ -468,6 +462,23 @@ publishing {
 
             signing {
                 sign(publishing.publications)
+            }
+        }
+    }
+}
+// endregion
+
+// region Fix for Java projects
+afterEvaluate {
+
+    /*
+     * This attribute needs to be set for usage in regular Java projects.
+     */
+    extensions.findByType<KotlinJvmProjectExtension>()?.run {
+
+        target {
+            attributes {
+                attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
             }
         }
     }
