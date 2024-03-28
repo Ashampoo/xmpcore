@@ -465,29 +465,3 @@ publishing {
     }
 }
 // endregion
-
-// region Fix for Java projects
-afterEvaluate {
-
-    Attribute.of(
-        "org.jetbrains.kotlin.platform.type",
-        KotlinPlatformType::class.java
-    )
-
-    val envJvm: TargetJvmEnvironment =
-        objects.named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
-
-    /*
-     * This attribute needs to be set for usage in regular Java projects.
-     */
-    extensions.findByType<KotlinJvmProjectExtension>()?.run {
-
-        target {
-            attributes {
-                attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE, envJvm)
-                attribute(KotlinPlatformType.attribute, KotlinPlatformType.jvm)
-            }
-        }
-    }
-}
-// endregion

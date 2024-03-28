@@ -7,9 +7,20 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
-    implementation 'com.ashampoo:xmpcore:92e2c4a'
+    implementation 'com.ashampoo:xmpcore:1.2.1'
+}
+
+// Needed to make it work for the Gradle java plugin
+// See https://github.com/pdvrieze/xmlutil/issues/200#issuecomment-2024831114
+// Thanks to Paul de Vrieze
+
+def platformAttr = Attribute.of("org.jetbrains.kotlin.platform.type", String)
+
+configurations.configureEach {
+    attributes {
+        attribute platformAttr, "jvm"
+    }
 }
