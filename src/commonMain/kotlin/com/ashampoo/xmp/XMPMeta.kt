@@ -338,6 +338,7 @@ class XMPMeta {
      * byte[] are handled, on all other `toString()` is called.
      * @param options   Option flags describing the property. See the earlier description.
      */
+    @kotlin.jvm.JvmOverloads
     fun setProperty(
         schemaNS: String,
         propName: String,
@@ -419,6 +420,7 @@ class XMPMeta {
      * `setProperty()`.
      * @param options   the set options for the item.
      */
+    @kotlin.jvm.JvmOverloads
     fun setArrayItem(
         schemaNS: String,
         arrayName: String,
@@ -459,6 +461,7 @@ class XMPMeta {
      * propValue in `setProperty()`.
      * @param options   the set options that decide about the kind of the node.
      */
+    @kotlin.jvm.JvmOverloads
     fun insertArrayItem(
         schemaNS: String,
         arrayName: String,
@@ -507,6 +510,7 @@ class XMPMeta {
      * @param itemValue    the value of the array item. Has the same usage as propValue in getProperty.
      * @param itemOptions  Option flags describing the item to append ([PropertyOptions])
      */
+    @kotlin.jvm.JvmOverloads
     fun appendArrayItem(
         schemaNS: String,
         arrayName: String,
@@ -622,6 +626,7 @@ class XMPMeta {
      * Has the same usage as propValue in getProperty.
      * @param options    Option flags describing the field. See the earlier description.
      */
+    @kotlin.jvm.JvmOverloads
     fun setStructField(
         schemaNS: String,
         structName: String,
@@ -665,6 +670,7 @@ class XMPMeta {
      * in getProperty.
      * @param options   Option flags describing the qualifier. See the earlier description.
      */
+    @kotlin.jvm.JvmOverloads
     fun setQualifier(
         schemaNS: String,
         propName: String,
@@ -1314,6 +1320,7 @@ class XMPMeta {
      * @param propValue the literal property value as `boolean`.
      * @param options   options of the property to set (optional).
      */
+    @kotlin.jvm.JvmOverloads
     fun setPropertyBoolean(
         schemaNS: String,
         propName: String,
@@ -1334,6 +1341,7 @@ class XMPMeta {
      * @param propValue the literal property value as `int`.
      * @param options   options of the property to set (optional).
      */
+    @kotlin.jvm.JvmOverloads
     fun setPropertyInteger(
         schemaNS: String,
         propName: String,
@@ -1349,6 +1357,7 @@ class XMPMeta {
      * @param propValue the literal property value as `long`.
      * @param options   options of the property to set (optional).
      */
+    @kotlin.jvm.JvmOverloads
     fun setPropertyLong(
         schemaNS: String,
         propName: String,
@@ -1364,6 +1373,7 @@ class XMPMeta {
      * @param propValue the literal property value as `double`.
      * @param options   options of the property to set (optional).
      */
+    @kotlin.jvm.JvmOverloads
     fun setPropertyDouble(
         schemaNS: String,
         propName: String,
@@ -1380,6 +1390,7 @@ class XMPMeta {
      * @param propValue the literal property value as byte array.
      * @param options   options of the property to set (optional).
      */
+    @kotlin.jvm.JvmOverloads
     fun setPropertyBase64(
         schemaNS: String,
         propName: String,
