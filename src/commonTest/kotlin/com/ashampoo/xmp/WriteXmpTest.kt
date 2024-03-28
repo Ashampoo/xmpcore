@@ -1,6 +1,5 @@
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.options.SerializeOptions
 import kotlinx.io.buffered
 import kotlinx.io.files.Path

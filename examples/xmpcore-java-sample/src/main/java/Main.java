@@ -2,8 +2,6 @@ import com.ashampoo.xmp.XMPConst;
 import com.ashampoo.xmp.XMPException;
 import com.ashampoo.xmp.XMPMeta;
 import com.ashampoo.xmp.XMPMetaFactory;
-import com.ashampoo.xmp.options.ParseOptions;
-import com.ashampoo.xmp.options.PropertyOptions;
 import com.ashampoo.xmp.options.SerializeOptions;
 
 import java.util.Set;
@@ -18,13 +16,9 @@ public class Main {
             .setUseCanonicalFormat(false)
             .setSort(true);
 
-    private static final ParseOptions xmpParseOptions =
-        new ParseOptions()
-            .setRequireXMPMeta(false);
-
     public static void main(String[] args) throws XMPException {
 
-        XMPMeta newXmpMeta = XMPMetaFactory.INSTANCE.create();
+        XMPMeta newXmpMeta = XMPMetaFactory.create();
 
         /*
          * Regular Adobe XMP Core API.
@@ -33,8 +27,7 @@ public class Main {
         newXmpMeta.setPropertyInteger(
             XMPConst.NS_XMP,
             "Rating",
-            3,
-            new PropertyOptions()
+            3
         );
 
         /* Ashampoo XMP Core convenience method. */
@@ -42,7 +35,7 @@ public class Main {
             Set.of("cat", "cute", "animal")
         );
 
-        String xmp = XMPMetaFactory.INSTANCE.serializeToString(
+        String xmp = XMPMetaFactory.serializeToString(
             newXmpMeta,
             xmpSerializeOptionsCompact
         );
@@ -68,8 +61,7 @@ public class Main {
                   </rdf:RDF>
                 </x:xmpmeta>""";
 
-        XMPMeta oldXmpMeta =
-            XMPMetaFactory.INSTANCE.parseFromString(oldXmp, xmpParseOptions);
+        XMPMeta oldXmpMeta = XMPMetaFactory.parseFromString(oldXmp);
 
         System.out.println("---");
 

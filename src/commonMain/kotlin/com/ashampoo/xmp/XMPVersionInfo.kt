@@ -9,7 +9,7 @@ object XMPVersionInfo {
 
     const val MAJOR: Int = 1
     const val MINOR: Int = 2
-    const val PATCH: Int = 1
+    const val PATCH: Int = 2
 
     const val VERSION_MESSAGE = "Ashampoo XMP Core $MAJOR.$MINOR.$PATCH"
 

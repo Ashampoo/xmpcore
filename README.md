@@ -20,7 +20,7 @@ It's part of [Ashampoo Photos](https://ashampoo.com/photos).
 ## Installation
 
 ```
-implementation("com.ashampoo:xmpcore:1.2.1")
+implementation("com.ashampoo:xmpcore:1.2.2")
 ```
 
 ## How to use

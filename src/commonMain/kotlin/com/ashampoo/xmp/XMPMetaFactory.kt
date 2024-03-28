@@ -22,8 +22,11 @@ object XMPMetaFactory {
     @kotlin.jvm.JvmStatic
     val versionInfo = XMPVersionInfo
 
+    @kotlin.jvm.JvmStatic
     fun create(): XMPMeta = XMPMeta()
 
+    @kotlin.jvm.JvmStatic
+    @kotlin.jvm.JvmOverloads
     @Throws(XMPException::class)
     fun parseFromString(
         packet: String,
@@ -31,6 +34,8 @@ object XMPMetaFactory {
     ): XMPMeta =
         XMPMetaParser.parse(packet, options)
 
+    @kotlin.jvm.JvmStatic
+    @kotlin.jvm.JvmOverloads
     @Throws(XMPException::class)
     fun serializeToString(
         xmp: XMPMeta,
