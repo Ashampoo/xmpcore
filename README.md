@@ -48,7 +48,11 @@ val xmpSerializeOptions =
 val newXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptions)
 ```
 
-See the unit tests `ReadXmpTest` and `WriteXmpTest` how to read and manipulate data.
+Check out the [Kotlin JVM example project](examples/xmpcore-kotlin-jvm-sample).
+
+For usage in Java projects check out the [Java example project](examples/xmpcore-java-sample).
+
+Also see the unit tests `ReadXmpTest` and `WriteXmpTest` to learn more about reading and manipulating data.
 
 ### Migration hint
 

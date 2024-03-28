@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -170,8 +172,7 @@ kotlin {
         dependencies {
 
             /* Needed to parse XML and create a DOM Document */
-            api("io.github.pdvrieze.xmlutil:core:$xmlUtilVersion")
-            api("io.github.pdvrieze.xmlutil:serialization:$xmlUtilVersion")
+            implementation("io.github.pdvrieze.xmlutil:core:$xmlUtilVersion")
         }
     }
 
@@ -186,6 +187,8 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:$kotlinIoVersion")
         }
     }
+
+    val jvmMain by sourceSets.getting
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     val jvmTest by sourceSets.getting {
@@ -220,12 +223,8 @@ kotlin {
         }
     }
 
-    val jvmMain by sourceSets.getting
-
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
-    val androidMain by sourceSets.getting {
-        dependsOn(jvmMain)
-    }
+    val androidMain by sourceSets.getting
 
     val posixMain by sourceSets.creating {
         dependsOn(commonMain)
@@ -308,8 +307,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.toVersion(11)
-        targetCompatibility = JavaVersion.toVersion(11)
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     publishing {
