@@ -1,6 +1,5 @@
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.options.SerializeOptions
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
@@ -32,7 +31,7 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        val expectedXmp = getXmp("empty.xmp")
+        val expectedXmp = getXmp("com/ashampoo/xmp/empty.xmp")
 
         val equals = actualXmp.contentEquals(expectedXmp)
 
@@ -62,7 +61,7 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        val expectedXmp = getXmp("rating.xmp")
+        val expectedXmp = getXmp("com/ashampoo/xmp/rating.xmp")
 
         val equals = actualXmp.contentEquals(expectedXmp)
 
@@ -92,7 +91,7 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        val expectedXmp = getXmp("new.xmp")
+        val expectedXmp = getXmp("com/ashampoo/xmp/new.xmp")
 
         val equals = actualXmp.contentEquals(expectedXmp)
 
@@ -144,7 +143,7 @@ class WriteXmpTest {
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
         /* Since we apply the same updates it should look identical to the new.xmp */
-        val expectedXmp = getXmp("new.xmp")
+        val expectedXmp = getXmp("com/ashampoo/xmp/new.xmp")
 
         val equals = actualXmp.contentEquals(expectedXmp)
 
