@@ -1,9 +1,6 @@
 import com.ashampoo.xmp.XMPConst
-import com.ashampoo.xmp.XMPMetaFactory.create
-import com.ashampoo.xmp.XMPMetaFactory.parseFromString
-import com.ashampoo.xmp.XMPMetaFactory.serializeToString
+import com.ashampoo.xmp.XMPMetaFactory
 import com.ashampoo.xmp.options.ParseOptions
-import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.options.SerializeOptions
 
 private val xmpSerializeOptionsCompact = SerializeOptions()
@@ -18,7 +15,7 @@ private val xmpParseOptions = ParseOptions()
 
 fun main() {
 
-    val newXmpMeta = create()
+    val newXmpMeta = XMPMetaFactory.create()
 
     /*
      * Regular Adobe XMP Core API.
@@ -27,8 +24,7 @@ fun main() {
     newXmpMeta.setPropertyInteger(
         XMPConst.NS_XMP,
         "Rating",
-        3,
-        PropertyOptions()
+        3
     )
 
     /* Ashampoo XMP Core convenience method. */
@@ -36,7 +32,7 @@ fun main() {
         setOf("cat", "cute", "animal")
     )
 
-    val xmp = serializeToString(
+    val xmp = XMPMetaFactory.serializeToString(
         newXmpMeta,
         xmpSerializeOptionsCompact
     )
@@ -64,7 +60,7 @@ fun main() {
                 """.trimIndent()
 
     val oldXmpMeta =
-        parseFromString(oldXmp, xmpParseOptions)
+        XMPMetaFactory.parseFromString(oldXmp, xmpParseOptions)
 
     println("---")
 
