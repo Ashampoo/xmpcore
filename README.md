@@ -15,7 +15,7 @@
 
 This library is a port of Adobe's XMP SDK to Kotlin Multiplatform by Ashampoo.
 
-It's part of [Ashampoo Photos](https://ashampoo.com/photos).
+It's part of [Ashampoo Photo Organizer](https://ashampoo.com/photo-organizer).
 
 ## Installation
 
