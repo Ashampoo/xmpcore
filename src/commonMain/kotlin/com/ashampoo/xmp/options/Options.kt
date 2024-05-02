@@ -8,7 +8,7 @@
 // =================================================================================================
 package com.ashampoo.xmp.options
 
-import com.ashampoo.xmp.XMPErrorConst
+import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.XMPException
 
 /**

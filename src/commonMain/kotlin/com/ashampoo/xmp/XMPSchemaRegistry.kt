@@ -8,7 +8,9 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.Utils.isXMLNameNS
+import com.ashampoo.xmp.internal.Utils.isXMLNameNS
+import com.ashampoo.xmp.internal.XMPErrorConst
+import com.ashampoo.xmp.internal.XMPNodeUtils
 import com.ashampoo.xmp.options.AliasOptions
 import com.ashampoo.xmp.properties.XMPAliasInfo
 

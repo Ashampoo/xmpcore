@@ -6,14 +6,19 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
+import com.ashampoo.xmp.XMPConst
+import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.XMPMeta
+import com.ashampoo.xmp.XMPSchemaRegistry
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import nl.adaptivity.xmlutil.dom.Attr
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node
 import nl.adaptivity.xmlutil.dom.NodeConsts
+import nl.adaptivity.xmlutil.dom.ProcessingInstruction
 import nl.adaptivity.xmlutil.dom.Text
 import nl.adaptivity.xmlutil.dom.attributes
 import nl.adaptivity.xmlutil.dom.childNodes

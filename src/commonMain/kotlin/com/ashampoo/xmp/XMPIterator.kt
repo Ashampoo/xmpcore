@@ -8,8 +8,11 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPNodeUtils.findNode
-import com.ashampoo.xmp.XMPNodeUtils.findSchemaNode
+import com.ashampoo.xmp.internal.XMPNodeUtils.findNode
+import com.ashampoo.xmp.internal.XMPNodeUtils.findSchemaNode
+import com.ashampoo.xmp.internal.QName
+import com.ashampoo.xmp.internal.XMPErrorConst
+import com.ashampoo.xmp.internal.XMPNode
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.properties.XMPPropertyInfo

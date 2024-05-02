@@ -8,6 +8,8 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
+import com.ashampoo.xmp.internal.Utils
+import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.xpath.XMPPath
 import com.ashampoo.xmp.xpath.XMPPathParser
 

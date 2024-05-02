@@ -6,9 +6,13 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
-import com.ashampoo.xmp.Utils.checkUUIDFormat
+import com.ashampoo.xmp.XMPConst
+import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.XMPMeta
+import com.ashampoo.xmp.XMPSchemaRegistry
+import com.ashampoo.xmp.internal.Utils.checkUUIDFormat
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath

@@ -1,5 +1,6 @@
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
+import com.ashampoo.xmp.XMPException
 import nl.adaptivity.xmlutil.DomWriter
 import nl.adaptivity.xmlutil.EventType
 import nl.adaptivity.xmlutil.dom.Document

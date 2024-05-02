@@ -6,12 +6,15 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
-import com.ashampoo.xmp.Utils.normalizeLangValue
-import com.ashampoo.xmp.Utils.replaceControlCharsWithSpace
-import com.ashampoo.xmp.Utils.splitNameAndValue
-import com.ashampoo.xmp.XMPUtils.encodeBase64
+import com.ashampoo.xmp.XMPConst
+import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.XMPSchemaRegistry
+import com.ashampoo.xmp.internal.Utils.normalizeLangValue
+import com.ashampoo.xmp.internal.Utils.replaceControlCharsWithSpace
+import com.ashampoo.xmp.internal.Utils.splitNameAndValue
+import com.ashampoo.xmp.internal.XMPUtils.encodeBase64
 import com.ashampoo.xmp.options.AliasOptions
 import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.xpath.XMPPath

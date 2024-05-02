@@ -8,6 +8,8 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
+import com.ashampoo.xmp.internal.XMPMetaParser
+import com.ashampoo.xmp.internal.XMPRDFWriter
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.SerializeOptions
 
