@@ -1938,7 +1938,7 @@ public class XMPMeta internal constructor() {
             )
     }
 
-    internal enum class XMPValueType {
+    private enum class XMPValueType {
 
         STRING,
         BOOLEAN,
