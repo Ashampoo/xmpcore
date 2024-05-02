@@ -8,8 +8,8 @@
 // =================================================================================================
 package com.ashampoo.xmp.options
 
-import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.internal.XMPErrorConst
 
 /**
  * The property flags are used when properties are fetched from the `XMPMeta`-object

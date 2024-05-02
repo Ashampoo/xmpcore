@@ -8,8 +8,8 @@
 // =================================================================================================
 package com.ashampoo.xmp.options
 
-import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.internal.XMPErrorConst
 
 /**
  * The base class for a collection of 32 flag bits. Individual flags are defined as enum value bit

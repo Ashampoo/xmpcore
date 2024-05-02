@@ -8,10 +8,10 @@
 // =================================================================================================
 package com.ashampoo.xmp.xpath
 
-import com.ashampoo.xmp.internal.Utils
-import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.XMPException
 import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
+import com.ashampoo.xmp.internal.Utils
+import com.ashampoo.xmp.internal.XMPErrorConst
 
 /**
  * Parser for XMP XPaths.

@@ -8,10 +8,16 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.internal.Utils.normalizeLangValue
 import com.ashampoo.xmp.XMPConst.NS_MWG_RS
 import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_APPLIED_TO_DIMENSIONS
 import com.ashampoo.xmp.XMPConst.XMP_MWG_RS_REGION_LIST
+import com.ashampoo.xmp.XMPPathFactory.composeArrayItemPath
+import com.ashampoo.xmp.XMPPathFactory.composeQualifierPath
+import com.ashampoo.xmp.XMPPathFactory.composeStructFieldPath
+import com.ashampoo.xmp.internal.Utils.normalizeLangValue
+import com.ashampoo.xmp.internal.XMPErrorConst
+import com.ashampoo.xmp.internal.XMPNode
+import com.ashampoo.xmp.internal.XMPNodeUtils
 import com.ashampoo.xmp.internal.XMPNodeUtils.appendLangItem
 import com.ashampoo.xmp.internal.XMPNodeUtils.chooseLocalizedText
 import com.ashampoo.xmp.internal.XMPNodeUtils.deleteNode
@@ -19,17 +25,11 @@ import com.ashampoo.xmp.internal.XMPNodeUtils.findNode
 import com.ashampoo.xmp.internal.XMPNodeUtils.setNodeValue
 import com.ashampoo.xmp.internal.XMPNodeUtils.verifySetOptions
 import com.ashampoo.xmp.internal.XMPNormalizer.normalize
-import com.ashampoo.xmp.XMPPathFactory.composeArrayItemPath
-import com.ashampoo.xmp.XMPPathFactory.composeQualifierPath
-import com.ashampoo.xmp.XMPPathFactory.composeStructFieldPath
 import com.ashampoo.xmp.internal.XMPUtils.convertToBoolean
 import com.ashampoo.xmp.internal.XMPUtils.convertToDouble
 import com.ashampoo.xmp.internal.XMPUtils.convertToInteger
 import com.ashampoo.xmp.internal.XMPUtils.convertToLong
 import com.ashampoo.xmp.internal.XMPUtils.decodeBase64
-import com.ashampoo.xmp.internal.XMPErrorConst
-import com.ashampoo.xmp.internal.XMPNode
-import com.ashampoo.xmp.internal.XMPNodeUtils
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
