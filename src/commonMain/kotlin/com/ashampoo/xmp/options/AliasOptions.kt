@@ -11,6 +11,7 @@ package com.ashampoo.xmp.options
 /**
  * Options for XMPSchemaRegistry#registerAlias.
  */
+@Suppress("TooManyFunctions")
 public class AliasOptions : Options {
 
     public constructor() : super()
