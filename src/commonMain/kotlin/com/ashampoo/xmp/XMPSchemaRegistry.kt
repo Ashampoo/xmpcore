@@ -12,7 +12,6 @@ import com.ashampoo.xmp.internal.Utils.isXMLNameNS
 import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.internal.XMPNodeUtils
 import com.ashampoo.xmp.options.AliasOptions
-import com.ashampoo.xmp.properties.XMPAliasInfo
 
 /**
  * The schema registry keeps track of all namespaces and aliases used in the XMP

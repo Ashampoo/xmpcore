@@ -15,7 +15,7 @@ import com.ashampoo.xmp.XMPSchemaRegistry
 import com.ashampoo.xmp.internal.Utils.checkUUIDFormat
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 
 internal object XMPNormalizer {
 

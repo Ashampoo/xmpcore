@@ -33,9 +33,7 @@ import com.ashampoo.xmp.internal.XMPUtils.decodeBase64
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import com.ashampoo.xmp.properties.XMPProperty
-import com.ashampoo.xmp.properties.XMPPropertyInfo
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 
 /**
  * This class represents the set of XMP metadata as a DOM representation. It has methods to read and

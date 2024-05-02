@@ -10,8 +10,8 @@ package com.ashampoo.xmp
 
 import com.ashampoo.xmp.internal.Utils
 import com.ashampoo.xmp.internal.XMPErrorConst
-import com.ashampoo.xmp.xpath.XMPPath
-import com.ashampoo.xmp.xpath.XMPPathParser
+import com.ashampoo.xmp.internal.XMPPath
+import com.ashampoo.xmp.internal.XMPPathParser
 
 /**
  * Utility services for the metadata object. It has only public static functions, you cannot create
