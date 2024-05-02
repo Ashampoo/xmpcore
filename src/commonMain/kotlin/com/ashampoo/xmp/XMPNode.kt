@@ -39,10 +39,17 @@ class XMPNode(
 
     /* Internal processing options */
 
-    var isImplicit = false
-    var hasAliases = false
-    var isAlias = false
-    var hasValueChild = false
+    public var isImplicit = false
+        internal set
+
+    public var hasAliases = false
+        internal set
+
+    public var isAlias = false
+        internal set
+
+    public var hasValueChild = false
+        internal set
 
     fun clear() {
         name = null
