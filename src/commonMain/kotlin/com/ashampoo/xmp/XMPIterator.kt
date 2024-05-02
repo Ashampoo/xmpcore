@@ -439,8 +439,8 @@ public class XMPIterator(
                     if (node.options.isSchemaNode())
                         return baseNS
 
-                    // determine namespace of leaf node
-                    val qname = QName(node.name!!)
+                    /* determine namespace of leaf node */
+                    val qname = QName.parse(node.name!!)
 
                     return XMPSchemaRegistry.getNamespaceURI(qname.prefix!!)!!
                 }
@@ -451,7 +451,7 @@ public class XMPIterator(
 
                 override fun getOptions(): PropertyOptions = node.options
 
-                // the language is not reported
+                /* the language is not reported */
                 override fun getLanguage(): String? = null
             }
         }

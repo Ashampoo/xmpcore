@@ -639,9 +639,9 @@ internal object XMPRDFWriter {
         if (actualNamespace == null) {
 
             // prefix contains qname, extract prefix and lookup namespace with prefix
-            val qname = QName(actualPrefix)
+            val qname = QName.parse(actualPrefix)
 
-            if (!qname.hasPrefix())
+            if (!qname.hasPrefix)
                 return
 
             actualPrefix = qname.prefix!!

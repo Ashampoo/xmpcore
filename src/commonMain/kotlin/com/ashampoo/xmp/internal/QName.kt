@@ -8,44 +8,37 @@
 // =================================================================================================
 package com.ashampoo.xmp.internal
 
-internal class QName {
+internal data class QName(
+    /** XML namespace prefix */
+    val prefix: String?,
+    /** XML localname */
+    val localName: String
+) {
 
-    /**
-     * XML namespace prefix
-     */
-    var prefix: String? = null
-        private set
+    val hasPrefix: Boolean =
+        prefix != null && prefix.isNotEmpty()
 
-    /**
-     * XML localname
-     */
-    var localName: String? = null
-        private set
+    companion object {
 
-    /**
-     * Splits a qname into prefix and localname.
-     *
-     * @param qname a QName
-     */
-    constructor(qname: String) {
+        /**
+         * Splits a qname into prefix and localname.
+         *
+         * @param qname a QName
+         */
+        fun parse(qname: String): QName {
 
-        val colon = qname.indexOf(':')
+            val colon = qname.indexOf(':')
 
-        if (colon >= 0) {
-            prefix = qname.substring(0, colon)
-            localName = qname.substring(colon + 1)
-        } else {
-            prefix = ""
-            localName = qname
+            return if (colon >= 0)
+                QName(
+                    prefix = qname.substring(0, colon),
+                    localName = qname.substring(colon + 1)
+                )
+            else
+                QName(
+                    prefix = null,
+                    localName = qname
+                )
         }
     }
-
-    constructor(prefix: String?, localName: String?) {
-        this.prefix = prefix
-        this.localName = localName
-    }
-
-    fun hasPrefix(): Boolean =
-        prefix != null && prefix!!.isNotEmpty()
-
 }
