@@ -11,8 +11,8 @@ package com.ashampoo.xmp
 /**
  * This exception wraps all errors that occur in the XMP Toolkit.
  */
-class XMPException(
+public class XMPException(
     message: String,
-    val errorCode: Int,
+    public val errorCode: Int,
     cause: Throwable? = null
 ) : Exception(message, cause)

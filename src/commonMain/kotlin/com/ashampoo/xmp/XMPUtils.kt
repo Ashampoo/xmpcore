@@ -15,7 +15,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  * Utility methods for XMP. I included only those that are different from the
  * Java default conversion utilities.
  */
-object XMPUtils {
+internal object XMPUtils {
 
     /**
      * Convert from string to Boolean.
@@ -33,7 +33,7 @@ object XMPUtils {
     fun convertToBoolean(value: String?): Boolean {
 
         if (value.isNullOrEmpty())
-            throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
+            throw XMPException(XMPErrorConst.EMPTY_CONVERT_STRING_TEXT, XMPErrorConst.BADVALUE)
 
         val valueLowercase = value.lowercase()
 
@@ -55,7 +55,7 @@ object XMPUtils {
         try {
 
             if (rawValue.isNullOrEmpty())
-                throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
+                throw XMPException(XMPErrorConst.EMPTY_CONVERT_STRING_TEXT, XMPErrorConst.BADVALUE)
 
             return if (rawValue.startsWith("0x"))
                 rawValue.substring(2).toInt(16)
@@ -63,7 +63,7 @@ object XMPUtils {
                 rawValue.toInt()
 
         } catch (ex: NumberFormatException) {
-            throw XMPException("Invalid integer string", XMPError.BADVALUE, ex)
+            throw XMPException("Invalid integer string", XMPErrorConst.BADVALUE, ex)
         }
     }
 
@@ -73,7 +73,7 @@ object XMPUtils {
         try {
 
             if (rawValue.isNullOrEmpty())
-                throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
+                throw XMPException(XMPErrorConst.EMPTY_CONVERT_STRING_TEXT, XMPErrorConst.BADVALUE)
 
             return if (rawValue.startsWith("0x"))
                 rawValue.substring(2).toLong(16)
@@ -81,7 +81,7 @@ object XMPUtils {
                 rawValue.toLong()
 
         } catch (ex: NumberFormatException) {
-            throw XMPException("Invalid long string", XMPError.BADVALUE, ex)
+            throw XMPException("Invalid long string", XMPErrorConst.BADVALUE, ex)
         }
     }
 
@@ -91,12 +91,12 @@ object XMPUtils {
         try {
 
             if (rawValue.isNullOrEmpty())
-                throw XMPException(XMPError.EMPTY_CONVERT_STRING_TEXT, XMPError.BADVALUE)
+                throw XMPException(XMPErrorConst.EMPTY_CONVERT_STRING_TEXT, XMPErrorConst.BADVALUE)
 
             return rawValue.toDouble()
 
         } catch (ex: NumberFormatException) {
-            throw XMPException("Invalid double string", XMPError.BADVALUE, ex)
+            throw XMPException("Invalid double string", XMPErrorConst.BADVALUE, ex)
         }
     }
 
@@ -114,7 +114,7 @@ object XMPUtils {
             return Base64.decode(base64String.encodeToByteArray())
 
         } catch (ex: Throwable) {
-            throw XMPException("Invalid base64 string", XMPError.BADVALUE, ex)
+            throw XMPException("Invalid base64 string", XMPErrorConst.BADVALUE, ex)
         }
     }
 }

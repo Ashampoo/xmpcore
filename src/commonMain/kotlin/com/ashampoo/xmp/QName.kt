@@ -8,7 +8,7 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-class QName {
+internal class QName {
 
     /**
      * XML namespace prefix

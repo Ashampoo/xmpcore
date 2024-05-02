@@ -121,15 +121,15 @@ internal object XMPRDFParser {
     fun parseRdfRoot(xmp: XMPMeta, rdfRdfNode: Node, options: ParseOptions) {
 
         if (rdfRdfNode.nodeName != "rdf:RDF")
-            throw XMPException("Root node should be of type rdf:RDF", XMPError.BADRDF)
+            throw XMPException("Root node should be of type rdf:RDF", XMPErrorConst.BADRDF)
 
         if (rdfRdfNode.nodeType != NodeConsts.ELEMENT_NODE)
-            throw XMPException("Root node must be of element type.", XMPError.BADRDF)
+            throw XMPException("Root node must be of element type.", XMPErrorConst.BADRDF)
 
         rdfRdfNode as Element
 
         if (rdfRdfNode.attributes.length == 0)
-            throw XMPException("Illegal: rdf:RDF node has no attributes", XMPError.BADRDF)
+            throw XMPException("Illegal: rdf:RDF node has no attributes", XMPErrorConst.BADRDF)
 
         for (index in 0 until rdfRdfNode.childNodes.length) {
 
@@ -167,10 +167,10 @@ internal object XMPRDFParser {
         val nodeTerm = getRDFTermKind(xmlNode)
 
         if (nodeTerm != RDFTERM_DESCRIPTION && nodeTerm != RDFTERM_OTHER)
-            throw XMPException("Node element must be rdf:Description or typed node", XMPError.BADRDF)
+            throw XMPException("Node element must be rdf:Description or typed node", XMPErrorConst.BADRDF)
 
         if (isTopLevel && nodeTerm == RDFTERM_OTHER)
-            throw XMPException("Top level typed node not allowed", XMPError.BADXMP)
+            throw XMPException("Top level typed node not allowed", XMPErrorConst.BADXMP)
 
         parseRdfNodeElementAttrs(xmp, xmpParent, xmlNode, isTopLevel)
         parseRdfPropertyElementList(xmp, xmpParent, xmlNode, isTopLevel, options)
@@ -216,7 +216,7 @@ internal object XMPRDFParser {
                 RDFTERM_ID, RDFTERM_NODE_ID, RDFTERM_ABOUT -> {
 
                     if (exclusiveAttrs > 0)
-                        throw XMPException("Mutally exclusive about, ID, nodeID attributes", XMPError.BADRDF)
+                        throw XMPException("Mutally exclusive about, ID, nodeID attributes", XMPErrorConst.BADRDF)
 
                     exclusiveAttrs++
 
@@ -229,7 +229,7 @@ internal object XMPRDFParser {
                         if (xmpParent.name != null && xmpParent.name!!.isNotEmpty()) {
 
                             if (xmpParent.name != attribute.value)
-                                throw XMPException("Mismatched top level rdf:about values", XMPError.BADXMP)
+                                throw XMPException("Mismatched top level rdf:about values", XMPErrorConst.BADXMP)
 
                         } else {
                             xmpParent.name = attribute.value
@@ -240,7 +240,7 @@ internal object XMPRDFParser {
                 RDFTERM_OTHER ->
                     addChildNode(xmp, xmpParent, attribute, attribute.value, isTopLevel)
 
-                else -> throw XMPException("Invalid nodeElement attribute", XMPError.BADRDF)
+                else -> throw XMPException("Invalid nodeElement attribute", XMPErrorConst.BADRDF)
             }
         }
     }
@@ -272,7 +272,7 @@ internal object XMPRDFParser {
                 continue
 
             if (currChild.nodeType != NodeConsts.ELEMENT_NODE)
-                throw XMPException("Expected property element node not found", XMPError.BADRDF)
+                throw XMPException("Expected property element node not found", XMPErrorConst.BADRDF)
 
             parseRdfPropertyElement(xmp, xmpParent, currChild as Element, isTopLevel, options)
         }
@@ -343,7 +343,7 @@ internal object XMPRDFParser {
         val nodeTerm = getRDFTermKind(xmlNode)
 
         if (!isPropertyElementName(nodeTerm))
-            throw XMPException("Invalid property element name", XMPError.BADRDF)
+            throw XMPException("Invalid property element name", XMPErrorConst.BADRDF)
 
         // remove the namespace-definitions from the list
         val attributes = xmlNode.attributes
@@ -401,16 +401,16 @@ internal object XMPRDFParser {
                             parseEmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel)
 
                         "Literal" == attrValue ->
-                            throw XMPException("Literal property element not allowed", XMPError.BADXMP)
+                            throw XMPException("Literal property element not allowed", XMPErrorConst.BADXMP)
 
                         "Resource" == attrValue ->
                             parseTypeResourcePropertyElement(xmp, xmpParent, xmlNode, isTopLevel, options)
 
                         "Collection" == attrValue ->
-                            throw XMPException("Collection property element forbidden", XMPError.BADXMP)
+                            throw XMPException("Collection property element forbidden", XMPErrorConst.BADXMP)
 
                         else ->
-                            throw XMPException("Other property element not allowed", XMPError.BADXMP)
+                            throw XMPException("Other property element not allowed", XMPErrorConst.BADXMP)
                     }
 
                     return
@@ -480,7 +480,7 @@ internal object XMPRDFParser {
             else if ("ID" == attribute.localName && XMPConst.NS_RDF == attribute.namespaceURI)
                 continue
             else
-                throw XMPException("Invalid attribute for resource property element", XMPError.BADRDF)
+                throw XMPException("Invalid attribute for resource property element", XMPErrorConst.BADRDF)
         }
 
         // walk through the children
@@ -519,7 +519,7 @@ internal object XMPRDFParser {
 
                                 var typeName = currentChild.namespaceURI
                                     ?: throw XMPException(
-                                        "All XML elements must be in a namespace", XMPError.BADXMP
+                                        "All XML elements must be in a namespace", XMPErrorConst.BADXMP
                                     )
 
                                 typeName += ":$localName"
@@ -540,17 +540,17 @@ internal object XMPRDFParser {
 
                 } else if (found) {
                     // found second child element
-                    throw XMPException("Invalid child of resource property element", XMPError.BADRDF)
+                    throw XMPException("Invalid child of resource property element", XMPErrorConst.BADRDF)
                 } else {
                     throw XMPException(
-                        "Children of resource property element must be XML elements", XMPError.BADRDF
+                        "Children of resource property element must be XML elements", XMPErrorConst.BADRDF
                     )
                 }
             }
         }
 
         if (!found)
-            throw XMPException("Missing child of resource property element", XMPError.BADRDF)
+            throw XMPException("Missing child of resource property element", XMPErrorConst.BADRDF)
     }
 
     /**
@@ -587,7 +587,7 @@ internal object XMPRDFParser {
             )
                 continue
             else
-                throw XMPException("Invalid attribute for literal property element", XMPError.BADRDF)
+                throw XMPException("Invalid attribute for literal property element", XMPErrorConst.BADRDF)
         }
 
         var textValue = ""
@@ -597,7 +597,7 @@ internal object XMPRDFParser {
             val child = xmlNode.childNodes.item(index)
 
             if (child?.nodeType != NodeConsts.TEXT_NODE)
-                throw XMPException("Invalid child of literal property element", XMPError.BADRDF)
+                throw XMPException("Invalid child of literal property element", XMPErrorConst.BADRDF)
 
             child as Text
 
@@ -646,7 +646,7 @@ internal object XMPRDFParser {
                 continue // The caller ensured the value is "Resource". Ignore all rdf:ID attributes.
             } else {
                 throw XMPException(
-                    "Invalid attribute for ParseTypeResource property element", XMPError.BADRDF
+                    "Invalid attribute for ParseTypeResource property element", XMPErrorConst.BADRDF
                 )
             }
         }
@@ -703,7 +703,7 @@ internal object XMPRDFParser {
 
         if (xmlNode.childNodes.length > 0)
             throw XMPException(
-                "Nested content not allowed with rdf:resource or property attributes", XMPError.BADRDF
+                "Nested content not allowed with rdf:resource or property attributes", XMPErrorConst.BADRDF
             )
 
         /* First figure out what XMP this maps to and remember the XML node for a simple value. */
@@ -733,12 +733,12 @@ internal object XMPRDFParser {
                     if (hasNodeIDAttr) {
                         throw XMPException(
                             "Empty property element can't have both rdf:resource and rdf:nodeID",
-                            XMPError.BADRDF
+                            XMPErrorConst.BADRDF
                         )
                     } else if (hasValueAttr) {
                         throw XMPException(
                             "Empty property element can't have both rdf:value and rdf:resource",
-                            XMPError.BADXMP
+                            XMPErrorConst.BADXMP
                         )
                     }
 
@@ -753,7 +753,7 @@ internal object XMPRDFParser {
                     if (hasResourceAttr) {
                         throw XMPException(
                             "Empty property element can't have both rdf:resource and rdf:nodeID",
-                            XMPError.BADRDF
+                            XMPErrorConst.BADRDF
                         )
                     }
 
@@ -767,7 +767,7 @@ internal object XMPRDFParser {
                         if (hasResourceAttr) {
                             throw XMPException(
                                 "Empty property element can't have both rdf:value and rdf:resource",
-                                XMPError.BADXMP
+                                XMPErrorConst.BADXMP
                             )
                         }
 
@@ -784,7 +784,7 @@ internal object XMPRDFParser {
                 else ->
                     throw XMPException(
                         "Unrecognized attribute of empty property element: $attrTerm",
-                        XMPError.BADRDF
+                        XMPErrorConst.BADRDF
                     )
             }
         }
@@ -803,7 +803,7 @@ internal object XMPRDFParser {
             val valueNodeValue = when {
                 valueNode == null -> null
                 valueNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (valueNode as Attr).value
-                else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
+                else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPErrorConst.BADXMP)
             }
 
             childNode.value = valueNodeValue ?: ""
@@ -854,7 +854,7 @@ internal object XMPRDFParser {
 
                 else -> throw XMPException(
                     "Unrecognized attribute of empty property element: $attrTerm",
-                    XMPError.BADRDF
+                    XMPErrorConst.BADRDF
                 )
             }
         }
@@ -872,13 +872,13 @@ internal object XMPRDFParser {
         var namespace = when {
             xmlNode.nodeType == NodeConsts.ELEMENT_NODE -> (xmlNode as Element).namespaceURI
             xmlNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (xmlNode as Attr).namespaceURI
-            else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
+            else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPErrorConst.BADXMP)
         }
 
         if (namespace.isNullOrEmpty())
             throw XMPException(
                 "XML namespace required for all elements and attributes: $xmlNode",
-                XMPError.BADRDF
+                XMPErrorConst.BADRDF
             )
 
         /* Fix a legacy DC namespace */
@@ -892,7 +892,7 @@ internal object XMPRDFParser {
             val xmlNodePrefix = when {
                 xmlNode.nodeType == NodeConsts.ELEMENT_NODE -> (xmlNode as Element).prefix
                 xmlNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (xmlNode as Attr).prefix
-                else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
+                else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPErrorConst.BADXMP)
             }
 
             prefix = if (xmlNodePrefix != null)
@@ -906,7 +906,7 @@ internal object XMPRDFParser {
         val xmlNodeLocalName = when {
             xmlNode.nodeType == NodeConsts.ELEMENT_NODE -> (xmlNode as Element).localName
             xmlNode.nodeType == NodeConsts.ATTRIBUTE_NODE -> (xmlNode as Attr).localName
-            else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPError.BADXMP)
+            else -> throw XMPException("Unknown node type ${xmlNode.nodeType}", XMPErrorConst.BADXMP)
         }
 
         val childName = prefix + xmlNodeLocalName
@@ -962,7 +962,7 @@ internal object XMPRDFParser {
         if (isValueNode) {
 
             if (isTopLevel || !actualXmpParent.options.isStruct())
-                throw XMPException("Misplaced rdf:value element", XMPError.BADRDF)
+                throw XMPException("Misplaced rdf:value element", XMPErrorConst.BADRDF)
 
             actualXmpParent.hasValueChild = true
         }
@@ -975,10 +975,10 @@ internal object XMPRDFParser {
                 newChild.name = XMPConst.ARRAY_ITEM_NAME
 
             !isParentArray && isArrayItem ->
-                throw XMPException("Misplaced rdf:li element", XMPError.BADRDF)
+                throw XMPException("Misplaced rdf:li element", XMPErrorConst.BADRDF)
 
             isParentArray && !isArrayItem ->
-                throw XMPException("Arrays cannot have arbitrary child names", XMPError.BADRDF)
+                throw XMPException("Arrays cannot have arbitrary child names", XMPErrorConst.BADRDF)
         }
 
         return newChild
@@ -1025,7 +1025,7 @@ internal object XMPRDFParser {
         if (valueNode.options.hasLanguage()) {
 
             if (xmpParent.options.hasLanguage())
-                throw XMPException("Redundant xml:lang for rdf:value element", XMPError.BADXMP)
+                throw XMPException("Redundant xml:lang for rdf:value element", XMPErrorConst.BADXMP)
 
             val langQual = valueNode.getQualifier(1)
 
@@ -1130,7 +1130,7 @@ internal object XMPRDFParser {
         val namespace = when {
             node.nodeType == NodeConsts.ELEMENT_NODE -> (node as Element).namespaceURI
             node.nodeType == NodeConsts.ATTRIBUTE_NODE -> (node as Attr).namespaceURI
-            else -> throw XMPException("Unknown Node ${node.nodeType}", XMPError.BADXMP)
+            else -> throw XMPException("Unknown Node ${node.nodeType}", XMPErrorConst.BADXMP)
         }
 
         /*

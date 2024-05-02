@@ -66,7 +66,7 @@ import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
  * a `NoSuchElementException` if there are no more properties to
  * return.
  */
-class XMPIterator(
+public class XMPIterator(
     xmp: XMPMeta,
     schemaNS: String?,
     propPath: String?,
@@ -151,7 +151,7 @@ class XMPIterator(
 
                 // !baseSchema  &&  baseProperty
                 // No schema but property provided -> error
-                throw XMPException("Schema namespace URI is required", XMPError.BADSCHEMA)
+                throw XMPException("Schema namespace URI is required", XMPErrorConst.BADSCHEMA)
             }
         }
 
@@ -173,7 +173,7 @@ class XMPIterator(
      * Skip the subtree below the current node when `next()` is
      * called.
      */
-    fun skipSubtree() {
+    public fun skipSubtree() {
         skipSubtree = true
     }
 
@@ -181,7 +181,7 @@ class XMPIterator(
      * Skip the subtree below and remaining siblings of the current node when
      * `next()` is called.
      */
-    fun skipSiblings() {
+    public fun skipSiblings() {
         skipSubtree()
         skipSiblings = true
     }
@@ -521,7 +521,7 @@ class XMPIterator(
         }
     }
 
-    companion object {
+    private companion object {
 
         /**
          * iteration state

@@ -11,7 +11,7 @@ package com.ashampoo.xmp.options
 /**
  * Options for XMPIterator construction.
  */
-class IteratorOptions : Options() {
+public class IteratorOptions : Options() {
 
     /**
      * @return Returns whether the option is set.

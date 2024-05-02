@@ -56,13 +56,13 @@ class XMPNode(
      * Returns the children or empty list, if there are none.
      * Will not lazily create the list!
      */
-    fun getChildren(): List<XMPNode> =
+    public fun getChildren(): List<XMPNode> =
         children ?: emptyList()
 
-    fun getChild(index: Int): XMPNode =
+    public fun getChild(index: Int): XMPNode =
         getOrCreateChildren()[index - 1]
 
-    fun addChild(node: XMPNode) {
+    public fun addChild(node: XMPNode) {
 
         /* Ignore doubled childs. */
         if (childExists(node.name!!))
@@ -73,7 +73,7 @@ class XMPNode(
         getOrCreateChildren().add(node)
     }
 
-    fun addChild(index: Int, node: XMPNode) {
+    public fun addChild(index: Int, node: XMPNode) {
 
         /* Ignore doubled childs. */
         if (childExists(node.name!!))
@@ -87,14 +87,14 @@ class XMPNode(
     /**
      * Replaces a node with another one.
      */
-    fun replaceChild(index: Int, node: XMPNode) {
+    public fun replaceChild(index: Int, node: XMPNode) {
 
         node.parent = this
 
         getOrCreateChildren()[index - 1] = node
     }
 
-    fun removeChild(itemIndex: Int) {
+    public fun removeChild(itemIndex: Int) {
 
         getOrCreateChildren().removeAt(itemIndex - 1)
 
@@ -105,7 +105,7 @@ class XMPNode(
      * Removes a child node.
      * If its a schema node and doesn't have any children anymore, its deleted.
      */
-    fun removeChild(node: XMPNode) {
+    public fun removeChild(node: XMPNode) {
 
         getOrCreateChildren().remove(node)
 
@@ -125,30 +125,30 @@ class XMPNode(
     /**
      * Removes all children from the node.
      */
-    fun removeChildren() {
+    public fun removeChildren() {
         children = null
     }
 
-    fun getChildrenLength(): Int =
+    public fun getChildrenLength(): Int =
         children?.size ?: 0
 
-    fun findChildByName(expr: String?): XMPNode? =
+    public fun findChildByName(expr: String?): XMPNode? =
         getOrCreateChildren().find { it.name == expr }
 
     /**
      * Returns the qualifier or empty list, if there are none.
      * Will not lazily create the list!
      */
-    fun getQualifier(): List<XMPNode> =
+    public fun getQualifier(): List<XMPNode> =
         qualifier ?: emptyList()
 
-    fun getQualifier(index: Int): XMPNode =
+    public fun getQualifier(index: Int): XMPNode =
         getOrCreateQualifier()[index - 1]
 
-    fun getQualifierLength(): Int =
+    public fun getQualifierLength(): Int =
         qualifier?.size ?: 0
 
-    fun addQualifier(qualNode: XMPNode) {
+    public fun addQualifier(qualNode: XMPNode) {
 
         /* Ignore doubled qualifiers. */
         if (qualifierExists(qualNode.name!!))
@@ -187,7 +187,7 @@ class XMPNode(
     /**
      * Removes one qualifier node and fixes the options.
      */
-    fun removeQualifier(qualNode: XMPNode) {
+    public fun removeQualifier(qualNode: XMPNode) {
 
         if (XMPConst.XML_LANG == qualNode.name) {
             // if "xml:lang" is removed, remove hasLanguage-flag too
@@ -208,7 +208,7 @@ class XMPNode(
     /**
      * Removes all qualifiers from the node and sets the options appropriate.
      */
-    fun removeQualifiers() {
+    public fun removeQualifiers() {
 
         // clear qualifier related options
         options.setHasQualifiers(false)
@@ -218,22 +218,22 @@ class XMPNode(
         qualifier = null
     }
 
-    fun findQualifierByName(expr: String?): XMPNode? =
+    public fun findQualifierByName(expr: String?): XMPNode? =
         qualifier?.find { it.name == expr }
 
-    fun hasChildren(): Boolean =
+    public fun hasChildren(): Boolean =
         children?.isNotEmpty() ?: false
 
-    fun iterateChildren(): Iterator<XMPNode> =
+    public fun iterateChildren(): Iterator<XMPNode> =
         children?.iterator() ?: emptySequence<XMPNode>().iterator()
 
-    fun iterateChildrenMutable(): MutableIterator<XMPNode> =
+    public fun iterateChildrenMutable(): MutableIterator<XMPNode> =
         children?.listIterator() ?: mutableListOf<XMPNode>().listIterator()
 
-    fun hasQualifier(): Boolean =
+    public fun hasQualifier(): Boolean =
         qualifier?.isNotEmpty() ?: false
 
-    fun iterateQualifier(): Iterator<XMPNode> =
+    public fun iterateQualifier(): Iterator<XMPNode> =
         qualifier?.listIterator() ?: emptySequence<XMPNode>().iterator()
 
     override fun compareTo(other: XMPNode): Int {
@@ -253,7 +253,7 @@ class XMPNode(
      *  * Sorting will not be used for arrays.
      *  * Within qualifier "xml:lang" and/or "rdf:type" stay at the top in that order, all others are sorted.
      */
-    fun sort() {
+    public fun sort() {
 
         // sort qualifier
         if (hasQualifier()) {

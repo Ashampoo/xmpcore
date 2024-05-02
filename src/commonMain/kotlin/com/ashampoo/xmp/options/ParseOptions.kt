@@ -11,7 +11,7 @@ package com.ashampoo.xmp.options
 /**
  * Options for [XMPMetaFactory.parse].
  */
-class ParseOptions : Options() {
+public class ParseOptions : Options() {
 
     /**
      * @return Returns the requireXMPMeta.

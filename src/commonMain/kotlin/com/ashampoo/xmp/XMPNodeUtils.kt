@@ -20,7 +20,7 @@ import com.ashampoo.xmp.xpath.XMPPathSegment
 /**
  * Utilities for `XMPNode`.
  */
-object XMPNodeUtils {
+internal object XMPNodeUtils {
 
     const val CLT_NO_VALUES = 0
 
@@ -78,7 +78,7 @@ object XMPNodeUtils {
                 prefix = if (!suggestedPrefix.isNullOrEmpty())
                     XMPSchemaRegistry.registerNamespace(namespaceURI, suggestedPrefix)
                 else
-                    throw XMPException("Unregistered schema namespace URI", XMPError.BADSCHEMA)
+                    throw XMPException("Unregistered schema namespace URI", XMPErrorConst.BADSCHEMA)
             }
 
             schemaNode.value = prefix
@@ -100,11 +100,11 @@ object XMPNodeUtils {
 
                 !parent.isImplicit ->
                     throw XMPException(
-                        "Named children only allowed for schemas and structs: $childName", XMPError.BADXPATH
+                        "Named children only allowed for schemas and structs: $childName", XMPErrorConst.BADXPATH
                     )
 
                 parent.options.isArray() ->
-                    throw XMPException("Named children not allowed for arrays: $childName", XMPError.BADXPATH)
+                    throw XMPException("Named children not allowed for arrays: $childName", XMPErrorConst.BADXPATH)
 
                 createNodes ->
                     parent.options.setStruct(true)
@@ -146,7 +146,7 @@ object XMPNodeUtils {
     ): XMPNode? {
 
         if (xpath == null || xpath.size() == 0)
-            throw XMPException("Empty XMPPath", XMPError.BADXPATH)
+            throw XMPException("Empty XMPPath", XMPErrorConst.BADXPATH)
 
         // Root of implicitly created subtree to possible delete it later.
         // Valid only if leaf is new.
@@ -284,7 +284,7 @@ object XMPNodeUtils {
             options.setArray(true)
 
         if (options.isCompositeProperty() && itemValue != null && itemValue.toString().isNotEmpty())
-            throw XMPException("Structs and arrays can't have values", XMPError.BADOPTIONS)
+            throw XMPException("Structs and arrays can't have values", XMPErrorConst.BADOPTIONS)
 
         options.assertConsistency(options.getOptions())
 
@@ -344,7 +344,7 @@ object XMPNodeUtils {
 
             // This is an array indexing step. First get the index, then get the node.
             if (!parentNode.options.isArray())
-                throw XMPException("Indexing applied to non-array", XMPError.BADXPATH)
+                throw XMPException("Indexing applied to non-array", XMPErrorConst.BADXPATH)
 
             val index = when (stepKind) {
 
@@ -375,7 +375,7 @@ object XMPNodeUtils {
                 else ->
                     throw XMPException(
                         "Unknown array indexing step in FollowXPathStep",
-                        XMPError.INTERNALFAILURE
+                        XMPErrorConst.INTERNALFAILURE
                     )
             }
 
@@ -425,10 +425,10 @@ object XMPNodeUtils {
             index = innerSegment.toInt()
 
             if (index < 1)
-                throw XMPException("Array index must be larger than zero", XMPError.BADXPATH)
+                throw XMPException("Array index must be larger than zero", XMPErrorConst.BADXPATH)
 
         } catch (ex: NumberFormatException) {
-            throw XMPException("Array index not digits.", XMPError.BADXPATH, ex)
+            throw XMPException("Array index not digits.", XMPErrorConst.BADXPATH, ex)
         }
 
         if (createNodes && index == arrayNode.getChildrenLength() + 1) {
@@ -464,7 +464,7 @@ object XMPNodeUtils {
             val currItem = arrayNode.getChild(index)
 
             if (!currItem.options.isStruct())
-                throw XMPException("Field selector must be used on array of struct", XMPError.BADXPATH)
+                throw XMPException("Field selector must be used on array of struct", XMPErrorConst.BADXPATH)
 
             @Suppress("LoopWithTooManyJumpStatements")
             for (childIndex in 1..currItem.getChildrenLength()) {
@@ -623,7 +623,7 @@ object XMPNodeUtils {
         // See if the array has the right form. Allow empty alt arrays, that is what parsing returns.
 
         if (!arrayNode.options.isArrayAltText())
-            throw XMPException("Localized text array is not alt-text", XMPError.BADXPATH)
+            throw XMPException("Localized text array is not alt-text", XMPErrorConst.BADXPATH)
         else if (!arrayNode.hasChildren())
             return arrayOf(CLT_NO_VALUES, null)
 
@@ -640,9 +640,9 @@ object XMPNodeUtils {
 
             // perform some checks on the current item
             if (currItem.options.isCompositeProperty())
-                throw XMPException("Alt-text array item is not simple", XMPError.BADXPATH)
+                throw XMPException("Alt-text array item is not simple", XMPErrorConst.BADXPATH)
             else if (!currItem.hasQualifier() || XMPConst.XML_LANG != currItem.getQualifier(1).name)
-                throw XMPException("Alt-text array item has no language qualifier", XMPError.BADXPATH)
+                throw XMPException("Alt-text array item has no language qualifier", XMPErrorConst.BADXPATH)
 
             val currLang = currItem.getQualifier(1).value
 
@@ -690,7 +690,7 @@ object XMPNodeUtils {
     fun lookupLanguageItem(arrayNode: XMPNode?, language: String): Int {
 
         if (!arrayNode!!.options.isArray())
-            throw XMPException("Language item must be used on array", XMPError.BADXPATH)
+            throw XMPException("Language item must be used on array", XMPErrorConst.BADXPATH)
 
         for (index in 1..arrayNode.getChildrenLength()) {
 

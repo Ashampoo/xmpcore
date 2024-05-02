@@ -8,14 +8,14 @@
 // =================================================================================================
 package com.ashampoo.xmp.options
 
-import com.ashampoo.xmp.XMPError
+import com.ashampoo.xmp.XMPErrorConst
 import com.ashampoo.xmp.XMPException
 
 /**
  * The base class for a collection of 32 flag bits. Individual flags are defined as enum value bit
  * masks. Inheriting classes add convenience accessor methods.
  */
-abstract class Options {
+public abstract class Options {
 
     /**
      * the internal int containing all options
@@ -113,7 +113,7 @@ abstract class Options {
         if (invalidOptions != 0)
             throw XMPException(
                 "The option bit(s) 0x" + invalidOptions.toString(16) + " + are invalid!",
-                XMPError.BADOPTIONS
+                XMPErrorConst.BADOPTIONS
             )
 
         assertConsistency(options)

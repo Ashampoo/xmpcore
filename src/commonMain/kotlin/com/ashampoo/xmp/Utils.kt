@@ -11,7 +11,7 @@ package com.ashampoo.xmp
 /**
  * Utility functions for the XMPToolkit implementation.
  */
-object Utils {
+internal object Utils {
 
     /**
      * segments of a UUID

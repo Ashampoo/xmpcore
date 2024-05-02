@@ -8,7 +8,7 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-object XMPError {
+internal object XMPErrorConst {
 
     const val EMPTY_ARRAY_NAME_TEXT: String = "Empty array name"
     const val EMPTY_SCHEMA_TEXT: String = "Empty schema namespace URI"

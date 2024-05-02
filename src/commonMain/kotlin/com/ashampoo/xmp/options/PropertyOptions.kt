@@ -8,14 +8,14 @@
 // =================================================================================================
 package com.ashampoo.xmp.options
 
-import com.ashampoo.xmp.XMPError
+import com.ashampoo.xmp.XMPErrorConst
 import com.ashampoo.xmp.XMPException
 
 /**
  * The property flags are used when properties are fetched from the `XMPMeta`-object
  * and provide more detailed information about the property.
  */
-class PropertyOptions : Options {
+public class PropertyOptions : Options {
 
     /**
      * Default constructor
@@ -282,9 +282,9 @@ class PropertyOptions : Options {
     public override fun assertConsistency(options: Int) {
 
         if (options and STRUCT > 0 && options and ARRAY > 0)
-            throw XMPException("IsStruct and IsArray options are mutually exclusive", XMPError.BADOPTIONS)
+            throw XMPException("IsStruct and IsArray options are mutually exclusive", XMPErrorConst.BADOPTIONS)
         else if (options and URI > 0 && options and (ARRAY or STRUCT) > 0)
-            throw XMPException("Structs and arrays can't have \"value\" options", XMPError.BADOPTIONS)
+            throw XMPException("Structs and arrays can't have \"value\" options", XMPErrorConst.BADOPTIONS)
     }
 
     companion object {

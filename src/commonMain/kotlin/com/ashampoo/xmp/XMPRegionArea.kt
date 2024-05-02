@@ -9,7 +9,7 @@
 package com.ashampoo.xmp
 
 /** As used in XMP-mwg-rs */
-data class XMPRegionArea(
+public data class XMPRegionArea(
     val xPos: Double,
     val yPos: Double,
     val width: Double,

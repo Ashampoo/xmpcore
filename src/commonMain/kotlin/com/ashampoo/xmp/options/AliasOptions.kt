@@ -11,7 +11,7 @@ package com.ashampoo.xmp.options
 /**
  * Options for XMPSchemaRegistry#registerAlias.
  */
-class AliasOptions : Options {
+public class AliasOptions : Options {
 
     constructor() : super()
 

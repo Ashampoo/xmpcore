@@ -68,7 +68,7 @@ internal object XMPNormalizer {
                 val idNode = XMPNodeUtils.findNode(tree, path, true, null)
 
                 if (idNode == null)
-                    throw XMPException("Failure creating xmpMM:InstanceID", XMPError.INTERNALFAILURE)
+                    throw XMPException("Failure creating xmpMM:InstanceID", XMPErrorConst.INTERNALFAILURE)
 
                 /* Clobber any existing xmpMM:InstanceID */
                 idNode.options = PropertyOptions()
@@ -366,7 +366,7 @@ internal object XMPNormalizer {
 
             // *** Allow x-default.
             if (childNode.options.hasLanguage())
-                throw XMPException("Alias to x-default already has a language qualifier", XMPError.BADXMP)
+                throw XMPException("Alias to x-default already has a language qualifier", XMPErrorConst.BADXMP)
 
             val langQual = XMPNode(XMPConst.XML_LANG, XMPConst.X_DEFAULT)
 
@@ -417,7 +417,7 @@ internal object XMPNormalizer {
     ) {
 
         if (aliasNode.value != baseNode.value || aliasNode.getChildrenLength() != baseNode.getChildrenLength())
-            throw XMPException("Mismatch between alias and base nodes", XMPError.BADXMP)
+            throw XMPException("Mismatch between alias and base nodes", XMPErrorConst.BADXMP)
 
         if (!outerCall &&
             (
@@ -426,7 +426,7 @@ internal object XMPNormalizer {
                     aliasNode.getQualifierLength() != baseNode.getQualifierLength()
                 )
         )
-            throw XMPException("Mismatch between alias and base nodes", XMPError.BADXMP)
+            throw XMPException("Mismatch between alias and base nodes", XMPErrorConst.BADXMP)
 
         run {
             val an = aliasNode.iterateChildren()

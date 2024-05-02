@@ -109,6 +109,8 @@ dependencies {
 
 kotlin {
 
+    // explicitApi()
+
     androidTarget {
 
         compilations.all {

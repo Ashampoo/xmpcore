@@ -11,7 +11,7 @@ package com.ashampoo.xmp.options
 /**
  * Options for [XMPMetaFactory.serializeToBuffer].
  */
-class SerializeOptions : Options {
+public class SerializeOptions : Options {
 
     /**
      * Default constructor.

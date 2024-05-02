@@ -41,7 +41,7 @@ import com.ashampoo.xmp.properties.XMPAliasInfo
  * There is only one single instance used by the toolkit.
  */
 @Suppress("TooManyFunctions")
-object XMPSchemaRegistry {
+public object XMPSchemaRegistry {
 
     /**
      * a map from a namespace URI to its registered prefix
@@ -98,21 +98,21 @@ object XMPSchemaRegistry {
      * @return Returns the registered prefix for this URI, is equal to the suggestedPrefix if the
      *         namespace hasn't been registered before, otherwise the existing prefix.
      */
-    fun registerNamespace(namespaceURI: String, suggestedPrefix: String): String {
+    public fun registerNamespace(namespaceURI: String, suggestedPrefix: String): String {
 
         var actualSuggestedPrefix = suggestedPrefix
 
         if (namespaceURI.isEmpty())
-            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+            throw XMPException(XMPErrorConst.EMPTY_SCHEMA_TEXT, XMPErrorConst.BADPARAM)
 
         if (actualSuggestedPrefix.isEmpty())
-            throw XMPException("Empty prefix", XMPError.BADPARAM)
+            throw XMPException("Empty prefix", XMPErrorConst.BADPARAM)
 
         if (actualSuggestedPrefix[actualSuggestedPrefix.length - 1] != ':')
             actualSuggestedPrefix += ':'
 
         if (!isXMLNameNS(actualSuggestedPrefix.substring(0, actualSuggestedPrefix.length - 1)))
-            throw XMPException("The prefix is a bad XML name", XMPError.BADXML)
+            throw XMPException("The prefix is a bad XML name", XMPErrorConst.BADXML)
 
         val registeredPrefix = namespaceToPrefixMap[namespaceURI]
         val registeredNS = prefixToNamespaceMap[actualSuggestedPrefix]
@@ -153,7 +153,7 @@ object XMPSchemaRegistry {
      * @param namespaceURI The URI for the namespace. Must not be null or the empty string.
      * @return Returns the prefix registered for this namespace URI or null.
      */
-    fun getNamespacePrefix(namespaceURI: String): String? =
+    public fun getNamespacePrefix(namespaceURI: String): String? =
         namespaceToPrefixMap[namespaceURI]
 
     /**
@@ -164,7 +164,7 @@ object XMPSchemaRegistry {
      * @param namespacePrefix The prefix for the namespace. Must not be null or the empty string.
      * @return Returns the URI registered for this prefix or null.
      */
-    fun getNamespaceURI(namespacePrefix: String): String? {
+    public fun getNamespaceURI(namespacePrefix: String): String? {
 
         var actualNamespacePrefix = namespacePrefix
 
@@ -178,7 +178,7 @@ object XMPSchemaRegistry {
      * @return Returns the registered prefix/namespace-pairs as map, where the keys are the
      * namespaces and the values are the prefixes.
      */
-    fun getNamespaces(): Map<String, String> =
+    public fun getNamespaces(): Map<String, String> =
         namespaceToPrefixMap
 
     /**
@@ -189,7 +189,7 @@ object XMPSchemaRegistry {
      *
      * @param namespaceURI The URI for the namespace.
      */
-    fun deleteNamespace(namespaceURI: String) {
+    public fun deleteNamespace(namespaceURI: String): Unit {
 
         val prefixToDelete = getNamespacePrefix(namespaceURI) ?: return
 
@@ -197,7 +197,7 @@ object XMPSchemaRegistry {
         prefixToNamespaceMap.remove(prefixToDelete)
     }
 
-    fun getPrefixes(): Map<String, String> =
+    public fun getPrefixes(): Map<String, String> =
         prefixToNamespaceMap
 
     /**
@@ -297,7 +297,7 @@ object XMPSchemaRegistry {
      * @return Returns the `XMPAliasInfo` for the given alias namespace and property
      *         or `null` if there is no such alias.
      */
-    fun resolveAlias(aliasNS: String, aliasProp: String): XMPAliasInfo? {
+    public fun resolveAlias(aliasNS: String, aliasProp: String): XMPAliasInfo? {
 
         val aliasPrefix = getNamespacePrefix(aliasNS) ?: return null
 
@@ -311,7 +311,7 @@ object XMPSchemaRegistry {
      * @return Returns if an alias definition for the given qname to another
      *         schema and property is registered.
      */
-    fun findAlias(qname: String): XMPAliasInfo? =
+    public fun findAlias(qname: String): XMPAliasInfo? =
         aliasMap[qname]
 
     /**
@@ -321,7 +321,7 @@ object XMPSchemaRegistry {
      * @param aliasNS a schema namespace URI
      * @return Returns all alias infos from aliases that are contained in the provided namespace.
      */
-    fun findAliases(aliasNS: String): Set<XMPAliasInfo> {
+    public fun findAliases(aliasNS: String): Set<XMPAliasInfo> {
 
         val prefix = getNamespacePrefix(aliasNS)
 
@@ -373,7 +373,7 @@ object XMPSchemaRegistry {
      * an array or not (see [AliasOptions]).
      */
     @Suppress("ThrowsCount")
-    fun registerAlias(
+    public fun registerAlias(
         aliasNS: String,
         aliasProp: String,
         actualNS: String,
@@ -382,16 +382,16 @@ object XMPSchemaRegistry {
     ) {
 
         if (aliasNS.isEmpty())
-            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+            throw XMPException(XMPErrorConst.EMPTY_SCHEMA_TEXT, XMPErrorConst.BADPARAM)
 
         if (aliasProp.isEmpty())
-            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+            throw XMPException(XMPErrorConst.EMPTY_PROPERTY_NAME_TEXT, XMPErrorConst.BADPARAM)
 
         if (actualNS.isEmpty())
-            throw XMPException(XMPError.EMPTY_SCHEMA_TEXT, XMPError.BADPARAM)
+            throw XMPException(XMPErrorConst.EMPTY_SCHEMA_TEXT, XMPErrorConst.BADPARAM)
 
         if (actualProp.isEmpty())
-            throw XMPException(XMPError.EMPTY_PROPERTY_NAME_TEXT, XMPError.BADPARAM)
+            throw XMPException(XMPErrorConst.EMPTY_PROPERTY_NAME_TEXT, XMPErrorConst.BADPARAM)
 
         // Fix the alias options
         val aliasOpts = if (aliasForm != null)
@@ -405,25 +405,25 @@ object XMPSchemaRegistry {
             AliasOptions()
 
         if (simpleProperyPattern.matches(aliasProp) || simpleProperyPattern.matches(actualProp))
-            throw XMPException("Alias and actual property names must be simple", XMPError.BADXPATH)
+            throw XMPException("Alias and actual property names must be simple", XMPErrorConst.BADXPATH)
 
         // check if both namespaces are registered
         val aliasPrefix = getNamespacePrefix(aliasNS)
         val actualPrefix = getNamespacePrefix(actualNS)
 
         if (aliasPrefix == null)
-            throw XMPException("Alias namespace is not registered", XMPError.BADSCHEMA)
+            throw XMPException("Alias namespace is not registered", XMPErrorConst.BADSCHEMA)
         else if (actualPrefix == null)
-            throw XMPException("Actual namespace is not registered", XMPError.BADSCHEMA)
+            throw XMPException("Actual namespace is not registered", XMPErrorConst.BADSCHEMA)
 
         val key = aliasPrefix + aliasProp
 
         // check if alias is already existing
         if (aliasMap.containsKey(key))
-            throw XMPException("Alias is already existing", XMPError.BADPARAM)
+            throw XMPException("Alias is already existing", XMPErrorConst.BADPARAM)
         else if (aliasMap.containsKey(actualPrefix + actualProp))
             throw XMPException(
-                "Actual property is already an alias, use the base property", XMPError.BADPARAM
+                "Actual property is already an alias, use the base property", XMPErrorConst.BADPARAM
             )
 
         val aliasInfo: XMPAliasInfo = object : XMPAliasInfo {
@@ -447,7 +447,7 @@ object XMPSchemaRegistry {
      * @return Returns the registered aliases as map, where the key is the "qname" (prefix and name)
      * and the value an `XMPAliasInfo`-object.
      */
-    fun getAliases(): Map<String, XMPAliasInfo> =
+    public fun getAliases(): Map<String, XMPAliasInfo> =
         aliasMap
 
     /**
