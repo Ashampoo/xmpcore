@@ -97,6 +97,8 @@ internal object XMPRDFParser {
      */
     const val DEFAULT_PREFIX = "_dflt"
 
+    const val XMLNS = "xmlns"
+
     /**
      * The main parsing method. The XML tree is walked through from the root node and and XMP tree
      * is created. This is a raw parse, the normalisation of the XMP tree happens outside.
@@ -206,7 +208,7 @@ internal object XMPRDFParser {
 
             // quick hack, ns declarations do not appear in C++
             // ignore "ID" without namespace
-            if ("xmlns" == attribute.prefix || attribute.prefix == null && "xmlns" == attribute.nodeName)
+            if (XMLNS == attribute.prefix || attribute.prefix == null && XMLNS == attribute.nodeName)
                 continue
 
             val attrTerm = getRDFTermKind(attribute)
@@ -354,7 +356,7 @@ internal object XMPRDFParser {
 
             val attribute = attributes.item(index) as Attr
 
-            if ("xmlns" == attribute.prefix || attribute.prefix == null && "xmlns" == attribute.nodeName) {
+            if (XMLNS == attribute.prefix || attribute.prefix == null && XMLNS == attribute.nodeName) {
 
                 if (nsAttrs == null)
                     nsAttrs = mutableListOf<String>()
@@ -472,7 +474,7 @@ internal object XMPRDFParser {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
-            if ("xmlns" == attribute.prefix || attribute.prefix == null && "xmlns" == attribute.nodeName)
+            if (XMLNS == attribute.prefix || attribute.prefix == null && XMLNS == attribute.nodeName)
                 continue
 
             if (XMPConst.XML_LANG == attribute.nodeName)
@@ -576,7 +578,7 @@ internal object XMPRDFParser {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
-            if ("xmlns" == attribute.prefix || attribute.prefix == null && "xmlns" == attribute.nodeName)
+            if (XMLNS == attribute.prefix || attribute.prefix == null && XMLNS == attribute.nodeName)
                 continue
 
             if (XMPConst.XML_LANG == attribute.nodeName)
@@ -634,7 +636,7 @@ internal object XMPRDFParser {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
-            if ("xmlns" == attribute.prefix || attribute.prefix == null && "xmlns" == attribute.nodeName)
+            if (XMLNS == attribute.prefix || attribute.prefix == null && XMLNS == attribute.nodeName)
                 continue
 
             if (XMPConst.XML_LANG == attribute.nodeName) {
@@ -711,7 +713,7 @@ internal object XMPRDFParser {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
-            if ("xmlns" == attribute.prefix || attribute.prefix == null && "xmlns" == attribute.nodeName)
+            if (XMLNS == attribute.prefix || attribute.prefix == null && XMLNS == attribute.nodeName)
                 continue
 
             val attrTerm = getRDFTermKind(attribute)
@@ -822,8 +824,8 @@ internal object XMPRDFParser {
             val attribute = xmlNode.attributes.item(index) as Attr
 
             if (
-                attribute === valueNode || "xmlns" == attribute.prefix ||
-                attribute.prefix == null && "xmlns" == attribute.nodeName
+                attribute === valueNode || XMLNS == attribute.prefix ||
+                attribute.prefix == null && XMLNS == attribute.nodeName
             )
                 continue // Skip the rdf:value or rdf:resource attribute holding the value.
 
