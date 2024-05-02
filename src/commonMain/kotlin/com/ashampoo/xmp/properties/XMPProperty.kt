@@ -13,23 +13,23 @@ import com.ashampoo.xmp.options.PropertyOptions
 /**
  * This interface is used to return a text property together with its and options.
  */
-interface XMPProperty {
+public interface XMPProperty {
 
     /**
      * @return Returns the value of the property.
      */
-    fun getValue(): String?
+    public fun getValue(): String?
 
     /**
      * @return Returns the options of the property.
      */
-    fun getOptions(): PropertyOptions
+    public fun getOptions(): PropertyOptions
 
     /**
      * Only set by {@link XMPMeta.getLocalizedText}.
      *
      * @return Returns the language of the alt-text item.
      */
-    fun getLanguage(): String?
+    public fun getLanguage(): String?
 
 }

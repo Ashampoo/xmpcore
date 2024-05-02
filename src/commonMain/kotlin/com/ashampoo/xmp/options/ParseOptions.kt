@@ -16,14 +16,14 @@ public class ParseOptions : Options() {
     /**
      * @return Returns the requireXMPMeta.
      */
-    fun getRequireXMPMeta(): Boolean =
+    public fun getRequireXMPMeta(): Boolean =
         getOption(REQUIRE_XMP_META)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setRequireXMPMeta(value: Boolean): ParseOptions {
+    public fun setRequireXMPMeta(value: Boolean): ParseOptions {
         setOption(REQUIRE_XMP_META, value)
         return this
     }
@@ -31,14 +31,14 @@ public class ParseOptions : Options() {
     /**
      * @return Returns the strictAliasing.
      */
-    fun getStrictAliasing(): Boolean =
+    public fun getStrictAliasing(): Boolean =
         getOption(STRICT_ALIASING)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setStrictAliasing(value: Boolean): ParseOptions {
+    public fun setStrictAliasing(value: Boolean): ParseOptions {
         setOption(STRICT_ALIASING, value)
         return this
     }
@@ -47,7 +47,7 @@ public class ParseOptions : Options() {
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setOmitNormalization(value: Boolean): ParseOptions {
+    public fun setOmitNormalization(value: Boolean): ParseOptions {
         setOption(OMIT_NORMALIZATION, value)
         return this
     }
@@ -55,7 +55,7 @@ public class ParseOptions : Options() {
     /**
      * @return Returns the option "omit normalization".
      */
-    fun getOmitNormalization(): Boolean =
+    public fun getOmitNormalization(): Boolean =
         getOption(OMIT_NORMALIZATION)
 
     /**
@@ -79,7 +79,7 @@ public class ParseOptions : Options() {
     /**
      * Require a surrounding "x:xmpmeta" element in the xml-document.
      */
-    companion object {
+    internal companion object {
 
         const val REQUIRE_XMP_META = 0x0001
 

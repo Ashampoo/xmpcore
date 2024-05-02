@@ -109,7 +109,7 @@ dependencies {
 
 kotlin {
 
-    // explicitApi()
+    explicitApi()
 
     androidTarget {
 

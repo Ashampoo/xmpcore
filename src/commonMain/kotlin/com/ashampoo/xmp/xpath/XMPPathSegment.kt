@@ -11,7 +11,7 @@ package com.ashampoo.xmp.xpath
 /**
  * A segment of a parsed `XMPPath`.
  */
-class XMPPathSegment {
+internal class XMPPathSegment {
 
     /**
      * name of the path segment

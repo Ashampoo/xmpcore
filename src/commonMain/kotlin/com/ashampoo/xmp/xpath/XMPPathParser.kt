@@ -16,7 +16,7 @@ import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 /**
  * Parser for XMP XPaths.
  */
-object XMPPathParser {
+internal object XMPPathParser {
 
     /**
      * Split an XMPPath expression apart at the conceptual steps, adding the

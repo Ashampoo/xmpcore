@@ -14,7 +14,7 @@ import com.ashampoo.xmp.options.PropertyOptions
  * A node in the internally XMP tree, which can be a schema node, a property node, an array node,
  * an array item, a struct node or a qualifier node (without '?').
  */
-class XMPNode(
+internal class XMPNode(
 
     /**
      * name of the node, contains different information depending of the node kind
@@ -33,25 +33,25 @@ class XMPNode(
 
 ) : Comparable<XMPNode> {
 
-    var parent: XMPNode? = null
+    internal var parent: XMPNode? = null
     private var children: MutableList<XMPNode>? = null
     private var qualifier: MutableList<XMPNode>? = null
 
     /* Internal processing options */
 
-    public var isImplicit = false
+    public var isImplicit: Boolean = false
         internal set
 
-    public var hasAliases = false
+    public var hasAliases: Boolean = false
         internal set
 
-    public var isAlias = false
+    public var isAlias: Boolean = false
         internal set
 
-    public var hasValueChild = false
+    public var hasValueChild: Boolean = false
         internal set
 
-    fun clear() {
+    internal fun clear() {
         name = null
         value = null
         options = PropertyOptions()

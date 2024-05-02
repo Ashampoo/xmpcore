@@ -20,7 +20,7 @@ public class PropertyOptions : Options {
     /**
      * Default constructor
      */
-    constructor()
+    public constructor()
 
     /**
      * Intialization constructor
@@ -28,19 +28,19 @@ public class PropertyOptions : Options {
      * @param options the initialization options
      *
      */
-    constructor(options: Int) : super(options)
+    internal constructor(options: Int) : super(options)
 
     /**
      * @return Return whether the property value is a URI. It is serialized to RDF using the
      * <tt>rdf:resource</tt> attribute. Not mandatory for URIs, but considered RDF-savvy.
      */
-    fun isURI(): Boolean = getOption(URI)
+    public fun isURI(): Boolean = getOption(URI)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setURI(value: Boolean): PropertyOptions {
+    public fun setURI(value: Boolean): PropertyOptions {
         setOption(URI, value)
         return this
     }
@@ -50,14 +50,14 @@ public class PropertyOptions : Options {
      * attribute, an <tt>rdf:type</tt> property, or a general qualifier. See the
      * introductory discussion of qualified properties for more information.
      */
-    fun hasQualifiers(): Boolean =
+    public fun hasQualifiers(): Boolean =
         getOption(HAS_QUALIFIERS)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setHasQualifiers(value: Boolean): PropertyOptions {
+    public fun setHasQualifiers(value: Boolean): PropertyOptions {
         setOption(HAS_QUALIFIERS, value)
         return this
     }
@@ -68,14 +68,14 @@ public class PropertyOptions : Options {
      * the qualifier's subtree. Qualifiers may have arbitrary structure, and may even have
      * qualifiers.
      */
-    fun isQualifier(): Boolean =
+    public fun isQualifier(): Boolean =
         getOption(QUALIFIER)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setQualifier(value: Boolean): PropertyOptions {
+    public fun setQualifier(value: Boolean): PropertyOptions {
         setOption(QUALIFIER, value)
         return this
     }
@@ -83,14 +83,14 @@ public class PropertyOptions : Options {
     /**
      * @return Return whether this property has an <tt>xml:lang</tt> qualifier.
      */
-    fun hasLanguage(): Boolean =
+    public fun hasLanguage(): Boolean =
         getOption(HAS_LANGUAGE)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setHasLanguage(value: Boolean): PropertyOptions {
+    public fun setHasLanguage(value: Boolean): PropertyOptions {
         setOption(HAS_LANGUAGE, value)
         return this
     }
@@ -98,14 +98,14 @@ public class PropertyOptions : Options {
     /**
      * @return Return whether this property has an <tt>rdf:type</tt> qualifier.
      */
-    fun hasType(): Boolean =
+    public fun hasType(): Boolean =
         getOption(HAS_TYPE)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setHasType(value: Boolean): PropertyOptions {
+    public fun setHasType(value: Boolean): PropertyOptions {
         setOption(HAS_TYPE, value)
         return this
     }
@@ -113,14 +113,14 @@ public class PropertyOptions : Options {
     /**
      * @return Return whether this property contains nested fields.
      */
-    fun isStruct(): Boolean =
+    public fun isStruct(): Boolean =
         getOption(STRUCT)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setStruct(value: Boolean): PropertyOptions {
+    public fun setStruct(value: Boolean): PropertyOptions {
         setOption(STRUCT, value)
         return this
     }
@@ -129,14 +129,14 @@ public class PropertyOptions : Options {
      * @return Return whether this property is an array. By itself this indicates a general
      * unordered array. It is serialized using an <tt>rdf:Bag</tt> container.
      */
-    fun isArray(): Boolean =
+    public fun isArray(): Boolean =
         getOption(ARRAY)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setArray(value: Boolean): PropertyOptions {
+    public fun setArray(value: Boolean): PropertyOptions {
         setOption(ARRAY, value)
         return this
     }
@@ -145,14 +145,14 @@ public class PropertyOptions : Options {
      * @return Return whether this property is an ordered array. Appears in conjunction with
      * getPropValueIsArray(). It is serialized using an <tt>rdf:Seq</tt> container.
      */
-    fun isArrayOrdered(): Boolean =
+    public fun isArrayOrdered(): Boolean =
         getOption(ARRAY_ORDERED)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setArrayOrdered(value: Boolean): PropertyOptions {
+    public fun setArrayOrdered(value: Boolean): PropertyOptions {
         setOption(ARRAY_ORDERED, value)
         return this
     }
@@ -161,14 +161,14 @@ public class PropertyOptions : Options {
      * @return Return whether this property is an alternative array. Appears in conjunction with
      * getPropValueIsArray(). It is serialized using an <tt>rdf:Alt</tt> container.
      */
-    fun isArrayAlternate(): Boolean =
+    public fun isArrayAlternate(): Boolean =
         getOption(ARRAY_ALTERNATE)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setArrayAlternate(value: Boolean): PropertyOptions {
+    public fun setArrayAlternate(value: Boolean): PropertyOptions {
         setOption(ARRAY_ALTERNATE, value)
         return this
     }
@@ -178,14 +178,14 @@ public class PropertyOptions : Options {
      * getPropArrayIsAlternate(). It is serialized using an <tt>rdf:Alt</tt> container.
      * Each array element is a simple property with an <tt>xml:lang</tt> attribute.
      */
-    fun isArrayAltText(): Boolean =
+    public fun isArrayAltText(): Boolean =
         getOption(ARRAY_ALT_TEXT)
 
     /**
      * @param value the value to set
      * @return Returns this to enable cascaded options.
      */
-    fun setArrayAltText(value: Boolean): PropertyOptions {
+    public fun setArrayAltText(value: Boolean): PropertyOptions {
         setOption(ARRAY_ALT_TEXT, value)
         return this
     }
@@ -193,14 +193,14 @@ public class PropertyOptions : Options {
     /**
      * @return Returns whether the SCHEMA_NODE option is set.
      */
-    fun isSchemaNode(): Boolean =
+    public fun isSchemaNode(): Boolean =
         getOption(SCHEMA_NODE)
 
     /**
      * @param value the option DELETE_EXISTING to set
      * @return Returns this to enable cascaded options.
      */
-    fun setSchemaNode(value: Boolean): PropertyOptions {
+    public fun setSchemaNode(value: Boolean): PropertyOptions {
         setOption(SCHEMA_NODE, value)
         return this
     }
@@ -208,13 +208,13 @@ public class PropertyOptions : Options {
     /**
      * @return Returns whether the property is of composite type - an array or a struct.
      */
-    fun isCompositeProperty(): Boolean =
+    public fun isCompositeProperty(): Boolean =
         getOptions() and (ARRAY or STRUCT) > 0
 
     /**
      * @return Returns whether the property is of composite type - an array or a struct.
      */
-    fun isSimple(): Boolean =
+    public fun isSimple(): Boolean =
         getOptions() and (ARRAY or STRUCT) == 0
 
     /**
@@ -223,7 +223,7 @@ public class PropertyOptions : Options {
      * @param options other options
      * @return Returns true if the array options of the sets are equal.
      */
-    fun equalArrayTypes(options: PropertyOptions): Boolean =
+    public fun equalArrayTypes(options: PropertyOptions): Boolean =
         isArray() == options.isArray() &&
             isArrayOrdered() == options.isArrayOrdered() &&
             isArrayAlternate() == options.isArrayAlternate() &&
@@ -235,14 +235,14 @@ public class PropertyOptions : Options {
      *
      * @param options other options
      */
-    fun mergeWith(options: PropertyOptions) {
+    public fun mergeWith(options: PropertyOptions) {
         setOptions(getOptions() or options.getOptions())
     }
 
     /**
      * @return Returns true if only array options are set.
      */
-    fun isOnlyArrayOptions(): Boolean =
+    public fun isOnlyArrayOptions(): Boolean =
         getOptions() and (ARRAY or ARRAY_ORDERED or ARRAY_ALTERNATE or ARRAY_ALT_TEXT).inv() == 0
 
     /**
@@ -287,7 +287,7 @@ public class PropertyOptions : Options {
             throw XMPException("Structs and arrays can't have \"value\" options", XMPErrorConst.BADOPTIONS)
     }
 
-    companion object {
+    internal companion object {
 
         /**
          *

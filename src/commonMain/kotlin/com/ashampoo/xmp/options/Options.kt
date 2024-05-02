@@ -48,7 +48,7 @@ public abstract class Options {
      * @param optionBits the binary bit or bits that shall be set to the given value
      * @param value      the boolean value to set
      */
-    fun setOption(optionBits: Int, value: Boolean) {
+    public fun setOption(optionBits: Int, value: Boolean) {
         this.valueBits = if (value)
             this.valueBits or optionBits
         else
@@ -60,9 +60,9 @@ public abstract class Options {
      *
      * @return Returns the options.
      */
-    fun getOptions(): Int = valueBits
+    public fun getOptions(): Int = valueBits
 
-    fun setOptions(options: Int) {
+    public fun setOptions(options: Int) {
 
         assertOptionsValid(options)
 
@@ -99,7 +99,7 @@ public abstract class Options {
      * @param options the bitmask to check.
      *
      */
-    protected open fun assertConsistency(options: Int) = Unit // empty, no checks
+    protected open fun assertConsistency(options: Int): Unit = Unit // empty, no checks
 
     /**
      * Checks options before they are set.

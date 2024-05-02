@@ -13,46 +13,46 @@ package com.ashampoo.xmp.options
  */
 public class AliasOptions : Options {
 
-    constructor() : super()
+    public constructor() : super()
 
-    constructor(options: Int) : super(options)
+    internal constructor(options: Int) : super(options)
 
-    fun isSimple(): Boolean =
+    public fun isSimple(): Boolean =
         getOptions() == PROP_DIRECT
 
-    fun isArray(): Boolean =
+    public fun isArray(): Boolean =
         getOption(PROP_ARRAY)
 
-    fun setArray(value: Boolean): AliasOptions {
+    public fun setArray(value: Boolean): AliasOptions {
         setOption(PROP_ARRAY, value)
         return this
     }
 
-    fun isArrayOrdered(): Boolean =
+    public fun isArrayOrdered(): Boolean =
         getOption(PROP_ARRAY_ORDERED)
 
-    fun setArrayOrdered(value: Boolean): AliasOptions {
+    public fun setArrayOrdered(value: Boolean): AliasOptions {
         setOption(PROP_ARRAY or PROP_ARRAY_ORDERED, value)
         return this
     }
 
-    fun isArrayAlternate(): Boolean =
+    public fun isArrayAlternate(): Boolean =
         getOption(PROP_ARRAY_ALTERNATE)
 
-    fun setArrayAlternate(value: Boolean): AliasOptions {
+    public fun setArrayAlternate(value: Boolean): AliasOptions {
         setOption(PROP_ARRAY or PROP_ARRAY_ORDERED or PROP_ARRAY_ALTERNATE, value)
         return this
     }
 
-    fun isArrayAltText(): Boolean =
+    public fun isArrayAltText(): Boolean =
         getOption(PROP_ARRAY_ALT_TEXT)
 
-    fun setArrayAltText(value: Boolean): AliasOptions {
+    public fun setArrayAltText(value: Boolean): AliasOptions {
         setOption(PROP_ARRAY or PROP_ARRAY_ORDERED or PROP_ARRAY_ALTERNATE or PROP_ARRAY_ALT_TEXT, value)
         return this
     }
 
-    fun toPropertyOptions(): PropertyOptions =
+    public fun toPropertyOptions(): PropertyOptions =
         PropertyOptions(getOptions())
 
     protected override fun defineOptionName(option: Int): String? {
@@ -69,7 +69,7 @@ public class AliasOptions : Options {
     protected override fun getValidOptions(): Int =
         PROP_DIRECT or PROP_ARRAY or PROP_ARRAY_ORDERED or PROP_ARRAY_ALTERNATE or PROP_ARRAY_ALT_TEXT
 
-    companion object {
+    internal companion object {
 
         const val PROP_DIRECT = 0
 

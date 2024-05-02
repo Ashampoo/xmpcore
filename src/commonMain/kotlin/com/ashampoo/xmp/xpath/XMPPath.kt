@@ -11,7 +11,7 @@ package com.ashampoo.xmp.xpath
 /**
  * Representates an XMP XMPPath with segment accessor methods.
  */
-class XMPPath {
+internal class XMPPath {
 
     private val segments = mutableListOf<XMPPathSegment>()
 

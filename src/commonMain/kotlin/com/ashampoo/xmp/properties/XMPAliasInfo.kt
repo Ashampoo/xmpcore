@@ -13,22 +13,22 @@ import com.ashampoo.xmp.options.AliasOptions
 /**
  * This interface is used to return info about an alias.
  */
-interface XMPAliasInfo {
+public interface XMPAliasInfo {
 
     /**
      * @return Returns the namespace URI for the base property.
      */
-    fun getNamespace(): String
+    public fun getNamespace(): String
 
     /**
      * @return Returns the default prefix for the given base property.
      */
-    fun getPrefix(): String
+    public fun getPrefix(): String
 
     /**
      * @return Returns the path of the base property.
      */
-    fun getPropName(): String
+    public fun getPropName(): String
 
     /**
      * @return Returns the kind of the alias. This can be a direct alias
@@ -37,6 +37,6 @@ interface XMPAliasInfo {
      * (ARRAY_ALTERNATE) or to an alternate text array
      * (ARRAY_ALT_TEXT).
      */
-    fun getAliasForm(): AliasOptions
+    public fun getAliasForm(): AliasOptions
 
 }

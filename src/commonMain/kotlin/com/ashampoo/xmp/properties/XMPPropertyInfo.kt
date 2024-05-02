@@ -14,17 +14,17 @@ import com.ashampoo.xmp.options.PropertyOptions
  * This interface is used to return a property together with its path and namespace.
  * It is returned when properties are iterated with the <code>XMPIterator</code>.
  */
-interface XMPPropertyInfo : XMPProperty {
+public interface XMPPropertyInfo : XMPProperty {
 
     /**
      * @return Returns the namespace of the property
      */
-    fun getNamespace(): String
+    public fun getNamespace(): String
 
     /**
      * @return Returns the path of the property, but only if returned by the iterator.
      */
-    fun getPath(): String
+    public fun getPath(): String
 
     /**
      * @return Returns the value of the property.
