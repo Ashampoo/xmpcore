@@ -21,6 +21,7 @@ import com.ashampoo.xmp.options.PropertyOptions
 /**
  * Utilities for `XMPNode`.
  */
+@Suppress("TooManyFunctions")
 internal object XMPNodeUtils {
 
     const val CLT_NO_VALUES = 0

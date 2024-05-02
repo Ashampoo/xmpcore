@@ -22,7 +22,7 @@ internal object XMPNormalizer {
     /**
      * caches the correct dc-property array forms
      */
-    private val dcArrayForms: Map<String, PropertyOptions> = createDCArrays()
+    private val dcArrayForms = createDCArrays()
 
     /**
      * Normalizes a raw parsed XMPMeta-Object
