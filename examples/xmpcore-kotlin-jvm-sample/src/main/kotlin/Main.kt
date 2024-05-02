@@ -40,6 +40,7 @@ fun main() {
     println("---")
     println(xmp)
 
+    /* language=XML */
     val oldXmp =
         """
                   <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="">

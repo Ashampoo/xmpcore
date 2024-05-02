@@ -115,6 +115,7 @@ class WriteXmpTest {
     @Test
     fun testUpdateXmp() {
 
+        /* language=XML */
         val existingXmp = """
             <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
               <rdf:Description rdf:about=""
