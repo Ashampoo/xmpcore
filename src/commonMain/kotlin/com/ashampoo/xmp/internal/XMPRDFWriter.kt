@@ -6,9 +6,14 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
-import com.ashampoo.xmp.Utils.escapeXML
+import com.ashampoo.xmp.XMPConst
+import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.XMPMeta
+import com.ashampoo.xmp.XMPSchemaRegistry
+import com.ashampoo.xmp.XMPVersionInfo
+import com.ashampoo.xmp.internal.Utils.escapeXML
 import com.ashampoo.xmp.options.SerializeOptions
 
 /**
@@ -73,7 +78,7 @@ internal object XMPRDFWriter {
             return sb.toString()
 
         } catch (ex: Exception) {
-            throw XMPException("Error writing the XMP", XMPError.UNKNOWN, ex)
+            throw XMPException("Error writing the XMP", XMPErrorConst.UNKNOWN, ex)
         }
     }
 
@@ -467,7 +472,7 @@ internal object XMPRDFWriter {
         }
 
         if (hasRDFResourceQual && hasElemFields)
-            throw XMPException("Can't mix rdf:resource qualifier and element fields", XMPError.BADRDF)
+            throw XMPException("Can't mix rdf:resource qualifier and element fields", XMPErrorConst.BADRDF)
 
         when {
 
@@ -634,9 +639,9 @@ internal object XMPRDFWriter {
         if (actualNamespace == null) {
 
             // prefix contains qname, extract prefix and lookup namespace with prefix
-            val qname = QName(actualPrefix)
+            val qname = QName.parse(actualPrefix)
 
-            if (!qname.hasPrefix())
+            if (!qname.hasPrefix)
                 return
 
             actualPrefix = qname.prefix!!
@@ -773,7 +778,7 @@ internal object XMPRDFWriter {
             // ! The value is output by a recursive call ON THE SAME NODE with
             // emitAsRDFValue set.
             if (hasRDFResourceQual)
-                throw XMPException("Can't mix rdf:resource and general qualifiers", XMPError.BADRDF)
+                throw XMPException("Can't mix rdf:resource and general qualifiers", XMPErrorConst.BADRDF)
 
             // Change serialization to canonical format with inner rdf:Description-tag
             // depending on option
@@ -943,7 +948,7 @@ internal object XMPRDFWriter {
                     for (child in node.getChildren()) {
 
                         if (!canBeRDFAttrProp(child))
-                            throw XMPException("Can't mix rdf:resource and complex fields", XMPError.BADRDF)
+                            throw XMPException("Can't mix rdf:resource and complex fields", XMPErrorConst.BADRDF)
 
                         sb.append(XMP_DEFAULT_NEWLINE)
                         writeIndent(sb, actualIndent + 1)

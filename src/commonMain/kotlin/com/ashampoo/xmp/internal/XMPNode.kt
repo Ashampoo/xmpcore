@@ -6,15 +6,16 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
+import com.ashampoo.xmp.XMPConst
 import com.ashampoo.xmp.options.PropertyOptions
 
 /**
  * A node in the internally XMP tree, which can be a schema node, a property node, an array node,
  * an array item, a struct node or a qualifier node (without '?').
  */
-class XMPNode(
+internal class XMPNode(
 
     /**
      * name of the node, contains different information depending of the node kind
@@ -33,16 +34,16 @@ class XMPNode(
 
 ) : Comparable<XMPNode> {
 
-    var parent: XMPNode? = null
+    internal var parent: XMPNode? = null
     private var children: MutableList<XMPNode>? = null
     private var qualifier: MutableList<XMPNode>? = null
 
     /* Internal processing options */
 
-    var isImplicit = false
-    var hasAliases = false
-    var isAlias = false
-    var hasValueChild = false
+    var isImplicit: Boolean = false
+    var hasAliases: Boolean = false
+    var isAlias: Boolean = false
+    var hasValueChild: Boolean = false
 
     fun clear() {
         name = null

@@ -11,12 +11,12 @@ package com.ashampoo.xmp.options
 /**
  * Options for [XMPMetaFactory.serializeToBuffer].
  */
-class SerializeOptions : Options {
+public class SerializeOptions : Options {
 
     /**
      * Default constructor.
      */
-    constructor()
+    public constructor()
 
     /**
      * Constructor using inital options
@@ -24,76 +24,76 @@ class SerializeOptions : Options {
      * @param options the inital options
      *
      */
-    constructor(options: Int) : super(options)
+    internal constructor(options: Int) : super(options)
 
-    fun getOmitPacketWrapper(): Boolean =
+    public fun getOmitPacketWrapper(): Boolean =
         getOption(OMIT_PACKET_WRAPPER)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setOmitPacketWrapper(value: Boolean): SerializeOptions {
+    public fun setOmitPacketWrapper(value: Boolean): SerializeOptions {
         setOption(OMIT_PACKET_WRAPPER, value)
         return this
     }
 
-    fun getOmitXmpMetaElement(): Boolean =
+    public fun getOmitXmpMetaElement(): Boolean =
         getOption(OMIT_XMPMETA_ELEMENT)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setOmitXmpMetaElement(value: Boolean): SerializeOptions {
+    public fun setOmitXmpMetaElement(value: Boolean): SerializeOptions {
         setOption(OMIT_XMPMETA_ELEMENT, value)
         return this
     }
 
-    fun getReadOnlyPacket(): Boolean =
+    public fun getReadOnlyPacket(): Boolean =
         getOption(READONLY_PACKET)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setReadOnlyPacket(value: Boolean): SerializeOptions {
+    public fun setReadOnlyPacket(value: Boolean): SerializeOptions {
         setOption(READONLY_PACKET, value)
         return this
     }
 
-    fun getUseCompactFormat(): Boolean =
+    public fun getUseCompactFormat(): Boolean =
         getOption(USE_COMPACT_FORMAT)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setUseCompactFormat(value: Boolean): SerializeOptions {
+    public fun setUseCompactFormat(value: Boolean): SerializeOptions {
         setOption(USE_COMPACT_FORMAT, value)
         return this
     }
 
-    fun getUseCanonicalFormat(): Boolean =
+    public fun getUseCanonicalFormat(): Boolean =
         getOption(USE_CANONICAL_FORMAT)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setUseCanonicalFormat(value: Boolean): SerializeOptions {
+    public fun setUseCanonicalFormat(value: Boolean): SerializeOptions {
         setOption(USE_CANONICAL_FORMAT, value)
         return this
     }
 
-    fun getSort(): Boolean =
+    public fun getSort(): Boolean =
         getOption(SORT)
 
     /**
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setSort(value: Boolean): SerializeOptions {
+    public fun setSort(value: Boolean): SerializeOptions {
         setOption(SORT, value)
         return this
     }
@@ -101,7 +101,7 @@ class SerializeOptions : Options {
     /**
      * @return Returns clone of this SerializeOptions-object with the same options set.
      */
-    fun clone(): SerializeOptions =
+    public fun clone(): SerializeOptions =
         SerializeOptions(getOptions())
 
     /**
@@ -124,7 +124,7 @@ class SerializeOptions : Options {
     override fun getValidOptions(): Int =
         OMIT_PACKET_WRAPPER or READONLY_PACKET or USE_COMPACT_FORMAT or OMIT_XMPMETA_ELEMENT or SORT
 
-    companion object {
+    internal companion object {
 
         /**
          * Omit the XML packet wrapper.

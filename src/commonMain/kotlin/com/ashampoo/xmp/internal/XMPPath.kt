@@ -6,12 +6,12 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.xpath
+package com.ashampoo.xmp.internal
 
 /**
  * Representates an XMP XMPPath with segment accessor methods.
  */
-class XMPPath {
+internal class XMPPath {
 
     private val segments = mutableListOf<XMPPathSegment>()
 

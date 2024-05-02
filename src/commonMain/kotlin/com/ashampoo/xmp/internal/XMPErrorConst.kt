@@ -6,9 +6,9 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
-object XMPError {
+internal object XMPErrorConst {
 
     const val EMPTY_ARRAY_NAME_TEXT: String = "Empty array name"
     const val EMPTY_SCHEMA_TEXT: String = "Empty schema namespace URI"

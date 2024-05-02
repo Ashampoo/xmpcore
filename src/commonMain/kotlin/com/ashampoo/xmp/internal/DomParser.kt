@@ -1,12 +1,13 @@
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
+import com.ashampoo.xmp.XMPException
 import nl.adaptivity.xmlutil.DomWriter
 import nl.adaptivity.xmlutil.EventType
 import nl.adaptivity.xmlutil.dom.Document
 import nl.adaptivity.xmlutil.writeCurrent
 import nl.adaptivity.xmlutil.xmlStreaming
 
-object DomParser {
+internal object DomParser {
 
     private const val RDF_RDF_END = "</rdf:RDF>"
 
@@ -46,7 +47,7 @@ object DomParser {
             return writer.target
 
         } catch (ex: Exception) {
-            throw XMPException("Error reading the XML file: ${ex.message}", XMPError.BADSTREAM, ex)
+            throw XMPException("Error reading the XML file: ${ex.message}", XMPErrorConst.BADSTREAM, ex)
         }
     }
 }

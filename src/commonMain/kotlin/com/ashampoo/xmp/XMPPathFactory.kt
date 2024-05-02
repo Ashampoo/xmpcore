@@ -8,8 +8,10 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.xpath.XMPPath
-import com.ashampoo.xmp.xpath.XMPPathParser
+import com.ashampoo.xmp.internal.Utils
+import com.ashampoo.xmp.internal.XMPErrorConst
+import com.ashampoo.xmp.internal.XMPPath
+import com.ashampoo.xmp.internal.XMPPathParser
 
 /**
  * Utility services for the metadata object. It has only public static functions, you cannot create
@@ -33,7 +35,7 @@ import com.ashampoo.xmp.xpath.XMPPathParser
  *
  * *Note:* These methods are much simpler than in the C++-API, they don't check the given path or array indices.
  */
-object XMPPathFactory {
+public object XMPPathFactory {
 
     /**
      * Compose the path expression for an item in an array.
@@ -47,7 +49,7 @@ object XMPPathFactory {
      *         &quot;i&quot; is the decimal representation of itemIndex.
      */
     @kotlin.jvm.JvmStatic
-    fun composeArrayItemPath(arrayName: String, itemIndex: Int): String {
+    public fun composeArrayItemPath(arrayName: String, itemIndex: Int): String {
 
         if (itemIndex > 0)
             return "$arrayName[$itemIndex]"
@@ -55,7 +57,7 @@ object XMPPathFactory {
         if (itemIndex == XMPConst.ARRAY_LAST_ITEM)
             return "$arrayName[last()]"
 
-        throw XMPException("Array index must be larger than zero", XMPError.BADINDEX)
+        throw XMPException("Array index must be larger than zero", XMPErrorConst.BADINDEX)
     }
 
     /**
@@ -70,18 +72,18 @@ object XMPPathFactory {
      *         schemaNS and &quot;fNS&quot; is the prefix for fieldNS.
      */
     @kotlin.jvm.JvmStatic
-    fun composeStructFieldPath(fieldNS: String, fieldName: String): String {
+    public fun composeStructFieldPath(fieldNS: String, fieldName: String): String {
 
         if (fieldNS.isEmpty())
-            throw XMPException("Empty field namespace URI", XMPError.BADSCHEMA)
+            throw XMPException("Empty field namespace URI", XMPErrorConst.BADSCHEMA)
 
         if (fieldName.isEmpty())
-            throw XMPException("Empty field name", XMPError.BADXPATH)
+            throw XMPException("Empty field name", XMPErrorConst.BADXPATH)
 
         val fieldPath = XMPPathParser.expandXPath(fieldNS, fieldName)
 
         if (fieldPath.size() != 2)
-            throw XMPException("The field name must be simple", XMPError.BADXPATH)
+            throw XMPException("The field name must be simple", XMPErrorConst.BADXPATH)
 
         return '/'.toString() + fieldPath.getSegment(XMPPath.STEP_ROOT_PROP).name
     }
@@ -98,18 +100,18 @@ object XMPPathFactory {
      *         schemaNS and &quot;qNS&quot; is the prefix for qualNS.
      */
     @kotlin.jvm.JvmStatic
-    fun composeQualifierPath(qualNS: String, qualName: String): String {
+    public fun composeQualifierPath(qualNS: String, qualName: String): String {
 
         if (qualNS.isEmpty())
-            throw XMPException("Empty qualifier namespace URI", XMPError.BADSCHEMA)
+            throw XMPException("Empty qualifier namespace URI", XMPErrorConst.BADSCHEMA)
 
         if (qualName.isEmpty())
-            throw XMPException("Empty qualifier name", XMPError.BADXPATH)
+            throw XMPException("Empty qualifier name", XMPErrorConst.BADXPATH)
 
         val qualPath = XMPPathParser.expandXPath(qualNS, qualName)
 
         if (qualPath.size() != 2)
-            throw XMPException("The qualifier name must be simple", XMPError.BADXPATH)
+            throw XMPException("The qualifier name must be simple", XMPErrorConst.BADXPATH)
 
         return "/?" + qualPath.getSegment(XMPPath.STEP_ROOT_PROP).name
     }
@@ -135,7 +137,7 @@ object XMPPathFactory {
      *         <tt>ns:arrayName[@xml:lang='langName']</tt>, where
      *         &quot;ns&quot; is the prefix for schemaNS.
      */
-    fun composeLangSelector(arrayName: String, langName: String): String =
+    public fun composeLangSelector(arrayName: String, langName: String): String =
         arrayName + "[?xml:lang=\"" + Utils.normalizeLangValue(langName) + "\"]"
 
     /**
@@ -160,7 +162,7 @@ object XMPPathFactory {
      *         <tt>ns:arrayName[fNS:fieldName='fieldValue']</tt>, where &quot;ns&quot; is the
      *         prefix for schemaNS and &quot;fNS&quot; is the prefix for fieldNS.
      */
-    fun composeFieldSelector(
+    public fun composeFieldSelector(
         arrayName: String,
         fieldNS: String?,
         fieldName: String?,
@@ -170,7 +172,7 @@ object XMPPathFactory {
         val fieldPath = XMPPathParser.expandXPath(fieldNS, fieldName)
 
         if (fieldPath.size() != 2)
-            throw XMPException("The fieldName name must be simple", XMPError.BADXPATH)
+            throw XMPException("The fieldName name must be simple", XMPErrorConst.BADXPATH)
 
         return arrayName +
             '[' + fieldPath.getSegment(XMPPath.STEP_ROOT_PROP).name + "=\"" + fieldValue + "\"]"

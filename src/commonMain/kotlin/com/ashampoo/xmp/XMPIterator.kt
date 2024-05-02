@@ -8,13 +8,15 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
-import com.ashampoo.xmp.XMPNodeUtils.findNode
-import com.ashampoo.xmp.XMPNodeUtils.findSchemaNode
+import com.ashampoo.xmp.internal.QName
+import com.ashampoo.xmp.internal.XMPErrorConst
+import com.ashampoo.xmp.internal.XMPNode
+import com.ashampoo.xmp.internal.XMPNodeUtils.findNode
+import com.ashampoo.xmp.internal.XMPNodeUtils.findSchemaNode
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import com.ashampoo.xmp.properties.XMPPropertyInfo
-import com.ashampoo.xmp.xpath.XMPPath
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.internal.XMPPath
+import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 
 /**
  * Interface for the `XMPMeta` iteration services.
@@ -66,7 +68,7 @@ import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
  * a `NoSuchElementException` if there are no more properties to
  * return.
  */
-class XMPIterator(
+public class XMPIterator(
     xmp: XMPMeta,
     schemaNS: String?,
     propPath: String?,
@@ -151,7 +153,7 @@ class XMPIterator(
 
                 // !baseSchema  &&  baseProperty
                 // No schema but property provided -> error
-                throw XMPException("Schema namespace URI is required", XMPError.BADSCHEMA)
+                throw XMPException("Schema namespace URI is required", XMPErrorConst.BADSCHEMA)
             }
         }
 
@@ -173,7 +175,7 @@ class XMPIterator(
      * Skip the subtree below the current node when `next()` is
      * called.
      */
-    fun skipSubtree() {
+    public fun skipSubtree() {
         skipSubtree = true
     }
 
@@ -181,7 +183,7 @@ class XMPIterator(
      * Skip the subtree below and remaining siblings of the current node when
      * `next()` is called.
      */
-    fun skipSiblings() {
+    public fun skipSiblings() {
         skipSubtree()
         skipSiblings = true
     }
@@ -437,8 +439,8 @@ class XMPIterator(
                     if (node.options.isSchemaNode())
                         return baseNS
 
-                    // determine namespace of leaf node
-                    val qname = QName(node.name!!)
+                    /* determine namespace of leaf node */
+                    val qname = QName.parse(node.name!!)
 
                     return XMPSchemaRegistry.getNamespaceURI(qname.prefix!!)!!
                 }
@@ -449,7 +451,7 @@ class XMPIterator(
 
                 override fun getOptions(): PropertyOptions = node.options
 
-                // the language is not reported
+                /* the language is not reported */
                 override fun getLanguage(): String? = null
             }
         }
@@ -521,7 +523,7 @@ class XMPIterator(
         }
     }
 
-    companion object {
+    private companion object {
 
         /**
          * iteration state

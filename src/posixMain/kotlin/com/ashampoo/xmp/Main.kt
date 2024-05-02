@@ -11,7 +11,7 @@ private val xmpSerializeOptionsCompact =
         .setUseCanonicalFormat(false)
         .setSort(true)
 
-fun main(args: Array<String>) {
+public fun main(args: Array<String>) {
 
     if (args.size != 1) {
         println("USAGE: Must be called with one argument.")

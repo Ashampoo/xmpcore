@@ -6,12 +6,14 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
+
+import com.ashampoo.xmp.XMPConst
 
 /**
  * Utility functions for the XMPToolkit implementation.
  */
-object Utils {
+internal object Utils {
 
     /**
      * segments of a UUID

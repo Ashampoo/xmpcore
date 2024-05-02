@@ -8,27 +8,29 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
+import com.ashampoo.xmp.internal.XMPMetaParser
+import com.ashampoo.xmp.internal.XMPRDFWriter
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.SerializeOptions
 
 /**
  * Creates `XMPMeta`-instances from an `InputStream`
  */
-object XMPMetaFactory {
+public object XMPMetaFactory {
 
     @kotlin.jvm.JvmStatic
-    val schemaRegistry = XMPSchemaRegistry
+    public val schemaRegistry: XMPSchemaRegistry = XMPSchemaRegistry
 
     @kotlin.jvm.JvmStatic
-    val versionInfo = XMPVersionInfo
+    public val versionInfo: XMPVersionInfo = XMPVersionInfo
 
     @kotlin.jvm.JvmStatic
-    fun create(): XMPMeta = XMPMeta()
+    public fun create(): XMPMeta = XMPMeta()
 
     @kotlin.jvm.JvmStatic
     @kotlin.jvm.JvmOverloads
     @Throws(XMPException::class)
-    fun parseFromString(
+    public fun parseFromString(
         packet: String,
         options: ParseOptions? = null
     ): XMPMeta =
@@ -37,7 +39,7 @@ object XMPMetaFactory {
     @kotlin.jvm.JvmStatic
     @kotlin.jvm.JvmOverloads
     @Throws(XMPException::class)
-    fun serializeToString(
+    public fun serializeToString(
         xmp: XMPMeta,
         options: SerializeOptions? = null
     ): String {

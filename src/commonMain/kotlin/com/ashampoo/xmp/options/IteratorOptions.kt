@@ -11,30 +11,30 @@ package com.ashampoo.xmp.options
 /**
  * Options for XMPIterator construction.
  */
-class IteratorOptions : Options() {
+public class IteratorOptions : Options() {
 
     /**
      * @return Returns whether the option is set.
      */
-    fun isJustChildren(): Boolean =
+    public fun isJustChildren(): Boolean =
         getOption(JUST_CHILDREN)
 
     /**
      * @return Returns whether the option is set.
      */
-    fun isJustLeafname(): Boolean =
+    public fun isJustLeafname(): Boolean =
         getOption(JUST_LEAFNAME)
 
     /**
      * @return Returns whether the option is set.
      */
-    fun isJustLeafnodes(): Boolean =
+    public fun isJustLeafnodes(): Boolean =
         getOption(JUST_LEAFNODES)
 
     /**
      * @return Returns whether the option is set.
      */
-    fun isOmitQualifiers(): Boolean =
+    public fun isOmitQualifiers(): Boolean =
         getOption(OMIT_QUALIFIERS)
 
     /**
@@ -43,7 +43,7 @@ class IteratorOptions : Options() {
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setJustChildren(value: Boolean): IteratorOptions {
+    public fun setJustChildren(value: Boolean): IteratorOptions {
         setOption(JUST_CHILDREN, value)
         return this
     }
@@ -54,7 +54,7 @@ class IteratorOptions : Options() {
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setJustLeafname(value: Boolean): IteratorOptions {
+    public fun setJustLeafname(value: Boolean): IteratorOptions {
         setOption(JUST_LEAFNAME, value)
         return this
     }
@@ -65,7 +65,7 @@ class IteratorOptions : Options() {
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setJustLeafnodes(value: Boolean): IteratorOptions {
+    public fun setJustLeafnodes(value: Boolean): IteratorOptions {
         setOption(JUST_LEAFNODES, value)
         return this
     }
@@ -76,7 +76,7 @@ class IteratorOptions : Options() {
      * @param value the value to set
      * @return Returns the instance to call more set-methods.
      */
-    fun setOmitQualifiers(value: Boolean): IteratorOptions {
+    public fun setOmitQualifiers(value: Boolean): IteratorOptions {
         setOption(OMIT_QUALIFIERS, value)
         return this
     }
@@ -103,7 +103,7 @@ class IteratorOptions : Options() {
     /**
      * Just do the immediate children of the root, default is subtree.
      */
-    companion object {
+    internal companion object {
 
         const val JUST_CHILDREN = 0x0100
 

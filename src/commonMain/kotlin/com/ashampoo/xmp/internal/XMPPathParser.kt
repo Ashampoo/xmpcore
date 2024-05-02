@@ -6,17 +6,15 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp.xpath
+package com.ashampoo.xmp.internal
 
-import com.ashampoo.xmp.Utils
-import com.ashampoo.xmp.XMPError
 import com.ashampoo.xmp.XMPException
 import com.ashampoo.xmp.XMPMetaFactory.schemaRegistry
 
 /**
  * Parser for XMP XPaths.
  */
-object XMPPathParser {
+internal object XMPPathParser {
 
     /**
      * Split an XMPPath expression apart at the conceptual steps, adding the
@@ -42,7 +40,7 @@ object XMPPathParser {
     fun expandXPath(schemaNS: String?, path: String?): XMPPath {
 
         if (schemaNS == null || path == null)
-            throw XMPException("Parameter must not be null", XMPError.BADPARAM)
+            throw XMPException("Parameter must not be null", XMPErrorConst.BADPARAM)
 
         val expandedXPath = XMPPath()
 
@@ -85,7 +83,7 @@ object XMPPathParser {
                     segment.name = "?" + segment.name!!.substring(1)
 
                     if ("?xml:lang" != segment.name)
-                        throw XMPException("Only xml:lang allowed with '@'", XMPError.BADXPATH)
+                        throw XMPException("Only xml:lang allowed with '@'", XMPErrorConst.BADXPATH)
                 }
 
                 if (segment.name!![0] == '?') {
@@ -104,7 +102,7 @@ object XMPPathParser {
                     segment.name = "[?" + segment.name!!.substring(2)
 
                     if (!segment.name!!.startsWith("[?xml:lang="))
-                        throw XMPException("Only xml:lang allowed with '@'", XMPError.BADXPATH)
+                        throw XMPException("Only xml:lang allowed with '@'", XMPErrorConst.BADXPATH)
                 }
 
                 if (segment.name!![1] == '?') {
@@ -131,7 +129,7 @@ object XMPPathParser {
             pos.stepBegin++
 
             if (pos.stepBegin >= path.length)
-                throw XMPException("Empty XMPPath segment", XMPError.BADXPATH)
+                throw XMPException("Empty XMPPath segment", XMPErrorConst.BADXPATH)
         }
 
         if (path[pos.stepBegin] == '*') {
@@ -140,7 +138,7 @@ object XMPPathParser {
             pos.stepBegin++
 
             if (pos.stepBegin >= path.length || path[pos.stepBegin] != '[')
-                throw XMPException("Missing '[' after '*'", XMPError.BADXPATH)
+                throw XMPException("Missing '[' after '*'", XMPErrorConst.BADXPATH)
         }
     }
 
@@ -154,7 +152,7 @@ object XMPPathParser {
         pos.nameEnd = pos.stepEnd
 
         if (pos.stepEnd == pos.stepBegin)
-            throw XMPException("Empty XMPPath segment", XMPError.BADXPATH)
+            throw XMPException("Empty XMPPath segment", XMPErrorConst.BADXPATH)
 
         return XMPPathSegment(
             pos.path!!.substring(pos.stepBegin, pos.stepEnd),
@@ -193,12 +191,12 @@ object XMPPathParser {
                 pos.stepEnd++
 
             if (pos.stepEnd >= pos.path!!.length)
-                throw XMPException("Missing ']' or '=' for array index", XMPError.BADXPATH)
+                throw XMPException("Missing ']' or '=' for array index", XMPErrorConst.BADXPATH)
 
             if (pos.path!![pos.stepEnd] == ']') {
 
                 if ("[last()" != pos.path!!.substring(pos.stepBegin, pos.stepEnd))
-                    throw XMPException("Invalid non-numeric array index", XMPError.BADXPATH)
+                    throw XMPException("Invalid non-numeric array index", XMPErrorConst.BADXPATH)
 
                 segment = XMPPathSegment(null, XMPPath.ARRAY_LAST_STEP)
 
@@ -213,7 +211,7 @@ object XMPPathParser {
                 val quote = pos.path!![pos.stepEnd]
 
                 if (quote != '\'' && quote != '"')
-                    throw XMPException("Invalid quote in array selector", XMPError.BADXPATH)
+                    throw XMPException("Invalid quote in array selector", XMPErrorConst.BADXPATH)
 
                 /* Absorb the leading quote */
                 pos.stepEnd++
@@ -233,7 +231,7 @@ object XMPPathParser {
                 }
 
                 if (pos.stepEnd >= pos.path!!.length)
-                    throw XMPException("No terminating quote for array selector", XMPError.BADXPATH)
+                    throw XMPException("No terminating quote for array selector", XMPErrorConst.BADXPATH)
 
                 /* Absorb the trailing quote. */
                 pos.stepEnd++
@@ -244,7 +242,7 @@ object XMPPathParser {
         }
 
         if (pos.stepEnd >= pos.path!!.length || pos.path!![pos.stepEnd] != ']')
-            throw XMPException("Missing ']' for array index", XMPError.BADXPATH)
+            throw XMPException("Missing ']' for array index", XMPErrorConst.BADXPATH)
 
         pos.stepEnd++
 
@@ -263,7 +261,7 @@ object XMPPathParser {
             pos.stepEnd++
 
         if (pos.stepEnd == pos.stepBegin)
-            throw XMPException("Empty initial XMPPath step", XMPError.BADXPATH)
+            throw XMPException("Empty initial XMPPath step", XMPErrorConst.BADXPATH)
 
         val rootProp = verifyXPathRoot(schemaNS, pos.path!!.substring(pos.stepBegin, pos.stepEnd))
         val aliasInfo = schemaRegistry.findAlias(rootProp)
@@ -333,11 +331,11 @@ object XMPPathParser {
                 if (regURI != null)
                     return
 
-                throw XMPException("Unknown namespace prefix for qualified name", XMPError.BADXPATH)
+                throw XMPException("Unknown namespace prefix for qualified name", XMPErrorConst.BADXPATH)
             }
         }
 
-        throw XMPException("Ill-formed qualified name: $qualName", XMPError.BADXPATH)
+        throw XMPException("Ill-formed qualified name: $qualName", XMPErrorConst.BADXPATH)
     }
 
     /**
@@ -346,7 +344,7 @@ object XMPPathParser {
     private fun verifySimpleXMLName(name: String) {
 
         if (!Utils.isXMLName(name))
-            throw XMPException("Bad XML name", XMPError.BADXPATH)
+            throw XMPException("Bad XML name", XMPErrorConst.BADXPATH)
     }
 
     /**
@@ -360,19 +358,19 @@ object XMPPathParser {
 
         /* Do some basic checks on the URI and name. Try to look up the URI. See if the name is qualified. */
         if (schemaNS.isNullOrEmpty())
-            throw XMPException("Schema namespace URI is required", XMPError.BADSCHEMA)
+            throw XMPException("Schema namespace URI is required", XMPErrorConst.BADSCHEMA)
 
         if (rootProp[0] == '?' || rootProp[0] == '@')
             throw XMPException(
                 "Top level name must not be a qualifier, but was '$rootProp'",
-                XMPError.BADXPATH
+                XMPErrorConst.BADXPATH
             )
 
         if (rootProp.indexOf('/') >= 0 || rootProp.indexOf('[') >= 0)
-            throw XMPException("Top level name must be simple, but was '$rootProp'", XMPError.BADXPATH)
+            throw XMPException("Top level name must be simple, but was '$rootProp'", XMPErrorConst.BADXPATH)
 
         var prefix = schemaRegistry.getNamespacePrefix(schemaNS)
-            ?: throw XMPException("Unregistered schema namespace URI: $schemaNS", XMPError.BADSCHEMA)
+            ?: throw XMPException("Unregistered schema namespace URI: $schemaNS", XMPErrorConst.BADSCHEMA)
 
         /* Verify the various URI and prefix combinations. Initialize the expanded XMPPath. */
         val colonPos = rootProp.indexOf(':')
@@ -400,10 +398,10 @@ object XMPPathParser {
             prefix = rootProp.substring(0, colonPos + 1)
 
             val regPrefix = schemaRegistry.getNamespacePrefix(schemaNS)
-                ?: throw XMPException("Unknown schema namespace prefix", XMPError.BADSCHEMA)
+                ?: throw XMPException("Unknown schema namespace prefix", XMPErrorConst.BADSCHEMA)
 
             if (prefix != regPrefix)
-                throw XMPException("Schema namespace URI and prefix mismatch", XMPError.BADSCHEMA)
+                throw XMPException("Schema namespace URI and prefix mismatch", XMPErrorConst.BADSCHEMA)
 
             rootProp
         }

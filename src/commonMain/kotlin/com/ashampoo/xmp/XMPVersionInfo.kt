@@ -5,14 +5,15 @@ package com.ashampoo.xmp
  * (which it is based on), but under it's real name and version number.
  */
 @Suppress("MagicNumber")
-object XMPVersionInfo {
+public object XMPVersionInfo {
 
-    const val MAJOR: Int = 1
-    const val MINOR: Int = 2
-    const val PATCH: Int = 2
+    public const val MAJOR: Int = 1
+    public const val MINOR: Int = 3
+    public const val PATCH: Int = 0
 
-    const val VERSION_MESSAGE = "Ashampoo XMP Core $MAJOR.$MINOR.$PATCH"
+    public const val VERSION_MESSAGE: String =
+        "Ashampoo XMP Core $MAJOR.$MINOR.$PATCH"
 
-    const val DEBUG: Boolean = false
+    public const val DEBUG: Boolean = false
 
 }

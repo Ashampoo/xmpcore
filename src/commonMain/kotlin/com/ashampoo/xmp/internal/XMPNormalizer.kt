@@ -6,19 +6,23 @@
 // NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the terms
 // of the Adobe license agreement accompanying it.
 // =================================================================================================
-package com.ashampoo.xmp
+package com.ashampoo.xmp.internal
 
-import com.ashampoo.xmp.Utils.checkUUIDFormat
+import com.ashampoo.xmp.XMPConst
+import com.ashampoo.xmp.XMPException
+import com.ashampoo.xmp.XMPMeta
+import com.ashampoo.xmp.XMPSchemaRegistry
+import com.ashampoo.xmp.internal.Utils.checkUUIDFormat
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import com.ashampoo.xmp.xpath.XMPPathParser.expandXPath
+import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 
 internal object XMPNormalizer {
 
     /**
      * caches the correct dc-property array forms
      */
-    private val dcArrayForms: Map<String, PropertyOptions> = createDCArrays()
+    private val dcArrayForms = createDCArrays()
 
     /**
      * Normalizes a raw parsed XMPMeta-Object
@@ -68,7 +72,7 @@ internal object XMPNormalizer {
                 val idNode = XMPNodeUtils.findNode(tree, path, true, null)
 
                 if (idNode == null)
-                    throw XMPException("Failure creating xmpMM:InstanceID", XMPError.INTERNALFAILURE)
+                    throw XMPException("Failure creating xmpMM:InstanceID", XMPErrorConst.INTERNALFAILURE)
 
                 /* Clobber any existing xmpMM:InstanceID */
                 idNode.options = PropertyOptions()
@@ -366,7 +370,7 @@ internal object XMPNormalizer {
 
             // *** Allow x-default.
             if (childNode.options.hasLanguage())
-                throw XMPException("Alias to x-default already has a language qualifier", XMPError.BADXMP)
+                throw XMPException("Alias to x-default already has a language qualifier", XMPErrorConst.BADXMP)
 
             val langQual = XMPNode(XMPConst.XML_LANG, XMPConst.X_DEFAULT)
 
@@ -417,7 +421,7 @@ internal object XMPNormalizer {
     ) {
 
         if (aliasNode.value != baseNode.value || aliasNode.getChildrenLength() != baseNode.getChildrenLength())
-            throw XMPException("Mismatch between alias and base nodes", XMPError.BADXMP)
+            throw XMPException("Mismatch between alias and base nodes", XMPErrorConst.BADXMP)
 
         if (!outerCall &&
             (
@@ -426,7 +430,7 @@ internal object XMPNormalizer {
                     aliasNode.getQualifierLength() != baseNode.getQualifierLength()
                 )
         )
-            throw XMPException("Mismatch between alias and base nodes", XMPError.BADXMP)
+            throw XMPException("Mismatch between alias and base nodes", XMPErrorConst.BADXMP)
 
         run {
             val an = aliasNode.iterateChildren()
