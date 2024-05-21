@@ -355,10 +355,9 @@ internal object XMPNormalizer {
     /**
      * Moves an alias node of array form to another schema into an array
      *
-     * @param removeChildFromTree lambda used to delete the property of the schema
      * @param childNode  the node to be moved
      * @param baseArray  the base array for the array item
-     *
+     * @param removeChildFromTree lambda used to delete the property of the schema
      */
     private fun transplantArrayItemAlias(
         childNode: XMPNode,

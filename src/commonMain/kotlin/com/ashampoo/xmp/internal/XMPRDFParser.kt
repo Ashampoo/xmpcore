@@ -18,7 +18,6 @@ import nl.adaptivity.xmlutil.dom.Attr
 import nl.adaptivity.xmlutil.dom.Element
 import nl.adaptivity.xmlutil.dom.Node
 import nl.adaptivity.xmlutil.dom.NodeConsts
-import nl.adaptivity.xmlutil.dom.ProcessingInstruction
 import nl.adaptivity.xmlutil.dom.Text
 import nl.adaptivity.xmlutil.dom.attributes
 import nl.adaptivity.xmlutil.dom.childNodes
