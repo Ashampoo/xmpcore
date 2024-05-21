@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
-    kotlin("multiplatform") version "1.9.23"
+    kotlin("multiplatform") version "2.0.0"
     id("com.android.library") version "8.2.2"
     id("maven-publish")
     id("signing")
@@ -188,6 +188,7 @@ kotlin {
         }
     }
 
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     val jvmMain by sourceSets.getting
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
