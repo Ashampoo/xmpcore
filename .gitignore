@@ -22,5 +22,6 @@
 /.idea/vcs.xml
 /.idea/workspace.xml
 /.idea/xmpcore.iml
+/.kotlin/
 /build/
 /local.properties
