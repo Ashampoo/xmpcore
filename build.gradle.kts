@@ -24,7 +24,7 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val xmlUtilVersion: String = "0.90.0-RC1" // fails
+val xmlUtilVersion: String = "0.90.0-RC2"
 val kotlinIoVersion: String = "0.3.5"
 
 description = productName
@@ -157,11 +157,7 @@ kotlin {
     js()
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        // All tests reading from files fail, because kotlinx-io
-        // has no Path support for WASM (yet?).
-        // nodejs()
-    }
+    wasmJs()
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmWasi()
