@@ -25,7 +25,7 @@ repositories {
 val productName = "Ashampoo XMP Core"
 
 val xmlUtilVersion: String = "0.90.0-RC3"
-val kotlinIoVersion: String = "0.3.5"
+val kotlinIoVersion: String = "0.4.0"
 
 description = productName
 group = "com.ashampoo"
