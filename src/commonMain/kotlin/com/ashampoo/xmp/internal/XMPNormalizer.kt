@@ -13,9 +13,9 @@ import com.ashampoo.xmp.XMPException
 import com.ashampoo.xmp.XMPMeta
 import com.ashampoo.xmp.XMPSchemaRegistry
 import com.ashampoo.xmp.internal.Utils.checkUUIDFormat
+import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 
 internal object XMPNormalizer {
 
@@ -369,7 +369,10 @@ internal object XMPNormalizer {
 
             // *** Allow x-default.
             if (childNode.options.hasLanguage())
-                throw XMPException("Alias to x-default already has a language qualifier", XMPErrorConst.BADXMP)
+                throw XMPException(
+                    "Alias to x-default already has a language qualifier",
+                    XMPErrorConst.BADXMP
+                )
 
             val langQual = XMPNode(XMPConst.XML_LANG, XMPConst.X_DEFAULT)
 

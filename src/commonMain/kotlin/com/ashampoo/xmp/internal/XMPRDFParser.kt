@@ -222,7 +222,10 @@ internal object XMPRDFParser {
                 RDFTERM_ID, RDFTERM_NODE_ID, RDFTERM_ABOUT -> {
 
                     if (exclusiveAttrs > 0)
-                        throw XMPException("Mutally exclusive about, ID, nodeID attributes", XMPErrorConst.BADRDF)
+                        throw XMPException(
+                            "Mutally exclusive about, ID, nodeID attributes",
+                            XMPErrorConst.BADRDF
+                        )
 
                     exclusiveAttrs++
 
@@ -235,7 +238,10 @@ internal object XMPRDFParser {
                         if (xmpParent.name != null && xmpParent.name!!.isNotEmpty()) {
 
                             if (xmpParent.name != attribute.value)
-                                throw XMPException("Mismatched top level rdf:about values", XMPErrorConst.BADXMP)
+                                throw XMPException(
+                                    "Mismatched top level rdf:about values",
+                                    XMPErrorConst.BADXMP
+                                )
 
                         } else {
                             xmpParent.name = attribute.value

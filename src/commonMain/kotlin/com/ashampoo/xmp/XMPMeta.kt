@@ -25,6 +25,7 @@ import com.ashampoo.xmp.internal.XMPNodeUtils.findNode
 import com.ashampoo.xmp.internal.XMPNodeUtils.setNodeValue
 import com.ashampoo.xmp.internal.XMPNodeUtils.verifySetOptions
 import com.ashampoo.xmp.internal.XMPNormalizer.normalize
+import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 import com.ashampoo.xmp.internal.XMPUtils.convertToBoolean
 import com.ashampoo.xmp.internal.XMPUtils.convertToDouble
 import com.ashampoo.xmp.internal.XMPUtils.convertToInteger
@@ -33,7 +34,6 @@ import com.ashampoo.xmp.internal.XMPUtils.decodeBase64
 import com.ashampoo.xmp.options.IteratorOptions
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
 
 /**
  * This class represents the set of XMP metadata as a DOM representation. It has methods to read and
@@ -106,7 +106,10 @@ public class XMPMeta internal constructor() {
         ) ?: return null
 
         if (valueType != XMPValueType.STRING && propNode.options.isCompositeProperty())
-            throw XMPException("Property must be simple when a value type is requested", XMPErrorConst.BADXPATH)
+            throw XMPException(
+                "Property must be simple when a value type is requested",
+                XMPErrorConst.BADXPATH
+            )
 
         val value = evaluateNodeValue(valueType, propNode)
 
@@ -547,7 +550,10 @@ public class XMPMeta internal constructor() {
             } else {
 
                 // array options missing
-                throw XMPException("Explicit arrayOptions required to create new array", XMPErrorConst.BADOPTIONS)
+                throw XMPException(
+                    "Explicit arrayOptions required to create new array",
+                    XMPErrorConst.BADOPTIONS
+                )
             }
         }
 
@@ -1200,7 +1206,10 @@ public class XMPMeta internal constructor() {
             }
 
             else -> // does not happen under normal circumstances
-                throw XMPException("Unexpected result from ChooseLocalizedText", XMPErrorConst.INTERNALFAILURE)
+                throw XMPException(
+                    "Unexpected result from ChooseLocalizedText",
+                    XMPErrorConst.INTERNALFAILURE
+                )
         }
 
         // Add an x-default at the front if needed.
@@ -1297,7 +1306,10 @@ public class XMPMeta internal constructor() {
         ) ?: return null
 
         if (valueType != XMPValueType.STRING && propNode.options.isCompositeProperty())
-            throw XMPException("Property must be simple when a value type is requested", XMPErrorConst.BADXPATH)
+            throw XMPException(
+                "Property must be simple when a value type is requested",
+                XMPErrorConst.BADXPATH
+            )
 
         return evaluateNodeValue(valueType, propNode)
     }
