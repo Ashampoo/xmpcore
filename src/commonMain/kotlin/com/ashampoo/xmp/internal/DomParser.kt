@@ -3,7 +3,8 @@ package com.ashampoo.xmp.internal
 import com.ashampoo.xmp.XMPException
 import nl.adaptivity.xmlutil.DomWriter
 import nl.adaptivity.xmlutil.EventType
-import nl.adaptivity.xmlutil.dom.Document
+import nl.adaptivity.xmlutil.XmlUtilInternal
+import nl.adaptivity.xmlutil.dom2.Document
 import nl.adaptivity.xmlutil.writeCurrent
 import nl.adaptivity.xmlutil.xmlStreaming
 
@@ -11,6 +12,7 @@ internal object DomParser {
 
     private const val RDF_RDF_END = "</rdf:RDF>"
 
+    @OptIn(XmlUtilInternal::class)
     fun parseDocumentFromString(input: String): Document {
 
         /*

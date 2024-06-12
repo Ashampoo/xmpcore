@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
-    kotlin("multiplatform") version "1.9.23"
+    kotlin("multiplatform") version "2.0.0"
     id("com.android.library") version "8.2.2"
     id("maven-publish")
     id("signing")
@@ -24,8 +24,8 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val xmlUtilVersion: String = "0.86.3"
-val kotlinIoVersion: String = "0.3.1"
+val xmlUtilVersion: String = "0.90.0-RC3"
+val kotlinIoVersion: String = "0.4.0"
 
 description = productName
 group = "com.ashampoo"
@@ -157,11 +157,7 @@ kotlin {
     js()
 
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        // All tests reading from files fail, because kotlinx-io
-        // has no Path support for WASM (yet?).
-        // nodejs()
-    }
+    wasmJs()
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmWasi()
@@ -188,6 +184,7 @@ kotlin {
         }
     }
 
+    @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive
     val jvmMain by sourceSets.getting
 
     @Suppress("UnusedPrivateMember", "UNUSED_VARIABLE") // False positive

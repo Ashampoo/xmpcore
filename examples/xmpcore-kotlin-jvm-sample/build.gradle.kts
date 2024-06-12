@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.23"
+    kotlin("jvm") version "2.0.0"
 }
 
 group = "com.ashampoo"
@@ -10,5 +10,5 @@ repositories {
 }
 
 dependencies {
-    implementation("com.ashampoo:xmpcore:1.3.0")
+    implementation("com.ashampoo:xmpcore:1.4.0")
 }

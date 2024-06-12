@@ -282,7 +282,10 @@ public class PropertyOptions : Options {
     public override fun assertConsistency(options: Int) {
 
         if (options and STRUCT > 0 && options and ARRAY > 0)
-            throw XMPException("IsStruct and IsArray options are mutually exclusive", XMPErrorConst.BADOPTIONS)
+            throw XMPException(
+                "IsStruct and IsArray options are mutually exclusive",
+                XMPErrorConst.BADOPTIONS
+            )
         else if (options and URI > 0 && options and (ARRAY or STRUCT) > 0)
             throw XMPException("Structs and arrays can't have \"value\" options", XMPErrorConst.BADOPTIONS)
     }

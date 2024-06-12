@@ -14,23 +14,22 @@ import com.ashampoo.xmp.XMPMeta
 import com.ashampoo.xmp.XMPSchemaRegistry
 import com.ashampoo.xmp.options.ParseOptions
 import com.ashampoo.xmp.options.PropertyOptions
-import nl.adaptivity.xmlutil.dom.Attr
-import nl.adaptivity.xmlutil.dom.Element
-import nl.adaptivity.xmlutil.dom.Node
 import nl.adaptivity.xmlutil.dom.NodeConsts
-import nl.adaptivity.xmlutil.dom.ProcessingInstruction
-import nl.adaptivity.xmlutil.dom.Text
-import nl.adaptivity.xmlutil.dom.attributes
-import nl.adaptivity.xmlutil.dom.childNodes
-import nl.adaptivity.xmlutil.dom.data
-import nl.adaptivity.xmlutil.dom.length
-import nl.adaptivity.xmlutil.dom.localName
-import nl.adaptivity.xmlutil.dom.namespaceURI
-import nl.adaptivity.xmlutil.dom.nodeName
-import nl.adaptivity.xmlutil.dom.nodeType
-import nl.adaptivity.xmlutil.dom.ownerElement
-import nl.adaptivity.xmlutil.dom.prefix
-import nl.adaptivity.xmlutil.dom.value
+import nl.adaptivity.xmlutil.dom2.Attr
+import nl.adaptivity.xmlutil.dom2.Element
+import nl.adaptivity.xmlutil.dom2.Node
+import nl.adaptivity.xmlutil.dom2.Text
+import nl.adaptivity.xmlutil.dom2.attributes
+import nl.adaptivity.xmlutil.dom2.childNodes
+import nl.adaptivity.xmlutil.dom2.data
+import nl.adaptivity.xmlutil.dom2.length
+import nl.adaptivity.xmlutil.dom2.localName
+import nl.adaptivity.xmlutil.dom2.namespaceURI
+import nl.adaptivity.xmlutil.dom2.nodeName
+import nl.adaptivity.xmlutil.dom2.nodeType
+import nl.adaptivity.xmlutil.dom2.ownerElement
+import nl.adaptivity.xmlutil.dom2.prefix
+import nl.adaptivity.xmlutil.dom2.value
 
 /**
  * Parser for "normal" XML serialisation of RDF.
@@ -135,7 +134,7 @@ internal object XMPRDFParser {
 
         rdfRdfNode as Element
 
-        if (rdfRdfNode.attributes.length == 0)
+        if (rdfRdfNode.attributes.getLength() == 0)
             throw XMPException("Illegal: rdf:RDF node has no attributes", XMPErrorConst.BADRDF)
 
         for (index in 0 until rdfRdfNode.childNodes.length) {
@@ -207,7 +206,7 @@ internal object XMPRDFParser {
         // Used to detect attributes that are mutually exclusive.
         var exclusiveAttrs = 0
 
-        for (index in 0 until xmlNode.attributes.length) {
+        for (index in 0 until xmlNode.attributes.getLength()) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
@@ -223,7 +222,10 @@ internal object XMPRDFParser {
                 RDFTERM_ID, RDFTERM_NODE_ID, RDFTERM_ABOUT -> {
 
                     if (exclusiveAttrs > 0)
-                        throw XMPException("Mutally exclusive about, ID, nodeID attributes", XMPErrorConst.BADRDF)
+                        throw XMPException(
+                            "Mutally exclusive about, ID, nodeID attributes",
+                            XMPErrorConst.BADRDF
+                        )
 
                     exclusiveAttrs++
 
@@ -236,7 +238,10 @@ internal object XMPRDFParser {
                         if (xmpParent.name != null && xmpParent.name!!.isNotEmpty()) {
 
                             if (xmpParent.name != attribute.value)
-                                throw XMPException("Mismatched top level rdf:about values", XMPErrorConst.BADXMP)
+                                throw XMPException(
+                                    "Mismatched top level rdf:about values",
+                                    XMPErrorConst.BADXMP
+                                )
 
                         } else {
                             xmpParent.name = attribute.value
@@ -357,7 +362,7 @@ internal object XMPRDFParser {
 
         var nsAttrs: MutableList<String>? = null
 
-        for (index in 0 until attributes.length) {
+        for (index in 0 until attributes.getLength()) {
 
             val attribute = attributes.item(index) as Attr
 
@@ -378,17 +383,19 @@ internal object XMPRDFParser {
                 attributes.removeNamedItem(it.next())
         }
 
-        if (attributes.length > 3) {
+        if (attributes.getLength() > 3) {
 
-            // Only an emptyPropertyElt can have more than 3 attributes.
+            /* Only an emptyPropertyElt can have more than 3 attributes. */
             parseEmptyPropertyElement(xmp, xmpParent, xmlNode, isTopLevel)
 
         } else {
 
-            // Look through the attributes for one that isn't rdf:ID or xml:lang,
-            // it will usually tell what we should be dealing with.
-            // The called routines must verify their specific syntax!
-            for (index in 0 until attributes.length) {
+            /*
+             * Look through the attributes for one that isn't rdf:ID or xml:lang,
+             * it will usually tell what we should be dealing with.
+             * The called routines must verify their specific syntax!
+             */
+            for (index in 0 until attributes.getLength()) {
 
                 val attribute = attributes.item(index) as Attr
 
@@ -424,8 +431,10 @@ internal object XMPRDFParser {
                 }
             }
 
-            // Only rdf:ID and xml:lang, could be a resourcePropertyElt, a literalPropertyElt,
-            // or an emptyPropertyElt. Look at the child XML nodes to decide which.
+            /*
+             * Only rdf:ID and xml:lang, could be a resourcePropertyElt, a literalPropertyElt,
+             * or an emptyPropertyElt. Look at the child XML nodes to decide which.
+             */
             if (xmlNode.childNodes.length > 0) {
 
                 for (index in 0 until xmlNode.childNodes.length) {
@@ -475,7 +484,7 @@ internal object XMPRDFParser {
 
         // walk through the attributes
         @Suppress("LoopWithTooManyJumpStatements")
-        for (index in 0 until xmlNode.attributes.length) {
+        for (index in 0 until xmlNode.attributes.getLength()) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
@@ -579,7 +588,7 @@ internal object XMPRDFParser {
         val newChild = addChildNode(xmp, xmpParent, xmlNode, null, isTopLevel)
 
         @Suppress("LoopWithTooManyJumpStatements")
-        for (index in 0 until xmlNode.attributes.length) {
+        for (index in 0 until xmlNode.attributes.getLength()) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
@@ -637,7 +646,7 @@ internal object XMPRDFParser {
         newStruct.options.setStruct(true)
 
         @Suppress("LoopWithTooManyJumpStatements")
-        for (index in 0 until xmlNode.attributes.length) {
+        for (index in 0 until xmlNode.attributes.getLength()) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
@@ -714,7 +723,7 @@ internal object XMPRDFParser {
             )
 
         /* First figure out what XMP this maps to and remember the XML node for a simple value. */
-        for (index in 0 until xmlNode.attributes.length) {
+        for (index in 0 until xmlNode.attributes.getLength()) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 
@@ -824,7 +833,7 @@ internal object XMPRDFParser {
             childIsStruct = true
         }
 
-        for (index in 0 until xmlNode.attributes.length) {
+        for (index in 0 until xmlNode.attributes.getLength()) {
 
             val attribute = xmlNode.attributes.item(index) as Attr
 

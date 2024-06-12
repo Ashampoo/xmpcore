@@ -948,7 +948,10 @@ internal object XMPRDFWriter {
                     for (child in node.getChildren()) {
 
                         if (!canBeRDFAttrProp(child))
-                            throw XMPException("Can't mix rdf:resource and complex fields", XMPErrorConst.BADRDF)
+                            throw XMPException(
+                                "Can't mix rdf:resource and complex fields",
+                                XMPErrorConst.BADRDF
+                            )
 
                         sb.append(XMP_DEFAULT_NEWLINE)
                         writeIndent(sb, actualIndent + 1)

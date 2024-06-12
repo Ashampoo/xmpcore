@@ -13,10 +13,10 @@ import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.internal.XMPNode
 import com.ashampoo.xmp.internal.XMPNodeUtils.findNode
 import com.ashampoo.xmp.internal.XMPNodeUtils.findSchemaNode
-import com.ashampoo.xmp.options.IteratorOptions
-import com.ashampoo.xmp.options.PropertyOptions
 import com.ashampoo.xmp.internal.XMPPath
 import com.ashampoo.xmp.internal.XMPPathParser.expandXPath
+import com.ashampoo.xmp.options.IteratorOptions
+import com.ashampoo.xmp.options.PropertyOptions
 
 /**
  * Interface for the `XMPMeta` iteration services.

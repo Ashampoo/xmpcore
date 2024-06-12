@@ -12,17 +12,15 @@ import com.ashampoo.xmp.XMPConst
 import com.ashampoo.xmp.XMPMeta
 import com.ashampoo.xmp.internal.XMPNormalizer.normalize
 import com.ashampoo.xmp.options.ParseOptions
-import nl.adaptivity.xmlutil.dom.Element
-import nl.adaptivity.xmlutil.dom.Node
 import nl.adaptivity.xmlutil.dom.NodeConsts
-import nl.adaptivity.xmlutil.dom.ProcessingInstruction
-import nl.adaptivity.xmlutil.dom.childNodes
-import nl.adaptivity.xmlutil.dom.nodeType
-import nl.adaptivity.xmlutil.dom.getData
-import nl.adaptivity.xmlutil.dom.getTarget
-import nl.adaptivity.xmlutil.dom.length
-import nl.adaptivity.xmlutil.dom.localName
-import nl.adaptivity.xmlutil.dom.namespaceURI
+import nl.adaptivity.xmlutil.dom2.Element
+import nl.adaptivity.xmlutil.dom2.Node
+import nl.adaptivity.xmlutil.dom2.ProcessingInstruction
+import nl.adaptivity.xmlutil.dom2.childNodes
+import nl.adaptivity.xmlutil.dom2.length
+import nl.adaptivity.xmlutil.dom2.localName
+import nl.adaptivity.xmlutil.dom2.namespaceURI
+import nl.adaptivity.xmlutil.dom2.nodeType
 
 /**
  * This class replaces the `ExpatAdapter.cpp` and does the XML-parsing and fixes the prefix.
