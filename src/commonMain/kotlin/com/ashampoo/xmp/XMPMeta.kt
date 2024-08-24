@@ -1057,8 +1057,7 @@ public class XMPMeta internal constructor() {
      * @param specificLang The name of the specific language as an RFC 3066 tag.
      *                     Must not be `null` or the empty string.
      * @param itemValue    A pointer to the `null` terminated UTF-8 string that is the new
-     *                     value for the appropriate array item.
-     * @param options      Option flags, none are defined at present.
+     *                     value for the appropriate array item
      */
     public fun setLocalizedText(
         schemaNS: String,

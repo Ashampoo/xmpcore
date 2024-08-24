@@ -254,6 +254,7 @@ internal object XMPRDFWriter {
      * Write each of the parent's simple unqualified properties as an attribute. Returns true if all
      * of the properties are written as attributes.
      *
+     * @param sb         the StringBuilder to append to
      * @param parentNode the parent property node
      * @param indent     the current indent level
      * @return Returns true if all properties can be rendered as RDF attribute.
@@ -419,6 +420,7 @@ internal object XMPRDFWriter {
     /**
      * Serializes an array property.
      *
+     * @param sb     the StringBuilder to append to
      * @param node   an XMPNode
      * @param indent the current indent level
      */
@@ -443,6 +445,7 @@ internal object XMPRDFWriter {
     /**
      * Serializes a struct property.
      *
+     * @param sb                 the StringBuilder to append to
      * @param node               an XMPNode
      * @param indent             the current indent level
      * @param hasRDFResourceQual Flag if the element has resource qualifier
@@ -529,6 +532,7 @@ internal object XMPRDFWriter {
     /**
      * Serializes the general qualifier.
      *
+     * @param sb     the StringBuilder to append to
      * @param indent the current indent level
      * @param node   the root node of the subtree
      */
@@ -620,6 +624,7 @@ internal object XMPRDFWriter {
     /**
      * Writes one namespace declaration to the output.
      *
+     * @param sb           the StringBuilder to append to
      * @param prefix       a namespace prefix (without colon) or a complete qname (when namespace == null)
      * @param namespace    the a namespace
      * @param usedPrefixes a set containing currently used prefixes
@@ -711,6 +716,7 @@ internal object XMPRDFWriter {
      * qualifiers like xml:lang. Except for the one struct case, attribute
      * qualifiers don't affect the output form.
      *
+     * @param sb              the StringBuilder to append to
      * @param node            the property node
      * @param emitAsRDFValue  property shall be rendered as attribute rather than tag
      * @param useCanonicalRDF use canonical form with inner description tag or
@@ -986,6 +992,7 @@ internal object XMPRDFWriter {
     /**
      * Writes the array start and end tags.
      *
+     * @param sb         the StringBuilder to append to
      * @param arrayNode  an array node
      * @param isStartTag flag if its the start or end tag
      * @param indent     the current indent level
@@ -1026,6 +1033,7 @@ internal object XMPRDFWriter {
      * Control chars are written unescaped, but if the user uses others than tab, LF
      * and CR the resulting XML will become invalid.
      *
+     * @param sb           the StringBuilder to append to
      * @param value        the value of the node
      * @param forAttribute flag if value is an attribute value
      *
