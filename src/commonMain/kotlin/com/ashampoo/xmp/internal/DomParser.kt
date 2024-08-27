@@ -1,8 +1,8 @@
 package com.ashampoo.xmp.internal
 
 import com.ashampoo.xmp.XMPException
-import nl.adaptivity.xmlutil.DomWriter
 import nl.adaptivity.xmlutil.EventType
+import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import nl.adaptivity.xmlutil.XmlUtilInternal
 import nl.adaptivity.xmlutil.dom2.Document
 import nl.adaptivity.xmlutil.writeCurrent
@@ -12,7 +12,7 @@ internal object DomParser {
 
     private const val RDF_RDF_END = "</rdf:RDF>"
 
-    @OptIn(XmlUtilInternal::class)
+    @OptIn(XmlUtilInternal::class, ExperimentalXmlUtilApi::class)
     fun parseDocumentFromString(input: String): Document {
 
         /*
@@ -37,7 +37,9 @@ internal object DomParser {
 
         try {
 
-            val writer = DomWriter()
+            val document = xmlStreaming.genericDomImplementation.createDocument()
+
+            val writer = xmlStreaming.newWriter(document)
 
             val reader = xmlStreaming.newReader(trimmedInput)
 
@@ -46,7 +48,7 @@ internal object DomParser {
                 reader.writeCurrent(writer)
             } while (event != EventType.END_DOCUMENT)
 
-            return writer.target
+            return document
 
         } catch (ex: Exception) {
             throw XMPException("Error reading the XML file: ${ex.message}", XMPErrorConst.BADSTREAM, ex)
