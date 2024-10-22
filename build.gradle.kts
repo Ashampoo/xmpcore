@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    kotlin("multiplatform") version "2.0.20"
+    kotlin("multiplatform") version "2.0.21"
     id("com.android.library") version "8.5.0"
     id("maven-publish")
     id("signing")
@@ -24,8 +24,8 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val xmlUtilVersion: String = "0.90.2-beta1"
-val kotlinIoVersion: String = "0.5.3"
+val xmlUtilVersion: String = "0.90.2"
+val kotlinIoVersion: String = "0.5.4"
 
 description = productName
 group = "com.ashampoo"
@@ -104,7 +104,7 @@ koverMerged {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 }
 
 kotlin {
