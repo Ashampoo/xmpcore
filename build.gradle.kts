@@ -3,16 +3,16 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    kotlin("multiplatform") version "2.0.21"
+    kotlin("multiplatform") version "2.1.0"
     id("com.android.library") version "8.5.0"
     id("maven-publish")
     id("signing")
-    id("io.gitlab.arturbosch.detekt") version "1.23.6"
+    id("io.gitlab.arturbosch.detekt") version "1.23.7"
     id("org.sonarqube") version "4.3.1.3277"
     id("org.jetbrains.kotlinx.kover") version "0.6.1"
     id("com.asarkar.gradle.build-time-tracker") version "4.3.0"
     id("me.qoomon.git-versioning") version "6.4.4"
-    id("com.goncalossilva.resources") version "0.9.0"
+    id("com.goncalossilva.resources") version "0.10.0"
     id("com.github.ben-manes.versions") version "0.51.0"
     id("org.jetbrains.dokka") version "1.9.20"
 }
@@ -24,8 +24,8 @@ repositories {
 
 val productName = "Ashampoo XMP Core"
 
-val xmlUtilVersion: String = "0.90.2"
-val kotlinIoVersion: String = "0.5.4"
+val xmlUtilVersion: String = "0.90.3"
+val kotlinIoVersion: String = "0.6.0"
 
 description = productName
 group = "com.ashampoo"
