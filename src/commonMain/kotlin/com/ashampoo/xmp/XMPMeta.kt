@@ -1431,7 +1431,7 @@ public class XMPMeta internal constructor() {
     public fun iterator(
         schemaNS: String?,
         propName: String?,
-        options: IteratorOptions
+        options: IteratorOptions?
     ): XMPIterator =
         XMPIterator(this, schemaNS, propName, options)
 
@@ -1947,6 +1947,102 @@ public class XMPMeta internal constructor() {
                 arrayName = XMPConst.XMP_ASHAMPOO_ALBUMS,
                 itemValue = albumName
             )
+    }
+
+    /**
+     * Extract the first entry of Iptc4xmpExt:LocationShown
+     * or falls back to "photoshop" namespace, if present.
+     */
+    public fun getLocation(): XMPLocation? {
+
+        val shownLocationsCount = countArrayItems(XMPConst.NS_IPTC_EXT, "Iptc4xmpExt:LocationShown")
+
+        var locationName: String? = null
+        var location: String? = null
+        var city: String? = null
+        var state: String? = null
+        var country: String? = null
+
+        /*
+         * First try to receive the information from Iptc4xmpExt:LocationShown,
+         * because that's the best place to store this information.
+         */
+
+        if (shownLocationsCount > 0) {
+
+            val locationNameAltPath = "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:LocationName"
+            val iterator: XMPIterator = iterator(XMPConst.NS_IPTC_EXT, locationNameAltPath, null)
+
+            while (iterator.hasNext()) {
+
+                val propertyInfo = iterator.next()
+
+                val value = propertyInfo.getValue()
+
+                if (value.isNotBlank()) {
+                    locationName = value
+                    break
+                }
+            }
+
+            location =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:Sublocation"
+                )
+
+            city =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:City"
+                )
+
+            state =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:ProvinceState"
+                )
+
+            country =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:CountryName"
+                )
+        }
+
+        /*
+         * For missing values fall back to the Photoshop namespace.
+         */
+
+        if (city.isNullOrBlank())
+            city = getPropertyString(XMPConst.NS_PHOTOSHOP, "City")
+
+        if (state.isNullOrBlank())
+            state = getPropertyString(XMPConst.NS_PHOTOSHOP, "State")
+
+        if (country.isNullOrBlank())
+            country = getPropertyString(XMPConst.NS_PHOTOSHOP, "Country")
+
+        /*
+         * If all fields are NULL we don't have location info in this XMP.
+         */
+        @Suppress("ComplexCondition")
+        if (
+            locationName.isNullOrBlank() &&
+            location.isNullOrBlank() &&
+            city.isNullOrBlank() &&
+            state.isNullOrBlank() &&
+            country.isNullOrBlank()
+        )
+            return null
+
+        return XMPLocation(
+            name = locationName,
+            location = location,
+            city = city,
+            state = state,
+            country = country
+        )
     }
 
     private enum class XMPValueType {

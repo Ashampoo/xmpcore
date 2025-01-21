@@ -39,8 +39,8 @@ public object XMPConst {
     public const val NS_IPTC_EXT: String = "http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
 
     /**
-     * The XML namespace for the DICOM medical schema.
-     */
+    //     * The XML namespace for the DICOM medical schema.
+    //     */
     public const val NS_DICOM: String = "http://ns.adobe.com/DICOM/"
 
     /**
@@ -284,6 +284,7 @@ public object XMPConst {
     public const val XMP_ACDSEE_KEYWORDS: String = "keywords"
 
     public const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
+    public const val XMP_IPTC_EXT_LOCATION_SHOWN: String = "LocationShown"
 
     public const val XMP_MWG_RS_TYPE_FACE: String = "Face"
     public const val XMP_MWG_RS_REGION_LIST: String = "Regions/mwg-rs:RegionList"
