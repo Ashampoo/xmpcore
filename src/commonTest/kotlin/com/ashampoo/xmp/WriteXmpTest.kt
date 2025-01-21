@@ -1,11 +1,8 @@
 package com.ashampoo.xmp
 
 import com.ashampoo.xmp.options.SerializeOptions
-import kotlinx.io.buffered
-import kotlinx.io.files.Path
-import kotlinx.io.files.SystemFileSystem
 import kotlin.test.Test
-import kotlin.test.fail
+import kotlin.test.assertEquals
 
 /**
  * Demonstrates how to use the library to write values.
@@ -31,21 +28,21 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        val expectedXmp = getXmp("empty.xmp")
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""/>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
 
-        val equals = actualXmp.contentEquals(expectedXmp)
-
-        if (!equals) {
-
-            SystemFileSystem
-                .sink(Path("build/empty.xmp"))
-                .buffered()
-                .use {
-                    it.write(actualXmp.encodeToByteArray())
-                }
-
-            fail("XMP empty.xmp looks different.")
-        }
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
     }
 
     /**
@@ -61,21 +58,23 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        val expectedXmp = getXmp("rating.xmp")
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""
+                    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+                  xmp:Rating="3"/>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
 
-        val equals = actualXmp.contentEquals(expectedXmp)
-
-        if (!equals) {
-
-            SystemFileSystem
-                .sink(Path("build/rating.xmp"))
-                .buffered()
-                .use {
-                    it.write(actualXmp.encodeToByteArray())
-                }
-
-            fail("XMP rating.xmp looks different.")
-        }
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
     }
 
     /**
@@ -91,21 +90,101 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        val expectedXmp = getXmp("new.xmp")
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""
+                    xmlns:MY="http://ns.mylollc.com/MyloEdit/"
+                    xmlns:acdsee="http://ns.acdsee.com/iptc/1.0/"
+                    xmlns:ashampoo="http://ns.ashampoo.com/xmp/1.0/"
+                    xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    xmlns:exif="http://ns.adobe.com/exif/1.0/"
+                    xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
+                    xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#"
+                    xmlns:stArea="http://ns.adobe.com/xmp/sType/Area#"
+                    xmlns:narrative="http://ns.narrative.so/narrative_select/1.0/"
+                    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+                    xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
+                  MY:flag="true"
+                  acdsee:tagged="True"
+                  exif:DateTimeOriginal="2023-07-07T13:37:42"
+                  exif:GPSLatitude="53,13.1635N"
+                  exif:GPSLongitude="8,14.3797E"
+                  exif:GPSVersionID="2.3.0.0"
+                  narrative:Tagged="True"
+                  xmp:Rating="3"
+                  xmpDM:pick="1">
+                  <ashampoo:albums>
+                    <rdf:Bag>
+                      <rdf:li>America trip</rdf:li>
+                      <rdf:li>My wedding</rdf:li>
+                    </rdf:Bag>
+                  </ashampoo:albums>
+                  <dc:subject>
+                    <rdf:Bag>
+                      <rdf:li>bird</rdf:li>
+                      <rdf:li>cat</rdf:li>
+                      <rdf:li>dog</rdf:li>
+                    </rdf:Bag>
+                  </dc:subject>
+                  <mwg-rs:Regions rdf:parseType="Resource">
+                    <mwg-rs:AppliedToDimensions
+                      stDim:h="1000"
+                      stDim:unit="pixel"
+                      stDim:w="1500"/>
+                    <mwg-rs:RegionList>
+                      <rdf:Bag>
+                        <rdf:li>
+                          <rdf:Description
+                            mwg-rs:Name="Eye Left"
+                            mwg-rs:Type="Face">
+                          <mwg-rs:Area
+                            stArea:h="0.05"
+                            stArea:unit="normalized"
+                            stArea:w="0.033245"
+                            stArea:x="0.295179"
+                            stArea:y="0.27888"/>
+                          </rdf:Description>
+                        </rdf:li>
+                        <rdf:li>
+                          <rdf:Description
+                            mwg-rs:Name="Eye Right"
+                            mwg-rs:Type="Face">
+                          <mwg-rs:Area
+                            stArea:h="0.05"
+                            stArea:unit="normalized"
+                            stArea:w="0.033245"
+                            stArea:x="0.81499"
+                            stArea:y="0.472579"/>
+                          </rdf:Description>
+                        </rdf:li>
+                        <rdf:li>
+                          <rdf:Description
+                            mwg-rs:Name="Nothing"
+                            mwg-rs:Type="Face">
+                          <mwg-rs:Area
+                            stArea:h="0.05"
+                            stArea:unit="normalized"
+                            stArea:w="0.033245"
+                            stArea:x="0.501552"
+                            stArea:y="0.905484"/>
+                          </rdf:Description>
+                        </rdf:li>
+                      </rdf:Bag>
+                    </mwg-rs:RegionList>
+                  </mwg-rs:Regions>
+                </rdf:Description>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
 
-        val equals = actualXmp.contentEquals(expectedXmp)
-
-        if (!equals) {
-
-            SystemFileSystem
-                .sink(Path("build/new.xmp"))
-                .buffered()
-                .use {
-                    it.write(actualXmp.encodeToByteArray())
-                }
-
-            fail("XMP new.xmp looks different.")
-        }
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
     }
 
     /**
@@ -144,21 +223,102 @@ class WriteXmpTest {
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
         /* Since we apply the same updates it should look identical to the new.xmp */
-        val expectedXmp = getXmp("new.xmp")
 
-        val equals = actualXmp.contentEquals(expectedXmp)
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""
+                    xmlns:MY="http://ns.mylollc.com/MyloEdit/"
+                    xmlns:acdsee="http://ns.acdsee.com/iptc/1.0/"
+                    xmlns:ashampoo="http://ns.ashampoo.com/xmp/1.0/"
+                    xmlns:dc="http://purl.org/dc/elements/1.1/"
+                    xmlns:exif="http://ns.adobe.com/exif/1.0/"
+                    xmlns:mwg-rs="http://www.metadataworkinggroup.com/schemas/regions/"
+                    xmlns:stDim="http://ns.adobe.com/xap/1.0/sType/Dimensions#"
+                    xmlns:stArea="http://ns.adobe.com/xmp/sType/Area#"
+                    xmlns:narrative="http://ns.narrative.so/narrative_select/1.0/"
+                    xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+                    xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/"
+                  MY:flag="true"
+                  acdsee:tagged="True"
+                  exif:DateTimeOriginal="2023-07-07T13:37:42"
+                  exif:GPSLatitude="53,13.1635N"
+                  exif:GPSLongitude="8,14.3797E"
+                  exif:GPSVersionID="2.3.0.0"
+                  narrative:Tagged="True"
+                  xmp:Rating="3"
+                  xmpDM:pick="1">
+                  <ashampoo:albums>
+                    <rdf:Bag>
+                      <rdf:li>America trip</rdf:li>
+                      <rdf:li>My wedding</rdf:li>
+                    </rdf:Bag>
+                  </ashampoo:albums>
+                  <dc:subject>
+                    <rdf:Bag>
+                      <rdf:li>bird</rdf:li>
+                      <rdf:li>cat</rdf:li>
+                      <rdf:li>dog</rdf:li>
+                    </rdf:Bag>
+                  </dc:subject>
+                  <mwg-rs:Regions rdf:parseType="Resource">
+                    <mwg-rs:AppliedToDimensions
+                      stDim:h="1000"
+                      stDim:unit="pixel"
+                      stDim:w="1500"/>
+                    <mwg-rs:RegionList>
+                      <rdf:Bag>
+                        <rdf:li>
+                          <rdf:Description
+                            mwg-rs:Name="Eye Left"
+                            mwg-rs:Type="Face">
+                          <mwg-rs:Area
+                            stArea:h="0.05"
+                            stArea:unit="normalized"
+                            stArea:w="0.033245"
+                            stArea:x="0.295179"
+                            stArea:y="0.27888"/>
+                          </rdf:Description>
+                        </rdf:li>
+                        <rdf:li>
+                          <rdf:Description
+                            mwg-rs:Name="Eye Right"
+                            mwg-rs:Type="Face">
+                          <mwg-rs:Area
+                            stArea:h="0.05"
+                            stArea:unit="normalized"
+                            stArea:w="0.033245"
+                            stArea:x="0.81499"
+                            stArea:y="0.472579"/>
+                          </rdf:Description>
+                        </rdf:li>
+                        <rdf:li>
+                          <rdf:Description
+                            mwg-rs:Name="Nothing"
+                            mwg-rs:Type="Face">
+                          <mwg-rs:Area
+                            stArea:h="0.05"
+                            stArea:unit="normalized"
+                            stArea:w="0.033245"
+                            stArea:x="0.501552"
+                            stArea:y="0.905484"/>
+                          </rdf:Description>
+                        </rdf:li>
+                      </rdf:Bag>
+                    </mwg-rs:RegionList>
+                  </mwg-rs:Regions>
+                </rdf:Description>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
 
-        if (!equals) {
-
-            SystemFileSystem
-                .sink(Path("build/updated.xmp"))
-                .buffered()
-                .use {
-                    it.write(actualXmp.encodeToByteArray())
-                }
-
-            fail("XMP updated.xmp looks different.")
-        }
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
     }
 
     private fun writeTestValues(xmpMeta: XMPMeta) {
@@ -187,12 +347,5 @@ class WriteXmpTest {
         )
 
         xmpMeta.setAlbums(setOf("My wedding", "America trip"))
-    }
-
-    private fun getXmp(name: String): String =
-        Path(getPathForResource("$RESOURCE_PATH/$name")).readText()
-
-    companion object {
-        private const val RESOURCE_PATH: String = "src/commonTest/resources/com/ashampoo/xmp"
     }
 }
