@@ -2045,6 +2045,96 @@ public class XMPMeta internal constructor() {
         )
     }
 
+    /*
+     * Remove old location informations and set them to the specified.
+     */
+    public fun setLocation(
+        xmpLocation: XMPLocation?
+    ) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN)
+
+        if (xmpLocation == null)
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_IPTC_EXT,
+            XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
+            null,
+            arrayOptions
+        )
+
+        /* Append empty entry */
+        appendArrayItem(
+            XMPConst.NS_IPTC_EXT,
+            XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
+            arrayOptions,
+            ""
+        )
+
+        if (!xmpLocation.location.isNullOrBlank()) {
+
+            setStructField(
+                XMPConst.NS_IPTC_EXT,
+                XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                XMPConst.NS_IPTC_EXT,
+                "Sublocation",
+                xmpLocation.location
+            )
+        }
+
+//        if (!xmpLocation.city.isNullOrBlank()) {
+//
+//            deleteProperty(
+//                XMPConst.NS_IPTC_EXT,
+//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:City"
+//            )
+//
+//        } else {
+//
+//            setProperty(
+//                XMPConst.NS_IPTC_EXT,
+//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:City",
+//                xmpLocation.city
+//            )
+//        }
+//
+//        if (!xmpLocation.state.isNullOrBlank()) {
+//
+//            deleteProperty(
+//                XMPConst.NS_IPTC_EXT,
+//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:ProvinceState"
+//            )
+//
+//        } else {
+//
+//            setProperty(
+//                XMPConst.NS_IPTC_EXT,
+//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:ProvinceState",
+//                xmpLocation.state
+//            )
+//        }
+//
+//        if (!xmpLocation.country.isNullOrBlank()) {
+//
+//            deleteProperty(
+//                XMPConst.NS_IPTC_EXT,
+//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:CountryName"
+//            )
+//
+//        } else {
+//
+//            setProperty(
+//                XMPConst.NS_IPTC_EXT,
+//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:CountryName",
+//                xmpLocation.country
+//            )
+//        }
+
+    }
+
     private enum class XMPValueType {
 
         STRING,

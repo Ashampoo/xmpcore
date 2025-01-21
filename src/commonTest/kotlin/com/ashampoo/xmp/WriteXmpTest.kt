@@ -348,4 +348,50 @@ class WriteXmpTest {
 
         xmpMeta.setAlbums(setOf("My wedding", "America trip"))
     }
+
+    /**
+     * Create an XMP only containing location info.
+     */
+    @OptIn(ExperimentalStdlibApi::class)
+    @Test
+    fun testCreateLocationXmp() {
+
+        val xmpMeta = XMPMetaFactory.create()
+
+        xmpMeta.setLocation(
+            XMPLocation(
+                name = "Ashampoo GmbH & Co. KG",
+                location = "Schafjückenweg 2",
+                city = "Rastede",
+                state = "Niedersachsen",
+                country = "Deutschland"
+            )
+        )
+
+        val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
+
+        // FIXME
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.4.3">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""
+                    xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/">
+                  <Iptc4xmpExt:LocationShown>
+                    <rdf:Bag>
+                      <rdf:li/>
+                    </rdf:Bag>
+                  </Iptc4xmpExt:LocationShown>
+                </rdf:Description>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
+
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
+    }
 }
