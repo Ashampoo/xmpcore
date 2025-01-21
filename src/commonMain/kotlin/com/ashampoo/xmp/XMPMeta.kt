@@ -508,7 +508,7 @@ public class XMPMeta internal constructor() {
         schemaNS: String,
         arrayName: String,
         arrayOptions: PropertyOptions = PropertyOptions(),
-        itemValue: String,
+        itemValue: Any?,
         itemOptions: PropertyOptions = PropertyOptions()
     ) {
 
@@ -570,7 +570,7 @@ public class XMPMeta internal constructor() {
     private fun doSetArrayItem(
         arrayNode: XMPNode,
         itemIndex: Int,
-        itemValue: String,
+        itemValue: Any?,
         itemOptions: PropertyOptions = PropertyOptions(),
         insert: Boolean
     ) {
@@ -2071,7 +2071,7 @@ public class XMPMeta internal constructor() {
             XMPConst.NS_IPTC_EXT,
             XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
             arrayOptions,
-            ""
+            null
         )
 
         if (!xmpLocation.location.isNullOrBlank()) {
@@ -2084,55 +2084,6 @@ public class XMPMeta internal constructor() {
                 xmpLocation.location
             )
         }
-
-//        if (!xmpLocation.city.isNullOrBlank()) {
-//
-//            deleteProperty(
-//                XMPConst.NS_IPTC_EXT,
-//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:City"
-//            )
-//
-//        } else {
-//
-//            setProperty(
-//                XMPConst.NS_IPTC_EXT,
-//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:City",
-//                xmpLocation.city
-//            )
-//        }
-//
-//        if (!xmpLocation.state.isNullOrBlank()) {
-//
-//            deleteProperty(
-//                XMPConst.NS_IPTC_EXT,
-//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:ProvinceState"
-//            )
-//
-//        } else {
-//
-//            setProperty(
-//                XMPConst.NS_IPTC_EXT,
-//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:ProvinceState",
-//                xmpLocation.state
-//            )
-//        }
-//
-//        if (!xmpLocation.country.isNullOrBlank()) {
-//
-//            deleteProperty(
-//                XMPConst.NS_IPTC_EXT,
-//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:CountryName"
-//            )
-//
-//        } else {
-//
-//            setProperty(
-//                XMPConst.NS_IPTC_EXT,
-//                "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:CountryName",
-//                xmpLocation.country
-//            )
-//        }
-
     }
 
     private enum class XMPValueType {
