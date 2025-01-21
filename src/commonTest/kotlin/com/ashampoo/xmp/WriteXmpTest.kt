@@ -380,7 +380,10 @@ class WriteXmpTest {
                     xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/">
                   <Iptc4xmpExt:LocationShown>
                     <rdf:Bag>
-                      <rdf:li/>
+                      <rdf:li>
+                          <rdf:Description
+                            Iptc4xmpExt:Sublocation="Schafjückenweg 2"/>
+                      </rdf:li>
                     </rdf:Bag>
                   </Iptc4xmpExt:LocationShown>
                 </rdf:Description>

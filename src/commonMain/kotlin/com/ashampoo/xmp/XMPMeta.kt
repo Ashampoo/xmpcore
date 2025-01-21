@@ -2068,20 +2068,21 @@ public class XMPMeta internal constructor() {
 
         /* Append empty entry */
         appendArrayItem(
-            XMPConst.NS_IPTC_EXT,
-            XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
-            arrayOptions,
-            null
+            schemaNS = XMPConst.NS_IPTC_EXT,
+            arrayName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
+            arrayOptions = arrayOptions,
+            itemValue = null,
+            itemOptions = PropertyOptions().setStruct(true)
         )
 
         if (!xmpLocation.location.isNullOrBlank()) {
 
             setStructField(
-                XMPConst.NS_IPTC_EXT,
-                XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
-                XMPConst.NS_IPTC_EXT,
-                "Sublocation",
-                xmpLocation.location
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "Sublocation",
+                fieldValue = xmpLocation.location
             )
         }
     }
