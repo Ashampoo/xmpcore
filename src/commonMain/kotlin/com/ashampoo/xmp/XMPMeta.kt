@@ -2079,7 +2079,7 @@ public class XMPMeta internal constructor() {
 
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
-                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
                 fieldNS = XMPConst.NS_IPTC_EXT,
                 fieldName = "Sublocation",
                 fieldValue = xmpLocation.location
