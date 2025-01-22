@@ -2114,6 +2114,12 @@ public class XMPMeta internal constructor() {
                 fieldName = "Sublocation",
                 fieldValue = xmpLocation.location
             )
+
+            setProperty(
+                schemaNS = XMPConst.NS_IPTC_CORE,
+                propName = "Location",
+                propValue = xmpLocation.location
+            )
         }
 
         if (!xmpLocation.city.isNullOrBlank()) {
@@ -2124,6 +2130,12 @@ public class XMPMeta internal constructor() {
                 fieldNS = XMPConst.NS_IPTC_EXT,
                 fieldName = "City",
                 fieldValue = xmpLocation.city
+            )
+
+            setProperty(
+                schemaNS = XMPConst.NS_PHOTOSHOP,
+                propName = "City",
+                propValue = xmpLocation.city
             )
         }
 
@@ -2136,6 +2148,12 @@ public class XMPMeta internal constructor() {
                 fieldName = "ProvinceState",
                 fieldValue = xmpLocation.state
             )
+
+            setProperty(
+                schemaNS = XMPConst.NS_PHOTOSHOP,
+                propName = "State",
+                propValue = xmpLocation.state
+            )
         }
 
         if (!xmpLocation.country.isNullOrBlank()) {
@@ -2146,6 +2164,12 @@ public class XMPMeta internal constructor() {
                 fieldNS = XMPConst.NS_IPTC_EXT,
                 fieldName = "CountryName",
                 fieldValue = xmpLocation.country
+            )
+
+            setProperty(
+                schemaNS = XMPConst.NS_PHOTOSHOP,
+                propName = "Country",
+                propValue = xmpLocation.country
             )
         }
     }

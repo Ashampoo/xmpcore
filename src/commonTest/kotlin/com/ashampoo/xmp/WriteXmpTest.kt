@@ -370,14 +370,19 @@ class WriteXmpTest {
 
         val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
 
-        // FIXME
         /* language=XML */
         val expectedXmp = """
             <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
             <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.4.3">
               <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                 <rdf:Description rdf:about=""
-                    xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/">
+                    xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
+                    xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
+                    xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
+                  Iptc4xmpCore:Location="Schafjückenweg 2"
+                  photoshop:City="Rastede"
+                  photoshop:Country="Deutschland"
+                  photoshop:State="Niedersachsen">
                   <Iptc4xmpExt:LocationShown>
                     <rdf:Bag>
                       <rdf:li>
