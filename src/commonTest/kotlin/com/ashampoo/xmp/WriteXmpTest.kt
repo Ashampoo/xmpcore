@@ -373,7 +373,7 @@ class WriteXmpTest {
         /* language=XML */
         val expectedXmp = """
             <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.4.3">
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
               <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                 <rdf:Description rdf:about=""
                     xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
