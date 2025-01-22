@@ -9,6 +9,7 @@
 package com.ashampoo.xmp.internal
 
 import com.ashampoo.xmp.XMPConst
+import com.ashampoo.xmp.XMPException
 import com.ashampoo.xmp.XMPMeta
 import com.ashampoo.xmp.internal.XMPNormalizer.normalize
 import com.ashampoo.xmp.options.ParseOptions
@@ -43,32 +44,30 @@ internal object XMPMetaParser {
         options: ParseOptions?
     ): XMPMeta {
 
+        if (input.isBlank())
+            throw XMPException("XMP input must not be a blank string.", XMPErrorConst.BADXMP)
+
         val actualOptions = options ?: ParseOptions()
 
         val document = DomParser.parseDocumentFromString(input)
 
-        val xmpmetaRequired = actualOptions.getRequireXMPMeta()
+        val xmpMetaRequired = actualOptions.getRequireXMPMeta()
 
-        val result = findRootNode(document, xmpmetaRequired, arrayOfNulls(3))
+        val result = findRootNode(document, xmpMetaRequired, arrayOfNulls(3))
 
-        return if (result != null && result[1] === XMP_RDF) {
+        if (result == null || result[1] !== XMP_RDF)
+            throw XMPException("XMP RDF was not found.", XMPErrorConst.BADXMP)
 
-            @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
-            val xmp = XMPRDFParser.parse(result[0] as Node, actualOptions)
+        @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
+        val xmp = XMPRDFParser.parse(result[0] as Node, actualOptions)
 
-            xmp.setPacketHeader(result[2] as? String)
+        xmp.setPacketHeader(result[2] as? String)
 
-            /* Check if the XMP object shall be normalized */
-            if (!actualOptions.getOmitNormalization())
-                normalize(xmp, actualOptions)
-            else
-                xmp
+        /* Check if the XMP object shall be normalized */
+        if (!actualOptions.getOmitNormalization())
+            return normalize(xmp, actualOptions)
 
-        } else {
-
-            /* No appropriate root node found, return empty metadata object */
-            XMPMeta()
-        }
+        return xmp
     }
 
     /**
@@ -88,7 +87,7 @@ internal object XMPMetaParser {
      * one that was textually earlier in the serialized XML.
      *
      * @param root            the root of the xml document
-     * @param xmpmetaRequired flag if the xmpmeta-tag is still required, might be set
+     * @param xmpMetaRequired flag if the xmpmeta-tag is still required, might be set
      * initially to `true`, if the parse option "REQUIRE_XMP_META" is set
      * @param result          The result array that is filled during the recursive process.
      * @return Returns an array that contains the result or `null`.
@@ -99,7 +98,11 @@ internal object XMPMetaParser {
      *  * [2] - the body text of the xpacket-instruction.
      */
     @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
-    private fun findRootNode(root: Node, xmpmetaRequired: Boolean, result: Array<Any?>): Array<Any?>? {
+    private fun findRootNode(
+        root: Node,
+        xmpMetaRequired: Boolean,
+        result: Array<Any?>
+    ): Array<Any?>? {
 
         /*
          * Look among this parent's content for x:xapmeta or x:xmpmeta.
@@ -144,7 +147,7 @@ internal object XMPMetaParser {
                         return findRootNode(child, false, result)
                     }
 
-                    if (!xmpmetaRequired && "RDF" == rootLocal && XMPConst.NS_RDF == rootNS) {
+                    if (!xmpMetaRequired && "RDF" == rootLocal && XMPConst.NS_RDF == rootNS) {
 
                         result[0] = child
                         result[1] = XMP_RDF
@@ -153,7 +156,7 @@ internal object XMPMetaParser {
                     }
 
                     /* continue searching */
-                    val newResult = findRootNode(child, xmpmetaRequired, result)
+                    val newResult = findRootNode(child, xmpMetaRequired, result)
 
                     return newResult ?: continue
                 }

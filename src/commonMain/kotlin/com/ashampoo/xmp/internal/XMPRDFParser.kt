@@ -278,15 +278,28 @@ internal object XMPRDFParser {
 
         for (index in 0 until xmlParent!!.childNodes.length) {
 
-            val currChild = xmlParent.childNodes.item(index)!!
+            val childNode = xmlParent.childNodes.item(index)!!
 
-            if (isWhitespaceNode(currChild))
+            /* Skip whitespaces */
+            if (isWhitespaceNode(childNode))
                 continue
 
-            if (currChild.nodeType != NodeConsts.ELEMENT_NODE)
-                throw XMPException("Expected property element node not found", XMPErrorConst.BADRDF)
+            /*
+             * Skip comments
+             *
+             * Some files have this before they start:
+             * <?adobe-xap-filters esc="CR"?>
+             */
+            if (childNode.nodeType == NodeConsts.COMMENT_NODE)
+                continue
 
-            parseRdfPropertyElement(xmp, xmpParent, currChild as Element, isTopLevel, options)
+            if (childNode.nodeType != NodeConsts.ELEMENT_NODE)
+                throw XMPException(
+                    "Expected element node not found. Found type: ${childNode.nodeType}",
+                    XMPErrorConst.BADRDF
+                )
+
+            parseRdfPropertyElement(xmp, xmpParent, childNode as Element, isTopLevel, options)
         }
     }
 

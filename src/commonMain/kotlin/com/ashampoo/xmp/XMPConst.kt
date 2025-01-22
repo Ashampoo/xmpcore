@@ -284,6 +284,7 @@ public object XMPConst {
     public const val XMP_ACDSEE_KEYWORDS: String = "keywords"
 
     public const val XMP_IPTC_EXT_PERSON_IN_IMAGE: String = "PersonInImage"
+    public const val XMP_IPTC_EXT_LOCATION_SHOWN: String = "LocationShown"
 
     public const val XMP_MWG_RS_TYPE_FACE: String = "Face"
     public const val XMP_MWG_RS_REGION_LIST: String = "Regions/mwg-rs:RegionList"

@@ -29,3 +29,9 @@ Problem: Doubled ImageDescription field
 okb9GBO6w0.jpg
 XMPException: Unrecognized attribute of empty property element
 <rdf:li rdf:about=''/>
+
+# sample_100.xml
+Triggers XMPNormalizer.tweakOldXMP()
+
+# sample_101.xml to sample_109.xmp
+Collection of problematic files from QA

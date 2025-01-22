@@ -508,7 +508,7 @@ public class XMPMeta internal constructor() {
         schemaNS: String,
         arrayName: String,
         arrayOptions: PropertyOptions = PropertyOptions(),
-        itemValue: String,
+        itemValue: Any?,
         itemOptions: PropertyOptions = PropertyOptions()
     ) {
 
@@ -570,7 +570,7 @@ public class XMPMeta internal constructor() {
     private fun doSetArrayItem(
         arrayNode: XMPNode,
         itemIndex: Int,
-        itemValue: String,
+        itemValue: Any?,
         itemOptions: PropertyOptions = PropertyOptions(),
         insert: Boolean
     ) {
@@ -1431,7 +1431,7 @@ public class XMPMeta internal constructor() {
     public fun iterator(
         schemaNS: String?,
         propName: String?,
-        options: IteratorOptions
+        options: IteratorOptions?
     ): XMPIterator =
         XMPIterator(this, schemaNS, propName, options)
 
@@ -1947,6 +1947,352 @@ public class XMPMeta internal constructor() {
                 arrayName = XMPConst.XMP_ASHAMPOO_ALBUMS,
                 itemValue = albumName
             )
+    }
+
+    /**
+     * Extract the first entry of Iptc4xmpExt:LocationShown
+     * or falls back to "photoshop" namespace, if present.
+     */
+    public fun getLocation(): XMPLocation? {
+
+        val shownLocationsCount = countArrayItems(XMPConst.NS_IPTC_EXT, "Iptc4xmpExt:LocationShown")
+
+        var locationName: String? = null
+        var location: String? = null
+        var city: String? = null
+        var state: String? = null
+        var country: String? = null
+
+        /*
+         * First try to receive the information from Iptc4xmpExt:LocationShown,
+         * because that's the best place to store this information.
+         */
+
+        if (shownLocationsCount > 0) {
+
+            val iterator: XMPIterator = iterator(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                propName = "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:LocationName",
+                options = null
+            )
+
+            @Suppress("LoopWithTooManyJumpStatements")
+            while (iterator.hasNext()) {
+
+                val propertyInfo = iterator.next()
+
+                if (!propertyInfo.getOptions().hasQualifiers())
+                    continue
+
+                val value = propertyInfo.getValue()
+
+                if (value.isNullOrBlank())
+                    continue
+
+                locationName = value
+            }
+
+            location =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:Sublocation"
+                )
+
+            city =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:City"
+                )
+
+            state =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:ProvinceState"
+                )
+
+            country =
+                getPropertyString(
+                    XMPConst.NS_IPTC_EXT,
+                    "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:CountryName"
+                )
+        }
+
+        /*
+         * For missing values fall back to the Photoshop namespace.
+         */
+
+        if (location.isNullOrBlank())
+            location = getPropertyString(XMPConst.NS_IPTC_CORE, "Location")
+
+        if (city.isNullOrBlank())
+            city = getPropertyString(XMPConst.NS_PHOTOSHOP, "City")
+
+        if (state.isNullOrBlank())
+            state = getPropertyString(XMPConst.NS_PHOTOSHOP, "State")
+
+        if (country.isNullOrBlank())
+            country = getPropertyString(XMPConst.NS_PHOTOSHOP, "Country")
+
+        /*
+         * If all fields are NULL we don't have location info in this XMP.
+         */
+        @Suppress("ComplexCondition")
+        if (
+            locationName.isNullOrBlank() &&
+            location.isNullOrBlank() &&
+            city.isNullOrBlank() &&
+            state.isNullOrBlank() &&
+            country.isNullOrBlank()
+        )
+            return null
+
+        return XMPLocation(
+            name = locationName,
+            location = location,
+            city = city,
+            state = state,
+            country = country
+        )
+    }
+
+    /*
+     * Remove old location informations and set them to the specified.
+     */
+    public fun setLocation(
+        xmpLocation: XMPLocation?
+    ) {
+
+        /* Delete existing entries, if any */
+        deleteProperty(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN)
+
+        if (xmpLocation == null)
+            return
+
+        /* Create a new array property. */
+        setProperty(
+            XMPConst.NS_IPTC_EXT,
+            XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
+            null,
+            arrayOptions
+        )
+
+        /* Append empty entry */
+        appendArrayItem(
+            schemaNS = XMPConst.NS_IPTC_EXT,
+            arrayName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
+            arrayOptions = arrayOptions,
+            itemValue = null,
+            itemOptions = PropertyOptions().setStruct(true)
+        )
+
+        if (!xmpLocation.name.isNullOrBlank()) {
+
+            val locationNamePath = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/Iptc4xmpExt:LocationName"
+
+            /* Create rdf:Alt container */
+            setProperty(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                propName = locationNamePath,
+                propValue = null,
+                options = PropertyOptions().setArrayAlternate(true)
+            )
+
+            appendArrayItem(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                arrayName = locationNamePath,
+                itemValue = xmpLocation.name
+            )
+
+            setQualifier(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                propName = locationNamePath + "[1]",
+                qualNS = XMPConst.NS_XML,
+                qualName = "lang",
+                qualValue = XMPConst.X_DEFAULT
+            )
+        }
+
+        if (!xmpLocation.location.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "Sublocation",
+                fieldValue = xmpLocation.location
+            )
+
+            setProperty(
+                schemaNS = XMPConst.NS_IPTC_CORE,
+                propName = "Location",
+                propValue = xmpLocation.location
+            )
+        }
+
+        if (!xmpLocation.city.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "City",
+                fieldValue = xmpLocation.city
+            )
+
+            setProperty(
+                schemaNS = XMPConst.NS_PHOTOSHOP,
+                propName = "City",
+                propValue = xmpLocation.city
+            )
+        }
+
+        if (!xmpLocation.state.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "ProvinceState",
+                fieldValue = xmpLocation.state
+            )
+
+            setProperty(
+                schemaNS = XMPConst.NS_PHOTOSHOP,
+                propName = "State",
+                propValue = xmpLocation.state
+            )
+        }
+
+        if (!xmpLocation.country.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "CountryName",
+                fieldValue = xmpLocation.country
+            )
+
+            setProperty(
+                schemaNS = XMPConst.NS_PHOTOSHOP,
+                propName = "Country",
+                propValue = xmpLocation.country
+            )
+        }
+    }
+
+    public fun getTitle(): String? {
+
+        val iterator: XMPIterator = iterator(
+            schemaNS = XMPConst.NS_DC,
+            propName = "title",
+            options = null
+        )
+
+        @Suppress("LoopWithTooManyJumpStatements")
+        while (iterator.hasNext()) {
+
+            val propertyInfo = iterator.next()
+
+            if (!propertyInfo.getOptions().hasQualifiers())
+                continue
+
+            val value = propertyInfo.getValue()
+
+            if (value.isNullOrBlank())
+                continue
+
+            return value
+        }
+
+        return null
+    }
+
+    public fun setTitle(title: String?) {
+
+        deleteProperty(XMPConst.NS_DC, "title")
+
+        if (title == null)
+            return
+
+        /* Create rdf:Alt container */
+        setProperty(
+            schemaNS = XMPConst.NS_DC,
+            propName = "title",
+            propValue = null,
+            options = PropertyOptions().setArrayAlternate(true)
+        )
+
+        appendArrayItem(
+            schemaNS = XMPConst.NS_DC,
+            arrayName = "title",
+            itemValue = title
+        )
+
+        setQualifier(
+            schemaNS = XMPConst.NS_DC,
+            propName = "title[1]",
+            qualNS = XMPConst.NS_XML,
+            qualName = "lang",
+            qualValue = XMPConst.X_DEFAULT
+        )
+    }
+
+    public fun getDescription(): String? {
+
+        val iterator: XMPIterator = iterator(
+            schemaNS = XMPConst.NS_DC,
+            propName = "description",
+            options = null
+        )
+
+        @Suppress("LoopWithTooManyJumpStatements")
+        while (iterator.hasNext()) {
+
+            val propertyInfo = iterator.next()
+
+            if (!propertyInfo.getOptions().hasQualifiers())
+                continue
+
+            val value = propertyInfo.getValue()
+
+            if (value.isNullOrBlank())
+                continue
+
+            return value
+        }
+
+        return null
+    }
+
+    public fun setDescription(description: String?) {
+
+        deleteProperty(XMPConst.NS_DC, "description")
+
+        if (description == null)
+            return
+
+        /* Create rdf:Alt container */
+        setProperty(
+            schemaNS = XMPConst.NS_DC,
+            propName = "description",
+            propValue = null,
+            options = PropertyOptions().setArrayAlternate(true)
+        )
+
+        appendArrayItem(
+            schemaNS = XMPConst.NS_DC,
+            arrayName = "description",
+            itemValue = description
+        )
+
+        setQualifier(
+            schemaNS = XMPConst.NS_DC,
+            propName = "description[1]",
+            qualNS = XMPConst.NS_XML,
+            qualName = "lang",
+            qualValue = XMPConst.X_DEFAULT
+        )
     }
 
     private enum class XMPValueType {
