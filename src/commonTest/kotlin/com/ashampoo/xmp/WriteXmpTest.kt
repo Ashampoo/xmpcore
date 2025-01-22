@@ -380,12 +380,18 @@ class WriteXmpTest {
                     xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/">
                   <Iptc4xmpExt:LocationShown>
                     <rdf:Bag>
-                      <rdf:li rdf:parseType="Resource">
+                      <rdf:li>
                         <rdf:Description
                           Iptc4xmpExt:City="Rastede"
-                          Iptc4xmpExt:Country="Deutschland"
-                          Iptc4xmpExt:State="Niedersachsen"
-                          Iptc4xmpExt:Sublocation="Schafjückenweg 2"/>
+                          Iptc4xmpExt:CountryName="Deutschland"
+                          Iptc4xmpExt:ProvinceState="Niedersachsen"
+                          Iptc4xmpExt:Sublocation="Schafjückenweg 2">
+                        <Iptc4xmpExt:LocationName>
+                          <rdf:Alt>
+                            <rdf:li xml:lang="x-default">Ashampoo GmbH &amp; Co. KG</rdf:li>
+                          </rdf:Alt>
+                        </Iptc4xmpExt:LocationName>
+                        </rdf:Description>
                       </rdf:li>
                     </rdf:Bag>
                   </Iptc4xmpExt:LocationShown>

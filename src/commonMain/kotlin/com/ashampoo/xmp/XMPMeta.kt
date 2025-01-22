@@ -2075,11 +2075,38 @@ public class XMPMeta internal constructor() {
             itemOptions = PropertyOptions().setStruct(true)
         )
 
+        if (!xmpLocation.name.isNullOrBlank()) {
+
+            val locationNamePath = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/Iptc4xmpExt:LocationName"
+
+            /* Create rdf:Alt container */
+            setProperty(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                propName = locationNamePath,
+                propValue = null,
+                options = PropertyOptions().setArrayAlternate(true)
+            )
+
+            appendArrayItem(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                arrayName = locationNamePath,
+                itemValue = xmpLocation.name
+            )
+
+            setQualifier(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                propName = locationNamePath + "[1]",
+                qualNS = XMPConst.NS_XML,
+                qualName = "lang",
+                qualValue = "x-default"
+            )
+        }
+
         if (!xmpLocation.location.isNullOrBlank()) {
 
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
-                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
                 fieldNS = XMPConst.NS_IPTC_EXT,
                 fieldName = "Sublocation",
                 fieldValue = xmpLocation.location
@@ -2090,7 +2117,7 @@ public class XMPMeta internal constructor() {
 
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
-                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
                 fieldNS = XMPConst.NS_IPTC_EXT,
                 fieldName = "City",
                 fieldValue = xmpLocation.city
@@ -2101,9 +2128,9 @@ public class XMPMeta internal constructor() {
 
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
-                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
                 fieldNS = XMPConst.NS_IPTC_EXT,
-                fieldName = "State",
+                fieldName = "ProvinceState",
                 fieldValue = xmpLocation.state
             )
         }
@@ -2112,9 +2139,9 @@ public class XMPMeta internal constructor() {
 
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
-                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
                 fieldNS = XMPConst.NS_IPTC_EXT,
-                fieldName = "Country",
+                fieldName = "CountryName",
                 fieldValue = xmpLocation.country
             )
         }
