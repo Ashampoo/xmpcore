@@ -411,4 +411,47 @@ class WriteXmpTest {
             actual = actualXmp
         )
     }
+
+    /**
+     * Create an XMP only containing title & description.
+     */
+    @OptIn(ExperimentalStdlibApi::class)
+    @Test
+    fun testCreateTitleAndDescriptionXmp() {
+
+        val xmpMeta = XMPMetaFactory.create()
+
+        xmpMeta.setTitle("Süße Kätzchen")
+        xmpMeta.setDescription("Ein Foto von wirklich supersüßen Kätzchen.")
+
+        val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
+
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.5.0">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""
+                    xmlns:dc="http://purl.org/dc/elements/1.1/">
+                  <dc:description>
+                    <rdf:Alt>
+                      <rdf:li xml:lang="x-default">Ein Foto von wirklich supersüßen Kätzchen.</rdf:li>
+                    </rdf:Alt>
+                  </dc:description>
+                  <dc:title>
+                    <rdf:Alt>
+                      <rdf:li xml:lang="x-default">Süße Kätzchen</rdf:li>
+                    </rdf:Alt>
+                  </dc:title>
+                </rdf:Description>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
+
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
+    }
 }

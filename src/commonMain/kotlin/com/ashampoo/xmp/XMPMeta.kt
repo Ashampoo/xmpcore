@@ -1970,15 +1970,17 @@ public class XMPMeta internal constructor() {
 
         if (shownLocationsCount > 0) {
 
-            val locationNameAltPath = "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:LocationName"
-            val iterator: XMPIterator = iterator(XMPConst.NS_IPTC_EXT, locationNameAltPath, null)
+            val iterator: XMPIterator = iterator(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                propName = "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:LocationName",
+                options = null
+            )
 
             @Suppress("LoopWithTooManyJumpStatements")
             while (iterator.hasNext()) {
 
                 val propertyInfo = iterator.next()
 
-                /* The value we are looking for has a qualifier "xml:lang" */
                 if (!propertyInfo.getOptions().hasQualifiers())
                     continue
 
@@ -2106,7 +2108,7 @@ public class XMPMeta internal constructor() {
                 propName = locationNamePath + "[1]",
                 qualNS = XMPConst.NS_XML,
                 qualName = "lang",
-                qualValue = "x-default"
+                qualValue = XMPConst.X_DEFAULT
             )
         }
 
@@ -2177,6 +2179,120 @@ public class XMPMeta internal constructor() {
                 propValue = xmpLocation.country
             )
         }
+    }
+
+    public fun getTitle(): String? {
+
+        val iterator: XMPIterator = iterator(
+            schemaNS = XMPConst.NS_DC,
+            propName = "title",
+            options = null
+        )
+
+        @Suppress("LoopWithTooManyJumpStatements")
+        while (iterator.hasNext()) {
+
+            val propertyInfo = iterator.next()
+
+            if (!propertyInfo.getOptions().hasQualifiers())
+                continue
+
+            val value = propertyInfo.getValue()
+
+            if (value.isNullOrBlank())
+                continue
+
+            return value
+        }
+
+        return null
+    }
+
+    public fun setTitle(title: String?) {
+
+        deleteProperty(XMPConst.NS_DC, "title")
+
+        if (title == null)
+            return
+
+        /* Create rdf:Alt container */
+        setProperty(
+            schemaNS = XMPConst.NS_DC,
+            propName = "title",
+            propValue = null,
+            options = PropertyOptions().setArrayAlternate(true)
+        )
+
+        appendArrayItem(
+            schemaNS = XMPConst.NS_DC,
+            arrayName = "title",
+            itemValue = title
+        )
+
+        setQualifier(
+            schemaNS = XMPConst.NS_DC,
+            propName = "title[1]",
+            qualNS = XMPConst.NS_XML,
+            qualName = "lang",
+            qualValue = XMPConst.X_DEFAULT
+        )
+    }
+
+    public fun getDescription(): String? {
+
+        val iterator: XMPIterator = iterator(
+            schemaNS = XMPConst.NS_DC,
+            propName = "description",
+            options = null
+        )
+
+        @Suppress("LoopWithTooManyJumpStatements")
+        while (iterator.hasNext()) {
+
+            val propertyInfo = iterator.next()
+
+            if (!propertyInfo.getOptions().hasQualifiers())
+                continue
+
+            val value = propertyInfo.getValue()
+
+            if (value.isNullOrBlank())
+                continue
+
+            return value
+        }
+
+        return null
+    }
+
+    public fun setDescription(description: String?) {
+
+        deleteProperty(XMPConst.NS_DC, "description")
+
+        if (description == null)
+            return
+
+        /* Create rdf:Alt container */
+        setProperty(
+            schemaNS = XMPConst.NS_DC,
+            propName = "description",
+            propValue = null,
+            options = PropertyOptions().setArrayAlternate(true)
+        )
+
+        appendArrayItem(
+            schemaNS = XMPConst.NS_DC,
+            arrayName = "description",
+            itemValue = description
+        )
+
+        setQualifier(
+            schemaNS = XMPConst.NS_DC,
+            propName = "description[1]",
+            qualNS = XMPConst.NS_XML,
+            qualName = "lang",
+            qualValue = XMPConst.X_DEFAULT
+        )
     }
 
     private enum class XMPValueType {
