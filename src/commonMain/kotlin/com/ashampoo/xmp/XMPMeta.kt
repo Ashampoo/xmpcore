@@ -2014,6 +2014,9 @@ public class XMPMeta internal constructor() {
          * For missing values fall back to the Photoshop namespace.
          */
 
+        if (location.isNullOrBlank())
+            location = getPropertyString(XMPConst.NS_IPTC_CORE, "Location")
+
         if (city.isNullOrBlank())
             city = getPropertyString(XMPConst.NS_PHOTOSHOP, "City")
 
