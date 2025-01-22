@@ -8,6 +8,7 @@
 // =================================================================================================
 package com.ashampoo.xmp
 
+import com.ashampoo.xmp.internal.XMPErrorConst
 import com.ashampoo.xmp.internal.XMPMetaParser
 import com.ashampoo.xmp.internal.XMPRDFWriter
 import com.ashampoo.xmp.options.ParseOptions
@@ -33,8 +34,26 @@ public object XMPMetaFactory {
     public fun parseFromString(
         packet: String,
         options: ParseOptions? = null
-    ): XMPMeta =
-        XMPMetaParser.parse(packet, options)
+    ): XMPMeta {
+
+        try {
+
+            return XMPMetaParser.parse(packet, options)
+
+        } catch (ex: a) {
+
+            throw ex
+
+        } catch (ex: Exception) {
+
+            /*
+             * Ensure that only XMPException is thrown from this method.
+             * Wrap all other exceptions accordingly.
+             */
+
+            throw XMPException("Parsing error.", XMPErrorConst.UNKNOWN, ex)
+        }
+    }
 
     @kotlin.jvm.JvmStatic
     @kotlin.jvm.JvmOverloads
@@ -44,12 +63,28 @@ public object XMPMetaFactory {
         options: SerializeOptions? = null
     ): String {
 
-        val actualOptions = options ?: SerializeOptions()
+        try {
 
-        /* sort the internal data model on demand */
-        if (actualOptions.getSort())
-            xmp.sort()
+            val actualOptions = options ?: SerializeOptions()
 
-        return XMPRDFWriter.serialize(xmp, actualOptions)
+            /* sort the internal data model on demand */
+            if (actualOptions.getSort())
+                xmp.sort()
+
+            return XMPRDFWriter.serialize(xmp, actualOptions)
+
+        } catch (ex: XMPException) {
+
+            throw ex
+
+        } catch (ex: Exception) {
+
+            /*
+             * Ensure that only XMPException is thrown from this method.
+             * Wrap all other exceptions accordingly.
+             */
+
+            throw XMPException("Serializing error.", XMPErrorConst.UNKNOWN, ex)
+        }
     }
 }

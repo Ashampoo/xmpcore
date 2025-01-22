@@ -39,8 +39,6 @@ internal object XMPMetaParser {
      * @param options the parse options
      * @return Returns the resulting XMP metadata object
      */
-    @kotlin.jvm.JvmStatic
-    @Throws(XMPException::class)
     fun parse(
         input: String,
         options: ParseOptions?
