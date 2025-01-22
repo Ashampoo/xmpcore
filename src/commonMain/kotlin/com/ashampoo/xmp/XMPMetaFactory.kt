@@ -40,7 +40,7 @@ public object XMPMetaFactory {
 
             return XMPMetaParser.parse(packet, options)
 
-        } catch (ex: a) {
+        } catch (ex: XMPException) {
 
             throw ex
 
