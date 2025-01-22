@@ -29,10 +29,21 @@ internal object DomParser {
          */
 
         val rdfStartPos = input.indexOf("<rdf:RDF")
-        val rfdEndPos = input.indexOf(RDF_RDF_END)
+        val rdfEndPos = input.indexOf(RDF_RDF_END)
+
+        /*
+         * We check the start positions to avoid an generic
+         * IndexOutOfBoundsException for the substring() call.
+         */
+
+        if (rdfStartPos == -1)
+            throw XMPException("String '<rdf:RDF' was not found in XMP.", XMPErrorConst.BADXMP)
+
+        if (rdfEndPos == -1)
+            throw XMPException("String '</rdf:RDF>' was not found in XMP.", XMPErrorConst.BADXMP)
 
         val trimmedInput = input.substring(
-            rdfStartPos until rfdEndPos + RDF_RDF_END.length
+            rdfStartPos until rdfEndPos + RDF_RDF_END.length
         )
 
         try {
