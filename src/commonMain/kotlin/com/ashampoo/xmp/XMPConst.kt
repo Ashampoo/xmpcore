@@ -39,8 +39,8 @@ public object XMPConst {
     public const val NS_IPTC_EXT: String = "http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
 
     /**
-    //     * The XML namespace for the DICOM medical schema.
-    //     */
+     * The XML namespace for the DICOM medical schema.
+     */
     public const val NS_DICOM: String = "http://ns.adobe.com/DICOM/"
 
     /**
