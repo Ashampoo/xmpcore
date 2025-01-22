@@ -169,11 +169,13 @@ class ReadXmpTest {
                     <rdf:Description rdf:about=""
                         xmlns:xmp="http://ns.adobe.com/xap/1.0/"
                         xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
+                        xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
                         xmlns:exif="http://ns.adobe.com/exif/1.0/"
                         xmlns:dc="http://purl.org/dc/elements/1.1/"
                         photoshop:Country="Deutschland"
                         photoshop:State="Niedersachsen"
-                        photoshop:City="Rastede">
+                        photoshop:City="Rastede"
+                        Iptc4xmpCore:Location="Schafjückenweg 2">
                     </rdf:Description>
                 </rdf:RDF>
             </x:xmpmeta>
@@ -185,7 +187,7 @@ class ReadXmpTest {
         assertEquals(
             expected = XMPLocation(
                 name = null,
-                location = null,
+                location = "Schafjückenweg 2",
                 city = "Rastede",
                 state = "Niedersachsen",
                 country = "Deutschland"
