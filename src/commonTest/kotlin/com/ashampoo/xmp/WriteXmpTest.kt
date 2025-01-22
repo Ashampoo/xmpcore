@@ -382,6 +382,9 @@ class WriteXmpTest {
                     <rdf:Bag>
                       <rdf:li rdf:parseType="Resource">
                         <rdf:Description
+                          Iptc4xmpExt:City="Rastede"
+                          Iptc4xmpExt:Country="Deutschland"
+                          Iptc4xmpExt:State="Niedersachsen"
                           Iptc4xmpExt:Sublocation="Schafjückenweg 2"/>
                       </rdf:li>
                     </rdf:Bag>

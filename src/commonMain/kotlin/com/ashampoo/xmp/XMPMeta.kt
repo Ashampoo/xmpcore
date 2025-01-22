@@ -2085,6 +2085,39 @@ public class XMPMeta internal constructor() {
                 fieldValue = xmpLocation.location
             )
         }
+
+        if (!xmpLocation.city.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "City",
+                fieldValue = xmpLocation.city
+            )
+        }
+
+        if (!xmpLocation.state.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "State",
+                fieldValue = xmpLocation.state
+            )
+        }
+
+        if (!xmpLocation.country.isNullOrBlank()) {
+
+            setStructField(
+                schemaNS = XMPConst.NS_IPTC_EXT,
+                structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]/rdf:Description",
+                fieldNS = XMPConst.NS_IPTC_EXT,
+                fieldName = "Country",
+                fieldValue = xmpLocation.country
+            )
+        }
     }
 
     private enum class XMPValueType {
