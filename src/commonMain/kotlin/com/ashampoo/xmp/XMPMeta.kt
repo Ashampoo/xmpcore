@@ -1973,16 +1973,21 @@ public class XMPMeta internal constructor() {
             val locationNameAltPath = "${XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN}[1]/Iptc4xmpExt:LocationName"
             val iterator: XMPIterator = iterator(XMPConst.NS_IPTC_EXT, locationNameAltPath, null)
 
+            @Suppress("LoopWithTooManyJumpStatements")
             while (iterator.hasNext()) {
 
                 val propertyInfo = iterator.next()
 
+                /* The value we are looking for has a qualifier "xml:lang" */
+                if (!propertyInfo.getOptions().hasQualifiers())
+                    continue
+
                 val value = propertyInfo.getValue()
 
-                if (value.isNotBlank()) {
-                    locationName = value
-                    break
-                }
+                if (value.isNullOrBlank())
+                    continue
+
+                locationName = value
             }
 
             location =
