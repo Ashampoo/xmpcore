@@ -295,7 +295,7 @@ android {
 
     namespace = "com.ashampoo.xmpcore"
 
-    compileSdk = 34
+    compileSdk = 35
 
     sourceSets["main"].res.srcDirs("src/commonMain/resources")
 
