@@ -464,7 +464,7 @@ class WriteXmpTest {
         /* language=XML */
         val expectedXmp = """
             <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.5.0">
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
               <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                 <rdf:Description rdf:about=""/>
               </rdf:RDF>
@@ -495,7 +495,7 @@ class WriteXmpTest {
         /* language=XML */
         val expectedXmp = """
             <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.5.0">
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
               <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                 <rdf:Description rdf:about=""
                     xmlns:dc="http://purl.org/dc/elements/1.1/">
