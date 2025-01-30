@@ -222,8 +222,6 @@ class ReadXmpTest {
             <?xpacket end="w"?>
         """.trimIndent()
 
-        println(testXmp)
-
         val xmpMeta = XMPMetaFactory.parseFromString(testXmp)
 
         assertEquals(

@@ -413,6 +413,72 @@ class WriteXmpTest {
     }
 
     /**
+     * Create an XMP only containing location info.
+     */
+    @OptIn(ExperimentalStdlibApi::class)
+    @Test
+    fun testLocationRemovalXmp() {
+
+        /* language=XML */
+        val originalXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""
+                    xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/"
+                    xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
+                    xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
+                  Iptc4xmpCore:Location="Schafjückenweg 2"
+                  photoshop:City="Rastede"
+                  photoshop:Country="Deutschland"
+                  photoshop:State="Niedersachsen">
+                  <Iptc4xmpExt:LocationShown>
+                    <rdf:Bag>
+                      <rdf:li>
+                        <rdf:Description
+                          Iptc4xmpExt:City="Rastede"
+                          Iptc4xmpExt:CountryName="Deutschland"
+                          Iptc4xmpExt:ProvinceState="Niedersachsen"
+                          Iptc4xmpExt:Sublocation="Schafjückenweg 2">
+                        <Iptc4xmpExt:LocationName>
+                          <rdf:Alt>
+                            <rdf:li xml:lang="x-default">Ashampoo GmbH &amp; Co. KG</rdf:li>
+                          </rdf:Alt>
+                        </Iptc4xmpExt:LocationName>
+                        </rdf:Description>
+                      </rdf:li>
+                    </rdf:Bag>
+                  </Iptc4xmpExt:LocationShown>
+                </rdf:Description>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
+
+        val xmpMeta = XMPMetaFactory.parseFromString(originalXmp)
+
+        xmpMeta.setLocation(null)
+
+        val actualXmp = XMPMetaFactory.serializeToString(xmpMeta, xmpSerializeOptionsCompact)
+
+        /* language=XML */
+        val expectedXmp = """
+            <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
+              <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                <rdf:Description rdf:about=""/>
+              </rdf:RDF>
+            </x:xmpmeta>
+            <?xpacket end="w"?>
+        """.trimIndent()
+
+        assertEquals(
+            expected = expectedXmp,
+            actual = actualXmp
+        )
+    }
+
+    /**
      * Create an XMP only containing title & description.
      */
     @OptIn(ExperimentalStdlibApi::class)
@@ -429,7 +495,7 @@ class WriteXmpTest {
         /* language=XML */
         val expectedXmp = """
             <?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
-            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Ashampoo XMP Core 1.5.0">
+            <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="${XMPVersionInfo.VERSION_MESSAGE}">
               <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                 <rdf:Description rdf:about=""
                     xmlns:dc="http://purl.org/dc/elements/1.1/">
