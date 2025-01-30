@@ -2018,7 +2018,7 @@ public class XMPMeta internal constructor() {
         }
 
         /*
-         * For missing values fall back to the Photoshop namespace.
+         * For missing values fall back to older places.
          */
 
         if (location.isNullOrBlank())
@@ -2062,13 +2062,21 @@ public class XMPMeta internal constructor() {
         xmpLocation: XMPLocation?
     ) {
 
-        /* Delete existing entries, if any */
+        /* Delete existing entries */
+
         deleteProperty(XMPConst.NS_IPTC_EXT, XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN)
+        deleteProperty(XMPConst.NS_IPTC_CORE, "Location")
+        deleteProperty(XMPConst.NS_PHOTOSHOP, "City")
+        deleteProperty(XMPConst.NS_PHOTOSHOP, "State")
+        deleteProperty(XMPConst.NS_PHOTOSHOP, "Country")
 
         if (xmpLocation == null)
             return
 
-        /* Create a new array property. */
+        /*
+         * Write Iptc4xmpExt:LocationShown
+         */
+
         setProperty(
             XMPConst.NS_IPTC_EXT,
             XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
@@ -2076,7 +2084,6 @@ public class XMPMeta internal constructor() {
             arrayOptions
         )
 
-        /* Append empty entry */
         appendArrayItem(
             schemaNS = XMPConst.NS_IPTC_EXT,
             arrayName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN,
@@ -2112,8 +2119,7 @@ public class XMPMeta internal constructor() {
             )
         }
 
-        if (!xmpLocation.location.isNullOrBlank()) {
-
+        if (!xmpLocation.location.isNullOrBlank())
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
                 structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
@@ -2122,15 +2128,7 @@ public class XMPMeta internal constructor() {
                 fieldValue = xmpLocation.location
             )
 
-            setProperty(
-                schemaNS = XMPConst.NS_IPTC_CORE,
-                propName = "Location",
-                propValue = xmpLocation.location
-            )
-        }
-
-        if (!xmpLocation.city.isNullOrBlank()) {
-
+        if (!xmpLocation.city.isNullOrBlank())
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
                 structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
@@ -2139,15 +2137,7 @@ public class XMPMeta internal constructor() {
                 fieldValue = xmpLocation.city
             )
 
-            setProperty(
-                schemaNS = XMPConst.NS_PHOTOSHOP,
-                propName = "City",
-                propValue = xmpLocation.city
-            )
-        }
-
-        if (!xmpLocation.state.isNullOrBlank()) {
-
+        if (!xmpLocation.state.isNullOrBlank())
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
                 structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
@@ -2156,15 +2146,7 @@ public class XMPMeta internal constructor() {
                 fieldValue = xmpLocation.state
             )
 
-            setProperty(
-                schemaNS = XMPConst.NS_PHOTOSHOP,
-                propName = "State",
-                propValue = xmpLocation.state
-            )
-        }
-
-        if (!xmpLocation.country.isNullOrBlank()) {
-
+        if (!xmpLocation.country.isNullOrBlank())
             setStructField(
                 schemaNS = XMPConst.NS_IPTC_EXT,
                 structName = XMPConst.XMP_IPTC_EXT_LOCATION_SHOWN + "[1]",
@@ -2173,12 +2155,21 @@ public class XMPMeta internal constructor() {
                 fieldValue = xmpLocation.country
             )
 
-            setProperty(
-                schemaNS = XMPConst.NS_PHOTOSHOP,
-                propName = "Country",
-                propValue = xmpLocation.country
-            )
-        }
+        /*
+         * Write older fields for completeness
+         */
+
+        if (!xmpLocation.location.isNullOrBlank())
+            setProperty(XMPConst.NS_IPTC_CORE, "Location", xmpLocation.location)
+
+        if (!xmpLocation.city.isNullOrBlank())
+            setProperty(XMPConst.NS_PHOTOSHOP, "City", xmpLocation.city)
+
+        if (!xmpLocation.state.isNullOrBlank())
+            setProperty(XMPConst.NS_PHOTOSHOP, "State", xmpLocation.state)
+
+        if (!xmpLocation.country.isNullOrBlank())
+            setProperty(XMPConst.NS_PHOTOSHOP, "Country", xmpLocation.country)
     }
 
     public fun getTitle(): String? {
