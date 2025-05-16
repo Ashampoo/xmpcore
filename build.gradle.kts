@@ -8,7 +8,7 @@ plugins {
     id("maven-publish")
     id("signing")
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
     id("com.asarkar.gradle.build-time-tracker") version "5.0.1"
     id("me.qoomon.git-versioning") version "6.4.4"
     id("com.goncalossilva.resources") version "0.10.0"
@@ -49,7 +49,6 @@ gitVersioning.apply {
 }
 
 apply(plugin = "io.gitlab.arturbosch.detekt")
-apply(plugin = "kover")
 
 buildTimeTracker {
     sortBy.set(com.asarkar.gradle.buildtimetracker.Sort.DESC)
@@ -65,11 +64,6 @@ detekt {
 }
 
 kover {
-}
-
-koverMerged {
-    xmlReport {
-    }
 }
 
 dependencies {
