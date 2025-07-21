@@ -5,14 +5,13 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     kotlin("multiplatform") version "2.1.21"
     id("com.android.library") version "8.9.2"
-    id("maven-publish")
-    id("signing")
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
     id("com.asarkar.gradle.build-time-tracker") version "5.0.1"
     id("me.qoomon.git-versioning") version "6.4.4"
     id("com.goncalossilva.resources") version "0.10.0"
     id("com.github.ben-manes.versions") version "0.52.0"
+    id("com.vanniktech.maven.publish") version "0.34.0"
 }
 
 repositories {
@@ -282,145 +281,48 @@ android {
 
 // region Maven publish
 
-ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
-ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
-ext["signing.secretKeyRingFile"] = "secring.pgp"
-ext["ossrhUsername"] = System.getenv("OSSRH_USERNAME")
-ext["ossrhPassword"] = System.getenv("OSSRH_PASSWORD")
-
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
 }
 
 val signingEnabled: Boolean = System.getenv("SIGNING_ENABLED")?.toBoolean() ?: false
 
-afterEvaluate {
+mavenPublishing {
 
-    if (signingEnabled) {
+    publishToMavenCentral()
 
-        /*
-         * Explicitly configure that signing comes before publishing.
-         * Otherwise the task execution of "publishAllPublicationsToSonatypeRepository" will fail.
-         */
+    if (signingEnabled)
+        signAllPublications()
 
-        val signJvmPublication by tasks.getting
-        val signAndroidReleasePublication by tasks.getting
-        val signIosArm64Publication by tasks.getting
-        val signIosX64Publication by tasks.getting
-        val signIosSimulatorArm64Publication by tasks.getting
-        val signMacosArm64Publication by tasks.getting
-        val signMacosX64Publication by tasks.getting
-        val signWinPublication by tasks.getting
-        val signLinuxX64Publication by tasks.getting
-        val signLinuxArm64Publication by tasks.getting
-        val signJsPublication by tasks.getting
-        val signWasmJsPublication by tasks.getting
-        val signWasmWasiPublication by tasks.getting
-        val signKotlinMultiplatformPublication by tasks.getting
+    coordinates(
+        groupId = "com.ashampoo",
+        artifactId = "xmpcore",
+        version = version.toString()
+    )
 
-        val publishJvmPublicationToSonatypeRepository by tasks.getting
-        val publishAndroidReleasePublicationToSonatypeRepository by tasks.getting
-        val publishIosArm64PublicationToSonatypeRepository by tasks.getting
-        val publishIosX64PublicationToSonatypeRepository by tasks.getting
-        val publishIosSimulatorArm64PublicationToSonatypeRepository by tasks.getting
-        val publishMacosArm64PublicationToSonatypeRepository by tasks.getting
-        val publishMacosX64PublicationToSonatypeRepository by tasks.getting
-        val publishWinPublicationToSonatypeRepository by tasks.getting
-        val publishLinuxX64PublicationToSonatypeRepository by tasks.getting
-        val publishLinuxArm64PublicationToSonatypeRepository by tasks.getting
-        val publishJsPublicationToSonatypeRepository by tasks.getting
-        val publishWasmJsPublicationToSonatypeRepository by tasks.getting
-        val publishWasmWasiPublicationToSonatypeRepository by tasks.getting
-        val publishKotlinMultiplatformPublicationToSonatypeRepository by tasks.getting
-        val publishAllPublicationsToSonatypeRepository by tasks.getting
+    pom {
 
-        val signTasks = listOf(
-            signJvmPublication, signAndroidReleasePublication,
-            signIosArm64Publication, signIosX64Publication, signIosSimulatorArm64Publication,
-            signMacosArm64Publication, signMacosX64Publication, signWinPublication,
-            signLinuxX64Publication, signLinuxArm64Publication,
-            signJsPublication, signWasmJsPublication, signWasmWasiPublication,
-            signKotlinMultiplatformPublication
-        )
+        name = productName
+        description = "XMP Core for Kotlin Multiplatform"
+        url = "https://github.com/Ashampoo/xmpcore"
 
-        val publishTasks = listOf(
-            publishJvmPublicationToSonatypeRepository,
-            publishAndroidReleasePublicationToSonatypeRepository,
-            publishIosArm64PublicationToSonatypeRepository,
-            publishIosX64PublicationToSonatypeRepository,
-            publishIosSimulatorArm64PublicationToSonatypeRepository,
-            publishMacosArm64PublicationToSonatypeRepository,
-            publishMacosX64PublicationToSonatypeRepository,
-            publishWinPublicationToSonatypeRepository,
-            publishLinuxX64PublicationToSonatypeRepository,
-            publishLinuxArm64PublicationToSonatypeRepository,
-            publishJsPublicationToSonatypeRepository,
-            publishWasmJsPublicationToSonatypeRepository,
-            publishWasmWasiPublicationToSonatypeRepository,
-            publishKotlinMultiplatformPublicationToSonatypeRepository,
-            publishAllPublicationsToSonatypeRepository
-        )
-
-        /* Each publish task depenends on every sign task. */
-        for (publishTask in publishTasks)
-            for (signTask in signTasks)
-                publishTask.dependsOn(signTask)
-    }
-}
-
-fun getExtraString(name: String) = ext[name]?.toString()
-
-publishing {
-    publications {
-
-        // Configure maven central repository
-        repositories {
-            maven {
-                name = "sonatype"
-                setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = getExtraString("ossrhUsername")
-                    password = getExtraString("ossrhPassword")
-                }
+        licenses {
+            license {
+                name = "The BSD License"
+                url = "https://github.com/Ashampoo/xmpcore/blob/main/original_source/original_license.txt"
             }
         }
 
-        publications.withType<MavenPublication> {
-
-            artifact(javadocJar.get())
-
-            pom {
-
-                name.set(productName)
-                description.set("XMP Core for Kotlin Multiplatform")
-                url.set("https://github.com/Ashampoo/xmpcore")
-
-                licenses {
-                    license {
-                        name.set("The BSD License")
-                        url.set("http://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html")
-                    }
-                }
-
-                developers {
-                    developer {
-                        name.set("Ashampoo GmbH & Co. KG")
-                        url.set("https://www.ashampoo.com/")
-                    }
-                }
-
-                scm {
-                    connection.set("https://github.com/Ashampoo/xmpcore.git")
-                    url.set("https://github.com/Ashampoo/xmpcore")
-                }
+        developers {
+            developer {
+                name = "Ashampoo GmbH & Co. KG"
+                url = "https://www.ashampoo.com/"
             }
         }
 
-        if (signingEnabled) {
-
-            signing {
-                sign(publishing.publications)
-            }
+        scm {
+            url = "https://github.com/Ashampoo/xmpcore"
+            connection = "scm:git:git://github.com/Ashampoo/xmpcore.git"
         }
     }
 }
