@@ -1,0 +1,51 @@
+[versions]
+# Kotlin and Android
+kotlin = "2.2.0"
+android-gradle-plugin = "8.9.2"
+android-compile-sdk = "36"
+android-min-sdk = "21"
+
+# Build and Analysis Tools
+detekt = "1.23.8"
+kover = "0.9.1"
+build-time-tracker = "5.0.1"
+git-versioning = "6.4.4"
+gradle-versions = "0.52.0"
+maven-publish = "0.34.0"
+
+# Resources
+resources = "0.10.1"
+
+# Libraries
+xmlutil = "0.91.1"
+kotlinx-io = "0.8.0"
+
+[libraries]
+# XML Processing
+xmlutil-core = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "xmlutil" }
+
+# Kotlin Extensions
+kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
+
+# Code Analysis
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
+[plugins]
+# Kotlin
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+
+# Android
+android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+
+# Code Analysis and Quality
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+
+# Build Tools
+build-time-tracker = { id = "com.asarkar.gradle.build-time-tracker", version.ref = "build-time-tracker" }
+git-versioning = { id = "me.qoomon.git-versioning", version.ref = "git-versioning" }
+gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
+
+# Resources and Publishing
+resources = { id = "com.goncalossilva.resources", version.ref = "resources" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
