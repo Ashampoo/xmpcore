@@ -1,17 +1,18 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    kotlin("multiplatform") version "2.1.21"
-    id("com.android.library") version "8.9.2"
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
-    id("org.jetbrains.kotlinx.kover") version "0.9.1"
-    id("com.asarkar.gradle.build-time-tracker") version "5.0.1"
-    id("me.qoomon.git-versioning") version "6.4.4"
-    id("com.goncalossilva.resources") version "0.10.0"
-    id("com.github.ben-manes.versions") version "0.52.0"
-    id("com.vanniktech.maven.publish") version "0.34.0"
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
+    alias(libs.plugins.build.time.tracker)
+    alias(libs.plugins.git.versioning)
+    alias(libs.plugins.resources)
+    alias(libs.plugins.gradle.versions)
+    alias(libs.plugins.maven.publish)
 }
 
 repositories {
@@ -20,9 +21,6 @@ repositories {
 }
 
 val productName = "Ashampoo XMP Core"
-
-val xmlUtilVersion: String = "0.91.1"
-val kotlinxIoVersion: String = "0.7.0"
 
 description = productName
 group = "com.ashampoo"
@@ -66,7 +64,7 @@ kover {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    detektPlugins(libs.detekt.formatting)
 }
 
 kotlin {
@@ -75,10 +73,8 @@ kotlin {
 
     androidTarget {
 
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "11"
-            }
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
         }
 
         publishLibraryVariants("release")
@@ -130,7 +126,7 @@ kotlin {
         dependencies {
 
             /* Needed to parse XML and create a DOM Document */
-            implementation("io.github.pdvrieze.xmlutil:core:$xmlUtilVersion")
+            implementation(libs.xmlutil.core)
         }
     }
 
@@ -142,7 +138,7 @@ kotlin {
             implementation(kotlin("test"))
 
             /* Multiplatform file access */
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:$kotlinxIoVersion")
+            implementation(libs.kotlinx.io.core)
         }
     }
 
@@ -257,12 +253,12 @@ android {
 
     namespace = "com.ashampoo.xmpcore"
 
-    compileSdk = 35
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     sourceSets["main"].res.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = 21
+        minSdk = libs.versions.android.min.sdk.get().toInt()
     }
 
     compileOptions {
@@ -304,25 +300,25 @@ mavenPublishing {
 
         name = productName
         description = "XMP Core for Kotlin Multiplatform"
-        url = "https://github.com/Ashampoo/xmpcore"
+        url = "https://github.com/Software-Rangers/xmpcore"
 
         licenses {
             license {
                 name = "The BSD License"
-                url = "https://github.com/Ashampoo/xmpcore/blob/main/original_source/original_license.txt"
+                url = "https://github.com/Software-Rangers/xmpcore/blob/main/original_source/original_license.txt"
             }
         }
 
         developers {
             developer {
-                name = "Ashampoo GmbH & Co. KG"
-                url = "https://www.ashampoo.com/"
+                name = "Software Rangers GmbH"
+                url = "https://software-rangers.com/"
             }
         }
 
         scm {
-            url = "https://github.com/Ashampoo/xmpcore"
-            connection = "scm:git:git://github.com/Ashampoo/xmpcore.git"
+            url = "https://github.com/Software-Rangers/xmpcore"
+            connection = "scm:git:git://github.com/Software-Rangers/xmpcore.git"
         }
     }
 }
