@@ -230,7 +230,7 @@ class RewriteXmpTest {
          * triggers XMPNormalizer.tweakOldXMP()
          */
 
-        const val TEST_PHOTO_COUNT = 109
+        const val TEST_PHOTO_COUNT = 110
 
         private const val RESOURCE_PATH: String = "src/commonTest/resources/com/ashampoo/xmp"
     }

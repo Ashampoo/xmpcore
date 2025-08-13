@@ -12,6 +12,9 @@ internal object DomParser {
 
     private const val RDF_RDF_END = "</rdf:RDF>"
 
+    private const val SINGLE_SELF_CLOSING_RDF_TAG =
+        """<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>"""
+
     @OptIn(XmlUtilInternal::class, ExperimentalXmlUtilApi::class)
     fun parseDocumentFromString(input: String): Document {
 
@@ -39,12 +42,29 @@ internal object DomParser {
         if (rdfStartPos == -1)
             throw XMPException("String '<rdf:RDF' was not found in XMP.", XMPErrorConst.BADXMP)
 
-        if (rdfEndPos == -1)
+        if (rdfEndPos == -1) {
+
+            /*
+             * If we can't find </rdf:RDF> the document may contain a single self-closing RDF tag.
+             */
+            if (input.contains(SINGLE_SELF_CLOSING_RDF_TAG))
+                return parseDocumentFromStringInternal(SINGLE_SELF_CLOSING_RDF_TAG)
+
             throw XMPException("String '</rdf:RDF>' was not found in XMP.", XMPErrorConst.BADXMP)
+        }
 
         val trimmedInput = input.substring(
             rdfStartPos until rdfEndPos + RDF_RDF_END.length
         )
+
+        return parseDocumentFromStringInternal(trimmedInput)
+    }
+
+    @OptIn(ExperimentalXmlUtilApi::class)
+    private fun parseDocumentFromStringInternal(input: String): Document {
+
+        if (input.isBlank())
+            throw XMPException("XMP is empty.", XMPErrorConst.BADXMP)
 
         try {
 
@@ -52,7 +72,7 @@ internal object DomParser {
 
             val writer = xmlStreaming.newWriter(document)
 
-            val reader = xmlStreaming.newReader(trimmedInput)
+            val reader = xmlStreaming.newReader(input)
 
             do {
                 val event = reader.next()

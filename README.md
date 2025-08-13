@@ -19,7 +19,7 @@ It's part of [Ashampoo Photo Organizer](https://ashampoo.com/photo-organizer).
 ## Installation
 
 ```
-implementation("com.ashampoo:xmpcore:1.6.0")
+implementation("com.ashampoo:xmpcore:1.6.1")
 ```
 
 ## How to use

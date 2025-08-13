@@ -35,3 +35,6 @@ Triggers XMPNormalizer.tweakOldXMP()
 
 # sample_101.xml to sample_109.xmp
 Collection of problematic files from QA
+
+# sample_110.xml
+File that has a RDF with self-closing tag

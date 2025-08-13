@@ -17,7 +17,7 @@ maven-publish = "0.34.0"
 resources = "0.10.1"
 
 # Libraries
-xmlutil = "0.91.1"
+xmlutil = "0.91.2"
 kotlinx-io = "0.8.0"
 
 [libraries]
