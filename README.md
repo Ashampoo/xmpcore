@@ -11,6 +11,16 @@
 ![WASM](https://img.shields.io/badge/-WASM-gray.svg?style=flat)
 ![WASI](https://img.shields.io/badge/-WASI-gray.svg?style=flat)
 
+
+----
+
+❌ This repository is deprecated. The project continues here:
+
+👉 [https://github.com/StefanOltmann/xmpcore](https://github.com/StefanOltmann/xmpcore)
+
+----
+
+
 This library is a port of Adobe's XMP SDK to Kotlin Multiplatform by Ashampoo.
 
 It's part of [Ashampoo Photo Organizer](https://ashampoo.com/photo-organizer).
